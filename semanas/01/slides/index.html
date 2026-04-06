@@ -36,7 +36,7 @@
             <li class="fragment fade-in">Filtrado y curado para maximizar calidad</li>
             <li class="fragment fade-in"><a href="https://huggingface.co/spaces/HuggingFaceFW/blogpost-fineweb-v1" target="_blank">HuggingFace FineWeb</a></li>
           </ul>
-          <!-- imagen placeholder: screenshot de FineWeb dataset page -->
+          <img src="../img/image01.png" alt="FineWeb dataset page" style="max-height: 50vh">
           <aside class="notes">
             FineWeb es un conjunto de datos masivo, refinado y de alta calidad, compuesto por 15 billones de tokens (44 TB) extraidos de la web y filtrados meticulosamente para entrenar modelos de lenguaje. Incluye muchas explicaciones y graficos interactivos acerca de como se obtienen y filtran los datos. Mostrar la pagina en vivo.
           </aside>
@@ -59,7 +59,8 @@
         <section>
           <h2>LLM como maquina estocastica</h2>
           <p class="fragment fade-in">Prediccion del siguiente token</p>
-          <!-- imagen placeholder: diagrama de prediccion de siguiente token -->
+          <img src="../img/image02.png" alt="Diagrama de prediccion de siguiente token" style="max-height: 40vh" class="fragment fade-in">
+          <img src="../img/image03.png" alt="Arquitectura transformer simplificada" style="max-height: 40vh" class="fragment fade-in">
           <p class="fragment fade-in"><a href="https://bbycroft.net/llm" target="_blank">Visualizacion de nanoGPT</a></p>
           <aside class="notes">
             Hablar un poco de como funcionan los transformers usando la visualizacion de nanoGPT. Explicar que el modelo toma una secuencia de tokens y predice el siguiente.
@@ -73,7 +74,8 @@
             <li class="fragment fade-in">No necesariamente coincide con lo que estaba en el dataset</li>
             <li class="fragment fade-in">Distribucion de probabilidad sobre todo el vocabulario</li>
           </ul>
-          <!-- imagen placeholder: distribucion de probabilidad de tokens -->
+          <img src="../img/image04.png" alt="Distribucion de probabilidad de tokens" style="max-height: 35vh" class="fragment fade-in">
+          <img src="../img/image05.png" alt="GPT-2 ejemplo" style="max-height: 35vh" class="fragment fade-in">
           <aside class="notes">
             Hacer hincapie en la naturaleza estocastica de las LLMs: no siempre el siguiente token que se predice es el mismo, ni tampoco necesariamente el que estaba en el dataset. Hay una distribucion de probabilidad sobre todos los posibles tokens y se muestrea de ahi. GPT-2 fue el primer modelo que demostro esto de forma convincente.
           </aside>
@@ -82,8 +84,8 @@
         <!-- Como la LLM aprende -->
         <section>
           <h2>Proceso de entrenamiento</h2>
-          <!-- imagen placeholder: curva de entrenamiento -->
-          <!-- imagen placeholder: proceso de entrenamiento paso a paso -->
+          <img src="../img/image06.png" alt="Curva de entrenamiento" style="max-height: 35vh">
+          <img src="../img/image07.png" alt="Proceso de entrenamiento paso a paso" style="max-height: 35vh">
           <ul>
             <li class="fragment fade-in">Se requieren GPUs potentes (NVIDIA H100)</li>
             <li class="fragment fade-in">Datacenters llenos de racks de H100</li>
@@ -131,8 +133,8 @@
             <li class="fragment fade-in">Supervised Fine-Tuning (SFT)</li>
             <li class="fragment fade-in">Tokens especiales para delimitar conversaciones</li>
           </ul>
-          <!-- imagen placeholder: esquema de dataset SFT -->
-          <!-- imagen placeholder: tokens especiales en conversaciones -->
+          <img src="../img/image08.png" alt="Esquema de dataset SFT" style="max-height: 35vh" class="fragment fade-in">
+          <img src="../img/image09.png" alt="Tokens especiales en conversaciones" style="max-height: 35vh" class="fragment fade-in">
           <aside class="notes">
             Hablar de como se requiere armar un nuevo dataset de conversaciones que sustituye al antiguo dataset de internet. El proceso se llama Supervised Fine-Tuning. Se usan tokens especiales para delimitar las conversaciones (inicio, turno de usuario, turno de asistente, fin).
           </aside>
@@ -185,6 +187,7 @@
         <!-- Explicacion -->
         <section>
           <h2>Por que alucinan las LLMs</h2>
+          <img src="../img/image10.png" alt="Ejemplo de alucinacion" style="max-height: 40vh">
           <ul>
             <li class="fragment fade-in">En el dataset de entrenamiento, todas las preguntas se responden con confianza</li>
             <li class="fragment fade-in">El modelo no tiene acceso a internet, solo genera tokens</li>
@@ -215,7 +218,7 @@
             <li class="fragment fade-in">Proceso automatizable con IA</li>
           </ul>
           <p class="fragment fade-in"><a href="https://arxiv.org/pdf/2407.21783" target="_blank">Paper de Llama 3</a></p>
-          <!-- imagen placeholder: proceso de reduccion de alucinaciones Llama 3 -->
+          <img src="../img/image11.png" alt="Proceso de reduccion de alucinaciones Llama 3" style="max-height: 35vh" class="fragment fade-in">
           <aside class="notes">
             Hablar de como Meta disminuyo las alucinaciones para Llama 3. Basicamente, van descubriendo ejemplos de informacion que el modelo no sabe (agarrando articulos de Wikipedia y analizandolos con LLMs para descubrir que informacion no es dada en el articulo) y con eso arman un nuevo dataset donde la respuesta correcta es "No lo se". Este proceso puede ser realizado completamente por IA.
           </aside>
@@ -239,7 +242,7 @@
             <li class="fragment fade-in">Conocimiento en los pesos del modelo: "vago recuerdo"</li>
             <li class="fragment fade-in">Informacion en el contexto: memoria funcional</li>
           </ul>
-          <!-- imagen placeholder: conocimiento en pesos vs contexto -->
+          <img src="../img/image12.png" alt="Conocimiento en pesos vs contexto" style="max-height: 40vh" class="fragment fade-in">
           <aside class="notes">
             El conocimiento embebido en los pesos del modelo es como un vago recuerdo, mientras que meterle informacion en el contexto es mas bien una memoria funcional. Por eso mecanismos como busqueda en internet o RAG son tan efectivos para reducir alucinaciones.
           </aside>
@@ -253,7 +256,7 @@
             <li class="fragment fade-in">Las respuestas sobre si mismo son una mezcla estocastica del dataset</li>
             <li class="fragment fade-in"><a href="https://huggingface.co/datasets/allenai/olmo-2-hard-coded" target="_blank">Dataset hard-coded de identidad</a></li>
           </ul>
-          <!-- imagen placeholder: comparacion modelo base vs instruct respondiendo "who are you" -->
+          <img src="../img/image13.png" alt="Comparacion modelo base vs instruct" style="max-height: 40vh" class="fragment fade-in">
           <aside class="notes">
             No tiene sentido preguntarle al modelo preguntas sobre quien es o tratarlo como si tuviese un sentido del yo. Al final es un generador de tokens entrenado con texto de internet y calibrado para responder como asistente. Lo que responda a ese tipo de preguntas es una mezcla estocastica de todo eso combinado con lo que el proveedor del modelo le agregue por defecto al contexto. Mostrar el dataset de OLMo con ejemplos de preguntas y respuestas hard-coded sobre identidad. Mostrar diferencia entre decirle "who are you" a un modelo base vs un modelo instruct.
           </aside>
@@ -267,7 +270,8 @@
             <li class="fragment fade-in">Generar tokens intermedios relevantes distribuye la capacidad de pensamiento</li>
             <li class="fragment fade-in">Respuestas con razonamiento previo son mejores</li>
           </ul>
-          <!-- imagen placeholder: ejemplo de chain of thought -->
+          <img src="../img/image14.png" alt="Ejemplo de chain of thought" style="max-height: 30vh" class="fragment fade-in">
+          <img src="../img/image15.png" alt="Otro ejemplo de chain of thought" style="max-height: 30vh" class="fragment fade-in">
           <aside class="notes">
             Generar intuicion acerca de como las LLMs necesitan generar tokens para pensar. Cada nuevo token que se genera va a usar la misma capacidad de computo sin importar su relevancia. Si en lugar de responder directamente, el modelo genera tokens relevantes para llegar a una respuesta, la respuesta final sera mejor porque distribuye su capacidad de pensamiento entre todos esos tokens. Usar Tiktokenizer como ayuda visual.
           </aside>
@@ -280,8 +284,7 @@
             <li class="fragment fade-in">Decirle "use code" genera y ejecuta un programa</li>
             <li class="fragment fade-in">Descomponer problemas grandes en problemas chicos mejora resultados</li>
           </ul>
-          <!-- imagen placeholder: ejemplo de tool use para aritmetica -->
-          <!-- imagen placeholder: tokenizacion y aritmetica -->
+          <img src="../img/image16.png" alt="Tokenizacion y aritmetica" style="max-height: 40vh" class="fragment fade-in">
           <aside class="notes">
             Para resolver problemas de aritmetica, decirle al modelo "use code" va a hacer que genere y ejecute un programa que lo calcule. En general, usar metodos que permitan al modelo descomponer el problema en problemas mas chicos que puede ir resolviendo va a hacer que el resultado sea mejor. Explicar por que tareas como aritmetica o deletreo no son el punto fuerte: los tokens no se alinean con digitos o letras individuales.
           </aside>
@@ -305,7 +308,7 @@
             <li class="fragment fade-in">Analogo a hacer los ejercicios de un libro</li>
             <li class="fragment fade-in">Prueba y error hasta llegar al resultado correcto</li>
           </ul>
-          <!-- imagen placeholder: multiples respuestas validas -->
+          <img src="../img/image17.png" alt="Multiples respuestas validas" style="max-height: 35vh" class="fragment fade-in">
           <aside class="notes">
             Ultima etapa del entrenamiento de una LLM moderna. Versiones de ChatGPT anteriores a o1, o3 no hacian esto. Es analogo a hacer los ejercicios de un libro: miras la letra del ejercicio, ves el resultado en el solucionario e iterativamente vas haciendo prueba y error hasta llegar al resultado. No siempre es claro que tipo de respuesta es mejor mostrarle a una LLM durante el entrenamiento, porque varias pueden parecer validas.
           </aside>
@@ -319,7 +322,7 @@
             <li class="fragment fade-in">Evaluar cual intento es mas correcto, corto y claro</li>
             <li class="fragment fade-in">Usar esa respuesta para entrenar el modelo</li>
           </ul>
-          <!-- imagen placeholder: diagrama de reinforcement learning -->
+          <img src="../img/image18.png" alt="Diagrama de reinforcement learning" style="max-height: 35vh" class="fragment fade-in">
           <aside class="notes">
             Lo que se quiere es que el modelo descubra por su cuenta como le sirve pensar. La forma de hacer eso es darle un problema para que resuelva, pedirle muchas veces que trate de resolverlo, evaluar en cual de esos intentos logro el resultado mas correcto (no solo correcto sino tambien el mas corto o mejor explicado) y usar esa respuesta generada para entrenar el modelo.
           </aside>
@@ -333,7 +336,7 @@
             <li class="fragment fade-in">Modelo de nivel similar a los de grandes empresas</li>
             <li class="fragment fade-in">Procedimiento de reinforcement learning publicado abiertamente</li>
           </ul>
-          <!-- imagen placeholder: resultados DeepSeek -->
+          <img src="../img/image19.png" alt="Resultados DeepSeek" style="max-height: 35vh" class="fragment fade-in">
           <aside class="notes">
             Antes de que DeepSeek publique su paper a principios de 2025, los conocimientos sobre como hacer reinforcement learning para LLMs eran cerrados. DeepSeek saco un modelo de nivel muy similar al de las grandes empresas e hizo publico el procedimiento que utilizo.
           </aside>
@@ -358,7 +361,7 @@
             <li class="fragment fade-in">Imitar a los mejores jugadores no es suficiente para superarlos</li>
             <li class="fragment fade-in">Es necesario que el modelo aprenda por si mismo</li>
           </ul>
-          <!-- imagen placeholder: AlphaGo resultados -->
+          <img src="../img/image20.png" alt="AlphaGo resultados" style="max-height: 40vh" class="fragment fade-in">
           <aside class="notes">
             DeepMind al entrenar su modelo que juega al Go dejo muy en evidencia que solamente tratar de imitar a los mejores jugadores del mundo no era suficiente para ser mejor que ellos. Es necesario permitir que el modelo aprenda por si mismo para lograr eso. Esta es la misma idea detras del reinforcement learning en LLMs.
           </aside>
