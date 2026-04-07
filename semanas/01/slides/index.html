@@ -144,6 +144,68 @@
           </aside>
         </section>
 
+        <!-- Que hay dentro de FineWeb -->
+        <section>
+          <div style="display: flex; gap: var(--spacing-lg); align-items: stretch; font-size: 0.5em; margin-top: var(--spacing-sm);">
+            <!-- Left column: rendered page + HTML source stacked -->
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+              <!-- Rendered page -->
+              <div style="background: #fff; color: #222; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
+                <div style="background: #e8e8e8; padding: 4px 10px; display: flex; align-items: center; gap: 6px;">
+                  <div style="display: flex; gap: 3px;">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #ff5f57; display: inline-block;"></span>
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #ffbd2e; display: inline-block;"></span>
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #28c840; display: inline-block;"></span>
+                  </div>
+                  <div style="flex: 1; background: #fff; border-radius: 3px; padding: 2px 6px; font-size: 0.75em; color: #555;">en.wikipedia.org/wiki/Large_language_model</div>
+                </div>
+                <div style="padding: 10px 12px; line-height: 1.4;">
+                  <div style="font-size: 1.3em; font-weight: bold; margin-bottom: 4px;">Large language model</div>
+                  <p style="margin-bottom: 6px; color: #333;">A <b>large language model</b> (LLM) is a type of computational model designed for natural language processing tasks such as language generation.</p>
+                  <div style="display: flex; gap: 4px; margin-top: 6px; opacity: 0.5;">
+                    <span style="background: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.7em; color: #666;">nav</span>
+                    <span style="background: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.7em; color: #666;">sidebar</span>
+                    <span style="background: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.7em; color: #666;">footer</span>
+                  </div>
+                </div>
+              </div>
+              <!-- HTML source -->
+              <div style="background: var(--bg-code); border-radius: 8px; padding: 10px; font-family: var(--font-mono); font-size: 0.75em; line-height: 1.5;">
+                <div><span style="color: #e06c75;">&lt;body&gt;</span></div>
+                <div style="padding-left: 14px; color: #636d83; text-decoration: line-through;">&lt;nav&gt;Main page | Contents...&lt;/nav&gt;</div>
+                <div style="padding-left: 14px; color: #636d83; text-decoration: line-through;">&lt;div class="sidebar"&gt;...&lt;/div&gt;</div>
+                <div style="padding-left: 14px;"><span style="color: #e06c75;">&lt;div</span> <span style="color: #d19a66;">id=</span><span style="color: #98c379;">"content"</span><span style="color: #e06c75;">&gt;</span></div>
+                <div style="padding-left: 28px;"><span style="color: #e06c75;">&lt;h1&gt;</span><span style="color: var(--text-primary);">Large language model</span><span style="color: #e06c75;">&lt;/h1&gt;</span></div>
+                <div style="padding-left: 28px;"><span style="color: #e06c75;">&lt;p&gt;</span><span style="color: var(--text-primary);">A large language model (LLM) is a type of...</span><span style="color: #e06c75;">&lt;/p&gt;</span></div>
+                <div style="padding-left: 14px;"><span style="color: #e06c75;">&lt;/div&gt;</span></div>
+                <div style="padding-left: 14px; color: #636d83; text-decoration: line-through;">&lt;footer&gt;Privacy | Terms...&lt;/footer&gt;</div>
+                <div><span style="color: #e06c75;">&lt;/body&gt;</span></div>
+              </div>
+              <p style="color: var(--text-primary); font-size: 0.75em; text-align: center;"><span style="color: #636d83; text-decoration: line-through;">tachado</span> = descartado por el pipeline</p>
+            </div>
+            <!-- Arrow in the middle -->
+            <div style="display: flex; align-items: center; flex: 0 0 auto;">
+              <svg width="40" height="28"><path d="M4 14h28m0 0l-8-8m8 8l-8 8" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <!-- Right: extracted record -->
+            <div style="flex: 1; display: flex; align-items: center;">
+              <div style="background: var(--bg-code); border-radius: 8px; padding: 14px; font-family: var(--font-mono); font-size: 0.85em; line-height: 1.7; width: 100%;">
+                <div><span style="color: var(--accent);">text:</span> <span style="color: var(--text-primary);">"A large language model (LLM) is a type of computational model designed for..."</span></div>
+                <div><span style="color: var(--accent);">id:</span> <span style="color: var(--accent-secondary);">"cc-2024-10-0042a7f3"</span></div>
+                <div><span style="color: var(--accent);">url:</span> <span style="color: var(--accent-secondary);">"en.wikipedia.org/wiki/Large_language_model"</span></div>
+                <div><span style="color: var(--accent);">dump:</span> <span style="color: var(--accent-secondary);">"CC-MAIN-2024-10"</span></div>
+                <div><span style="color: var(--accent);">date:</span> <span style="color: var(--accent-secondary);">"2024-03-15"</span></div>
+                <div><span style="color: var(--accent);">language:</span> <span style="color: var(--accent-secondary);">"en"</span></div>
+                <div><span style="color: var(--accent);">language_score:</span> <span style="color: var(--accent-secondary);">0.98</span></div>
+                <div><span style="color: var(--accent);">token_count:</span> <span style="color: var(--accent-secondary);">847</span></div>
+              </div>
+            </div>
+          </div>
+          <aside class="notes">
+            Mostrar como un documento en FineWeb se ve en la practica. Arriba a la izquierda, la pagina web renderizada tal como se ve en un navegador. Abajo, el HTML crudo con las partes que se descartan tachadas (nav, sidebar, footer). La flecha en el medio apunta al registro limpio que queda despues del pipeline: solo el texto util con metadata. Esto es lo que la LLM va a ver durante el entrenamiento — texto limpio, no HTML.
+          </aside>
+        </section>
+
         <!-- Tokenizacion -->
         <section>
           <h2>Tokenizacion</h2>
