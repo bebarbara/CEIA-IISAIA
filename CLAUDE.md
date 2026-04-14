@@ -38,10 +38,16 @@ Presentaciones HTML (reveal.js) para un curso de 8 semanas.
 
 ## Setup
 
-After cloning, install Claude Code skills:
+After cloning:
 
 ```bash
+# Install Claude Code skills
 cp -r tools/skills/* ~/.claude/skills/
+
+# Python tools (yt-transcript)
+python -m venv tools/.venv
+source tools/.venv/Scripts/activate  # Windows
+pip install -r tools/requirements.txt
 ```
 
 ## Run
