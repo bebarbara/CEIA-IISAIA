@@ -438,14 +438,268 @@
         <!-- Common Crawl -->
         <section>
           <h2>Common Crawl</h2>
-          <ul>
-            <li><a href="https://commoncrawl.org/" target="_blank">commoncrawl.org</a> — rastrea la web desde 2007</li>
-            <li class="fragment fade-in">2.7 mil millones de paginas indexadas (2024)</li>
-            <li class="fragment fade-in">Datos crudos: HTML completo de cada pagina</li>
-            <li class="fragment fade-in">Punto de partida para todos los datasets de LLMs</li>
-          </ul>
+          <div style="display: flex; gap: var(--spacing-lg); align-items: center;">
+            <!-- Crawl animation -->
+            <div style="flex: 1;">
+              <svg id="crawl-viz" viewBox="0 0 360 240" style="width: 100%; max-height: 36vh; background: var(--bg-code); border-radius: 8px;">
+                <!-- Nodes and edges drawn by JS -->
+              </svg>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+                <span style="color: var(--text-muted); font-size: 0.5em;">Paginas semilla → seguir links → indexar → repetir</span>
+                <span id="crawl-counter" style="color: var(--accent); font-family: var(--font-mono); font-size: 0.55em;">0 paginas</span>
+              </div>
+            </div>
+            <!-- Info -->
+            <div style="flex: 0 0 38%; font-size: 0.75em;">
+              <p><a href="https://commoncrawl.org/" target="_blank">commoncrawl.org</a></p>
+              <p style="color: var(--text-muted); margin-top: 8px;">Rastreando la web desde 2007</p>
+              <div style="margin-top: 16px;">
+                <div style="color: var(--accent); font-size: 1.4em; font-weight: bold; font-family: var(--font-mono);">2.7B</div>
+                <div style="color: var(--text-muted);">paginas indexadas</div>
+              </div>
+              <div style="margin-top: 12px;">
+                <div style="color: var(--accent-secondary); font-size: 1.1em; font-weight: bold; font-family: var(--font-mono);">HTML crudo</div>
+                <div style="color: var(--text-muted);">de cada pagina</div>
+              </div>
+              <p class="fragment fade-in" style="color: var(--text-primary); margin-top: 16px; font-size: 0.9em;">Punto de partida de todos los datasets de LLMs</p>
+            </div>
+          </div>
+
+          <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            var svg = document.getElementById('crawl-viz');
+            var counter = document.getElementById('crawl-counter');
+            if (!svg || typeof Reveal === 'undefined') return;
+
+            var nodes = [];
+            var edges = [];
+            var count = 0;
+            var timer = null;
+            var W = 360, H = 240;
+
+            // Pre-generate node positions (spread out, avoid overlap)
+            var positions = [];
+            for (var i = 0; i < 40; i++) {
+              var placed = false;
+              for (var attempt = 0; attempt < 50; attempt++) {
+                var x = 30 + Math.random() * (W - 60);
+                var y = 25 + Math.random() * (H - 50);
+                var ok = true;
+                for (var j = 0; j < positions.length; j++) {
+                  var dx = positions[j].x - x, dy = positions[j].y - y;
+                  if (Math.sqrt(dx*dx + dy*dy) < 32) { ok = false; break; }
+                }
+                if (ok) { positions.push({x: x, y: y}); placed = true; break; }
+              }
+              if (!placed) positions.push({x: 30 + Math.random() * (W - 60), y: 25 + Math.random() * (H - 50)});
+            }
+
+            // Seed nodes (first 3)
+            var seeds = [0, 1, 2];
+            // Connections: each subsequent node connects from a random existing node
+            var conns = [];
+            for (var i = 3; i < positions.length; i++) {
+              conns.push({ from: Math.floor(Math.random() * i), to: i });
+            }
+
+            function addNode(idx) {
+              var p = positions[idx];
+              var isSeed = idx < 3;
+              var color = isSeed ? 'var(--accent)' : 'var(--accent-secondary)';
+              var r = isSeed ? 6 : 4;
+
+              // Node circle
+              var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+              circle.setAttribute('cx', p.x);
+              circle.setAttribute('cy', p.y);
+              circle.setAttribute('r', '0');
+              circle.setAttribute('fill', color);
+              circle.setAttribute('opacity', '0.8');
+              svg.appendChild(circle);
+
+              // Animate radius
+              var anim = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+              anim.setAttribute('attributeName', 'r');
+              anim.setAttribute('from', '0');
+              anim.setAttribute('to', String(r));
+              anim.setAttribute('dur', '0.3s');
+              anim.setAttribute('fill', 'freeze');
+              circle.appendChild(anim);
+              anim.beginElement();
+
+              // Ping effect
+              var ping = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+              ping.setAttribute('cx', p.x);
+              ping.setAttribute('cy', p.y);
+              ping.setAttribute('r', String(r));
+              ping.setAttribute('fill', 'none');
+              ping.setAttribute('stroke', color);
+              ping.setAttribute('stroke-width', '1');
+              ping.setAttribute('opacity', '0.6');
+              svg.insertBefore(ping, svg.firstChild);
+              var pingR = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+              pingR.setAttribute('attributeName', 'r');
+              pingR.setAttribute('from', String(r));
+              pingR.setAttribute('to', String(r + 14));
+              pingR.setAttribute('dur', '0.6s');
+              pingR.setAttribute('fill', 'freeze');
+              var pingO = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+              pingO.setAttribute('attributeName', 'opacity');
+              pingO.setAttribute('from', '0.6');
+              pingO.setAttribute('to', '0');
+              pingO.setAttribute('dur', '0.6s');
+              pingO.setAttribute('fill', 'freeze');
+              ping.appendChild(pingR);
+              ping.appendChild(pingO);
+              pingR.beginElement();
+              pingO.beginElement();
+
+              nodes.push(idx);
+              count++;
+              counter.textContent = count + ' paginas';
+            }
+
+            function addEdge(fromIdx, toIdx) {
+              var a = positions[fromIdx], b = positions[toIdx];
+              var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+              line.setAttribute('x1', a.x);
+              line.setAttribute('y1', a.y);
+              line.setAttribute('x2', a.x);
+              line.setAttribute('y2', a.y);
+              line.setAttribute('stroke', '#8892b0');
+              line.setAttribute('stroke-width', '0.5');
+              line.setAttribute('opacity', '0.3');
+              svg.insertBefore(line, svg.firstChild);
+              var animX = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+              animX.setAttribute('attributeName', 'x2');
+              animX.setAttribute('from', String(a.x));
+              animX.setAttribute('to', String(b.x));
+              animX.setAttribute('dur', '0.2s');
+              animX.setAttribute('fill', 'freeze');
+              var animY = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+              animY.setAttribute('attributeName', 'y2');
+              animY.setAttribute('from', String(a.y));
+              animY.setAttribute('to', String(b.y));
+              animY.setAttribute('dur', '0.2s');
+              animY.setAttribute('fill', 'freeze');
+              line.appendChild(animX);
+              line.appendChild(animY);
+              animX.beginElement();
+              animY.beginElement();
+            }
+
+            var step = 0;
+            function tick() {
+              if (step < 3) {
+                addNode(step);
+              } else {
+                var c = conns[step - 3];
+                if (!c) { clearInterval(timer); return; }
+                addEdge(c.from, c.to);
+                setTimeout(function() { addNode(c.to); }, 250);
+              }
+              step++;
+              if (step >= 3 + conns.length) {
+                clearInterval(timer);
+                // Pause, then restart
+                setTimeout(function() {
+                  var cur = Reveal.getCurrentSlide();
+                  if (cur && cur.contains(svg)) startCrawl();
+                }, 2500);
+              }
+            }
+
+            function startCrawl() {
+              // Clear previous
+              svg.innerHTML = '';
+              nodes = [];
+              edges = [];
+              count = 0;
+              step = 0;
+              counter.textContent = '0 paginas';
+              timer = setInterval(tick, 350);
+            }
+
+            Reveal.on('slidechanged', function(e) {
+              if (e.currentSlide && e.currentSlide.contains(svg)) {
+                startCrawl();
+              } else {
+                clearInterval(timer);
+              }
+            });
+            // Also start if we're already on this slide
+            var cur = Reveal.getCurrentSlide();
+            if (cur && cur.contains(svg)) startCrawl();
+          });
+          </script>
+
           <aside class="notes">
-            Common Crawl es una organizacion sin fines de lucro que rastrea la web de forma masiva desde 2007. Tiene crawlers que empiezan con paginas semilla, siguen todos los links, y van indexando toda la informacion. A 2024, han indexado 2.7 mil millones de paginas web. Los datos son completamente abiertos. Ningun laboratorio de IA entrena directamente con estos datos crudos — son demasiado sucios. Cada empresa toma esto como punto de partida y aplica su propio pipeline de filtrado. FineWeb de HuggingFace, C4 de Google, RefinedWeb de Falcon, Dolma de AI2 — todos parten de Common Crawl.
+            La animacion muestra como funciona un crawler: empieza con 3 paginas semilla (nodos verdes), sigue los links de cada pagina (lineas), y va descubriendo paginas nuevas (nodos azules). Cada nodo es una pagina indexada. En la realidad esto pasa a una escala de miles de millones. Common Crawl es una organizacion sin fines de lucro que hace esto desde 2007. Tiene crawlers corriendo constantemente, indexando paginas y siguiendo links. A 2024, han indexado 2.7 mil millones de paginas web. Los datos son completamente abiertos y gratuitos, almacenados en Amazon S3. Lo que guardan es el HTML crudo y completo de cada pagina. Ningun laboratorio de IA entrena directamente con estos datos crudos — son demasiado sucios. Cada empresa toma esto como punto de partida y aplica su propio pipeline de filtrado.
+          </aside>
+        </section>
+
+        <!-- What Common Crawl data looks like -->
+        <section>
+          <h2>Que guarda Common Crawl</h2>
+          <div style="display: flex; gap: var(--spacing-md); font-size: 0.45em; margin-top: 8px;">
+            <!-- WARC header -->
+            <div style="flex: 0 0 32%; background: var(--bg-code); border-radius: 8px; padding: 10px; font-family: var(--font-mono); line-height: 1.6; overflow: hidden;">
+              <div style="color: var(--text-muted); margin-bottom: 6px; font-size: 0.9em;">Metadata (WARC = Web ARChive format)</div>
+              <div style="color: #e06c75;">WARC/1.0</div>
+              <div><span style="color: var(--accent);">WARC-Type:</span> response</div>
+              <div><span style="color: var(--accent);">WARC-Date:</span> 2024-03-15T08:42:11Z</div>
+              <div><span style="color: var(--accent);">WARC-Target-URI:</span> <span style="color: var(--accent-secondary);">https://ejemplo.com/blog/post-42</span></div>
+              <div><span style="color: var(--accent);">Content-Length:</span> 48,291</div>
+              <div><span style="color: var(--accent);">Content-Type:</span> text/html</div>
+              <div style="color: var(--text-muted); margin-top: 4px;">...</div>
+            </div>
+            <!-- Raw HTML -->
+            <div id="html-raw" style="flex: 1; background: var(--bg-code); border-radius: 8px; padding: 10px; font-family: var(--font-mono); line-height: 1.5; overflow: hidden; color: var(--text-primary);">
+              <div style="color: var(--text-muted); margin-bottom: 6px; font-size: 0.9em;">Contenido: HTML crudo tal cual</div>
+              <div class="html-noise" style="transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;!DOCTYPE html&gt;</span></div>
+              <div class="html-noise" style="transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;html&gt;&lt;head&gt;</span></div>
+              <div class="html-noise" style="padding-left: 10px; transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;script&gt;</span>var ga=function(){...tracking...}<span style="color: #e06c75;">&lt;/script&gt;</span></div>
+              <div class="html-noise" style="padding-left: 10px; transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;link</span> <span style="color: #d19a66;">rel=</span><span style="color: #98c379;">"stylesheet"</span> <span style="color: #d19a66;">href=</span><span style="color: #98c379;">"styles.min.css"</span><span style="color: #e06c75;">&gt;</span></div>
+              <div class="html-noise" style="padding-left: 10px; transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;meta</span> <span style="color: #d19a66;">property=</span><span style="color: #98c379;">"og:title"</span> <span style="color: #d19a66;">content=</span><span style="color: #98c379;">"Blog Post"</span><span style="color: #e06c75;">&gt;</span></div>
+              <div class="html-noise" style="transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;/head&gt;&lt;body&gt;</span></div>
+              <div class="html-noise" style="padding-left: 10px; transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;nav</span> <span style="color: #d19a66;">class=</span><span style="color: #98c379;">"main-nav"</span><span style="color: #e06c75;">&gt;</span>Home | About | Contact<span style="color: #e06c75;">&lt;/nav&gt;</span></div>
+              <div class="html-noise" style="padding-left: 10px; transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;div</span> <span style="color: #d19a66;">class=</span><span style="color: #98c379;">"sidebar"</span><span style="color: #e06c75;">&gt;&lt;div</span> <span style="color: #d19a66;">class=</span><span style="color: #98c379;">"ad"</span><span style="color: #e06c75;">&gt;</span>BUY NOW!<span style="color: #e06c75;">&lt;/div&gt;&lt;/div&gt;</span></div>
+              <div class="html-noise" style="padding-left: 10px; transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;div</span> <span style="color: #d19a66;">class=</span><span style="color: #98c379;">"cookie-banner"</span><span style="color: #e06c75;">&gt;</span>Accept cookies...<span style="color: #e06c75;">&lt;/div&gt;</span></div>
+              <div style="padding-left: 10px;"><span style="color: #e06c75;">&lt;article&gt;</span></div>
+              <div style="padding-left: 20px;"><span style="color: #e06c75;">&lt;h1&gt;</span><span style="font-weight: bold;">Los oceanos absorben el 30% del CO2</span><span style="color: #e06c75;">&lt;/h1&gt;</span></div>
+              <div style="padding-left: 20px;"><span style="color: #e06c75;">&lt;p&gt;</span>Investigadores del CSIC confirmaron que los oceanos actuan como sumideros de carbono, absorbiendo aproximadamente un tercio de las emisiones...<span style="color: #e06c75;">&lt;/p&gt;</span></div>
+              <div style="padding-left: 10px;"><span style="color: #e06c75;">&lt;/article&gt;</span></div>
+              <div class="html-noise" style="padding-left: 10px; transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;footer&gt;</span>Copyright 2024 | Privacy Policy | Terms<span style="color: #e06c75;">&lt;/footer&gt;</span></div>
+              <div class="html-noise" style="padding-left: 10px; transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;script</span> <span style="color: #d19a66;">src=</span><span style="color: #98c379;">"analytics.js"</span><span style="color: #e06c75;">&gt;&lt;/script&gt;</span></div>
+              <div class="html-noise" style="transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;/body&gt;&lt;/html&gt;</span></div>
+            </div>
+          </div>
+          <p class="fragment fade-in" id="html-filter-trigger" style="font-size: 0.8em; margin-top: 12px; color: var(--text-muted);">De todo esto, solo nos interesa el <span style="color: var(--text-primary); font-weight: bold;">texto del contenido</span>. El resto es ruido.</p>
+
+          <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            if (typeof Reveal === 'undefined') return;
+            Reveal.on('fragmentshown', function(e) {
+              if (e.fragment.id !== 'html-filter-trigger') return;
+              var els = document.querySelectorAll('#html-raw .html-noise');
+              for (var i = 0; i < els.length; i++) {
+                els[i].style.opacity = '0.2';
+                els[i].style.textDecoration = 'line-through';
+              }
+            });
+            Reveal.on('fragmenthidden', function(e) {
+              if (e.fragment.id !== 'html-filter-trigger') return;
+              var els = document.querySelectorAll('#html-raw .html-noise');
+              for (var i = 0; i < els.length; i++) {
+                els[i].style.opacity = '1';
+                els[i].style.textDecoration = 'none';
+              }
+            });
+          });
+          </script>
+
+          <aside class="notes">
+            Esto es lo que Common Crawl guarda: un header en formato WARC (Web ARChive, un estandar ISO para archivar contenido web) con metadata, y el HTML crudo completo. Al principio todo se ve igual — es un bloque de HTML sin distincion. Dejar que los estudiantes lo miren un momento. Cuando avanzo, se ve el contraste: la mayoria es ruido (scripts, CSS, navegacion, ads, cookies, footer) y se tacha. El texto util es una fraccion minima. Sin filtrado, le dariamos a la red neuronal mayormente basura. Esto motiva el pipeline de FineWeb.
           </aside>
         </section>
 
