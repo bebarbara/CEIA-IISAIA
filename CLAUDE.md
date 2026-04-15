@@ -45,7 +45,7 @@ After cloning:
 cp -r tools/skills/* ~/.claude/skills/
 
 # Python tools (yt-transcript)
-cd tools && uv sync && cd ..
+uv sync
 ```
 
 ## Run

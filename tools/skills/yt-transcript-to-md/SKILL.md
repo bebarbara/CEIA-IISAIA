@@ -12,7 +12,7 @@ Extracts a YouTube video's full transcript and transforms it into a set of topic
 | Key | Value |
 |-----|-------|
 | Script | `tools/yt-transcript.py` |
-| Run | `uv run --project tools python tools/yt-transcript.py` |
+| Run | `uv run python tools/yt-transcript.py` |
 | Slice size | ~500 lines per Read call |
 
 ## Flow
@@ -26,7 +26,7 @@ Extract the YouTube URL from the user's message. Ask the user for the output dir
 Run the Python script to download the full transcript with timestamps:
 
 ```bash
-uv run --project tools python tools/yt-transcript.py "<youtube_url>" --timestamps -o "<output_dir>/transcript.txt"
+uv run python tools/yt-transcript.py "<youtube_url>" --timestamps -o "<output_dir>/transcript.txt"
 ```
 
 If the command fails, report the error to the user and stop. Common failures:
