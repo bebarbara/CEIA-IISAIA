@@ -13,7 +13,7 @@ Presentaciones HTML (reveal.js) para un curso de 8 semanas.
 | `shared/templates/` | Template base de reveal.js para todas las semanas |
 | `semanas/NN/` | Contenido de cada semana (notas, slides, imagenes) |
 | `semanas/NN/CONTEXT.md` | Contrato de la semana: inputs, proceso, outputs |
-| `semanas/NN/notas.md` | Borrador/guion de la clase |
+| `semanas/NN/source_material/` | Material fuente para generar slides (index.md + contenido) |
 | `semanas/NN/slides/` | Presentacion reveal.js generada |
 | `semanas/NN/img/` | Imagenes de la semana |
 | `docs/` | Documentos de diseno y planes |
@@ -25,7 +25,6 @@ Presentaciones HTML (reveal.js) para un curso de 8 semanas.
 | Task | Read |
 |------|------|
 | Generate/edit slides for week N | `semanas/NN/CONTEXT.md` |
-| Draft/edit lecture notes | `semanas/NN/CONTEXT.md` + `programa.md` |
 | Change theme or styling | `_config/theme/` |
 | Check slide rules | `_config/slide-conventions.md` |
 | Set up a new week | `shared/CONTEXT.md` + `programa.md` |
