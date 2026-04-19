@@ -117,6 +117,12 @@ function buildAnimation(text, containerId, titleId, conceptsId) {
         }
         html += '</div>';
         html += '<div style="color: var(--text-muted); font-size: 0.8em;">Cada caracter se mapea a un numero. Pero usar uno por caracter es ineficiente.</div>';
+        var uniqueCount = Object.keys(usedCodes).length;
+        html += '<div style="color: var(--accent); font-size: 0.8em; margin-top: 4px;">' + displayChars.length + ' caracteres, ' + uniqueCount + ' unicos (de 256 valores posibles en UTF-8)</div>';
+        // Show sequence as list of UTF-8 codes
+        var codeList = displayChars.slice(0, 20).map(function(c) { return c.code; });
+        html += '<div style="color: var(--text-muted); font-size: 0.75em; margin-top: 8px;">El texto como secuencia de numeros:</div>';
+        html += '<div style="color: var(--accent-secondary); font-family: var(--font-mono); font-size: 0.75em; margin-top: 2px;">[' + codeList.join(', ') + ', ...]</div>';
         html += '</div>';
 
         // Right: mini ASCII table (relative sizing)
@@ -142,7 +148,7 @@ function buildAnimation(text, containerId, titleId, conceptsId) {
       }
     },
     {
-      label: 'Paso 2: Agrupar bytes en tokens (subpalabras frecuentes)',
+      label: 'Paso 2: Agrupar bytes en subpalabras frecuentes',
       render: function() {
         var html = '<div style="display: flex; gap: 4px; flex-wrap: wrap; align-items: center;">';
         tokens.forEach(function(t) {
@@ -152,7 +158,11 @@ function buildAnimation(text, containerId, titleId, conceptsId) {
             '</span>';
         });
         html += '</div>';
-        html += '<div style="margin-top: 10px; color: var(--text-primary); font-size: 0.8em;">Un algoritmo (BPE) aprende que secuencias de bytes aparecen juntas con frecuencia y las agrupa en "tokens".</div>';
+        html += '<div style="margin-top: 10px; color: var(--text-primary); font-size: 0.8em;">Un algoritmo (<a href="https://en.wikipedia.org/wiki/Byte-pair_encoding" target="_blank" style="color: var(--link);">BPE</a>) aprende que secuencias de bytes aparecen juntas con frecuencia y las agrupa en "tokens".</div>';
+        html += '<ul style="margin-top: 8px; font-size: 0.75em; color: var(--text-muted); line-height: 1.6;">';
+        html += '<li>' + displayChars.length + ' caracteres → <span style="color: var(--accent);">' + tokens.length + ' subpalabras</span> (secuencia mas corta, vocabulario mas grande)</li>';
+        html += '<li>GPT-4 usa un vocabulario de ~100.000 tokens</li>';
+        html += '</ul>';
         return html;
       }
     },

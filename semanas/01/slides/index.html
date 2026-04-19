@@ -661,16 +661,23 @@
               <div class="html-noise" style="padding-left: 10px; transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;nav</span> <span style="color: #d19a66;">class=</span><span style="color: #98c379;">"main-nav"</span><span style="color: #e06c75;">&gt;</span>Home | About | Contact<span style="color: #e06c75;">&lt;/nav&gt;</span></div>
               <div class="html-noise" style="padding-left: 10px; transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;div</span> <span style="color: #d19a66;">class=</span><span style="color: #98c379;">"sidebar"</span><span style="color: #e06c75;">&gt;&lt;div</span> <span style="color: #d19a66;">class=</span><span style="color: #98c379;">"ad"</span><span style="color: #e06c75;">&gt;</span>BUY NOW!<span style="color: #e06c75;">&lt;/div&gt;&lt;/div&gt;</span></div>
               <div class="html-noise" style="padding-left: 10px; transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;div</span> <span style="color: #d19a66;">class=</span><span style="color: #98c379;">"cookie-banner"</span><span style="color: #e06c75;">&gt;</span>Accept cookies...<span style="color: #e06c75;">&lt;/div&gt;</span></div>
-              <div style="padding-left: 10px;"><span style="color: #e06c75;">&lt;article&gt;</span></div>
-              <div style="padding-left: 20px;"><span style="color: #e06c75;">&lt;h1&gt;</span><span style="font-weight: bold;">Los oceanos absorben el 30% del CO2</span><span style="color: #e06c75;">&lt;/h1&gt;</span></div>
-              <div style="padding-left: 20px;"><span style="color: #e06c75;">&lt;p&gt;</span>Investigadores del CSIC confirmaron que los oceanos actuan como sumideros de carbono, absorbiendo aproximadamente un tercio de las emisiones...<span style="color: #e06c75;">&lt;/p&gt;</span></div>
-              <div style="padding-left: 10px;"><span style="color: #e06c75;">&lt;/article&gt;</span></div>
+              <div class="html-noise" style="padding-left: 10px; transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;article&gt;</span></div>
+              <div style="padding-left: 20px;"><span class="html-noise" style="color: #e06c75; transition: opacity 0.5s;">&lt;h1&gt;</span><span style="font-weight: bold;">Los oceanos absorben el 30% del CO2</span><span class="html-noise" style="color: #e06c75; transition: opacity 0.5s;">&lt;/h1&gt;</span></div>
+              <div style="padding-left: 20px;"><span class="html-noise" style="color: #e06c75; transition: opacity 0.5s;">&lt;p&gt;</span>Investigadores del CSIC confirmaron que los oceanos actuan como sumideros de carbono, absorbiendo aproximadamente un tercio de las emisiones...<span class="html-noise" style="color: #e06c75; transition: opacity 0.5s;">&lt;/p&gt;</span></div>
+              <div class="html-noise" style="padding-left: 10px; transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;/article&gt;</span></div>
               <div class="html-noise" style="padding-left: 10px; transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;footer&gt;</span>Copyright 2024 | Privacy Policy | Terms<span style="color: #e06c75;">&lt;/footer&gt;</span></div>
               <div class="html-noise" style="padding-left: 10px; transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;script</span> <span style="color: #d19a66;">src=</span><span style="color: #98c379;">"analytics.js"</span><span style="color: #e06c75;">&gt;&lt;/script&gt;</span></div>
               <div class="html-noise" style="transition: opacity 0.5s;"><span style="color: #e06c75;">&lt;/body&gt;&lt;/html&gt;</span></div>
             </div>
           </div>
-          <p class="fragment fade-in" id="html-filter-trigger" style="font-size: 0.8em; margin-top: 12px; color: var(--text-muted);">De todo esto, solo nos interesa el <span style="color: var(--text-primary); font-weight: bold;">texto del contenido</span>. El resto es ruido.</p>
+          <div class="fragment fade-in" id="html-filter-trigger" style="margin-top: 12px;">
+            <p style="font-size: 0.8em; color: var(--text-muted);">De todo esto, solo nos interesa el <span style="color: var(--text-primary); font-weight: bold;">texto del contenido</span>. El resto es ruido.</p>
+            <ul style="font-size: 0.65em; margin-top: 6px; line-height: 1.6;">
+              <li><a href="https://huggingface.co/spaces/HuggingFaceFW/blogpost-fineweb-v1" target="_blank">FineWeb</a> (HuggingFace)</li>
+              <li><a href="https://huggingface.co/datasets/allenai/c4" target="_blank">C4</a> (Google/Allen AI)</li>
+              <li><a href="https://huggingface.co/datasets/cerebras/SlimPajama-627B" target="_blank">SlimPajama</a> (Cerebras)</li>
+            </ul>
+          </div>
 
           <script>
           document.addEventListener('DOMContentLoaded', function() {
@@ -706,13 +713,13 @@
             <div style="flex: 1;">
               <ul style="font-size: 0.85em;">
                 <li><a href="https://huggingface.co/spaces/HuggingFaceFW/blogpost-fineweb-v1" target="_blank">HuggingFace FineWeb</a></li>
-                <li><strong>15 billones de tokens</strong> (44 TB)</li>
+                <li><strong>44 TB</strong> de texto limpio</li>
                 <li>96 snapshots de Common Crawl (2013-2024)</li>
               </ul>
             </div>
             <div style="flex: 0 0 auto; text-align: right; font-size: 0.65em; color: var(--text-muted); line-height: 1.8;">
-              <div>Paginas crudas: <span style="color: var(--text-primary);">~200B</span></div>
-              <div>Post-filtrado: <span style="color: var(--accent);">~15B tokens</span></div>
+              <div>Paginas crudas: <span style="color: var(--text-primary);">~200 mil millones</span></div>
+              <div>Post-filtrado: <span style="color: var(--accent);">44 TB de texto</span></div>
               <div>Se descarta: <span style="color: var(--accent-secondary);">~93%</span></div>
             </div>
           </div>
@@ -832,9 +839,9 @@
 
           <div id="tok-concepts" style="opacity: 0; transition: opacity 0.5s; margin-top: 12px;">
             <ul style="font-size: 0.75em;">
-              <li>Este proceso se llama <strong style="color: var(--accent);">tokenizacion</strong>: convertir texto en numeros</li>
+              <li>Este proceso se llama <strong style="color: var(--accent);">tokenizacion</strong>: segmentar texto en subpalabras (tokens)</li>
               <li>GPT-4 usa un vocabulario de ~100.000 tokens</li>
-              <li><a href="https://tiktokenizer.vercel.app/?model=cl100k_base" target="_blank">Tiktokenizer</a> (demo en vivo)</li>
+              <li><a href="https://tiktokenizer.vercel.app/?model=cl100k_base" target="_blank">Tiktokenizer</a></li>
             </ul>
           </div>
 
