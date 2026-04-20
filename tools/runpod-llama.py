@@ -35,7 +35,7 @@ GPU_TYPES = [
 # Pod configuration
 POD_CONFIG = {
     "name": "vllm-llama405b-base",
-    "imageName": "vllm/vllm-openai:latest",
+    "imageName": "vllm/vllm-openai:v0.6.6.post1",
     "gpuCount": 8,
     "containerDiskInGb": 50,
     "volumeInGb": 300,
@@ -46,8 +46,7 @@ POD_CONFIG = {
     "dockerArgs": (
         "--model meta-llama/Llama-3.1-405B-FP8 "
         "--tensor-parallel-size 8 "
-        "--max-model-len 4096 "
-        "--enforce-eager"
+        "--max-model-len 4096"
     ),
 }
 
