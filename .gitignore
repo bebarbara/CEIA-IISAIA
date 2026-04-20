@@ -2,3 +2,6 @@ node_modules/
 .claude/
 programa.md
 semana_1.md
+.env
+.runpod-pod
+__pycache__/

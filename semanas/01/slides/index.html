@@ -58,17 +58,6 @@
       width: 24px;
       height: 14px;
     }
-    /* Loss curve animation */
-    .loss-path {
-      stroke-dasharray: 600;
-      stroke-dashoffset: 600;
-    }
-    .loss-path.animate {
-      animation: drawLoss 3s ease-out forwards;
-    }
-    @keyframes drawLoss {
-      to { stroke-dashoffset: 0; }
-    }
     /* Tool use flow */
     .flow-step {
       background: var(--bg-secondary);
@@ -1264,7 +1253,7 @@
         <section class="section-divider">
           <h2>Computo y Modelos Base</h2>
           <aside class="notes">
-            Ahora vamos a ver como se ve en la practica entrenar un modelo, que hardware se usa, y que obtenemos al final del pre-entrenamiento.
+            Ya vimos como funciona el entrenamiento de redes neuronales. Ahora vamos a hablar de la escala: cuanto cuesta entrenar un modelo real, que hardware se usa, y que obtenemos al final. Lo que sale del pre-training tiene capacidades sorprendentes, pero tambien limitaciones claras que motivan la siguiente etapa.
           </aside>
         </section>
 
@@ -1293,117 +1282,205 @@
             </div>
           </div>
           <aside class="notes">
-            GPT-2 fue publicado en 2019 y es el primer modelo que tiene un stack reconocible por estandares modernos — mismo tipo de red (Transformer), misma idea de pre-training + fine-tuning. La diferencia es solo de escala. GPT-2 tenia 1.6 mil millones de parametros; los modelos actuales tienen cientos de miles de millones o mas. El contexto de GPT-2 era 1,024 tokens — hoy estamos en cientos de miles o hasta un millon. Karpathy reprodujo GPT-2 por ~$600 en un dia usando hardware moderno (H100). El costo bajo tanto porque: 1) los datasets son mejores y mas limpios, 2) el hardware es mas rapido (H100 vs V100), 3) el software esta mucho mas optimizado.
+            GPT-2 fue publicado en 2019 y es el primer modelo con un stack reconocible por estandares modernos — mismo tipo de red (Transformer), misma idea de pre-training. La diferencia con modelos actuales es solo de escala. GPT-2 tenia 1.6 mil millones de parametros; modelos actuales tienen cientos de miles de millones. El contexto era 1,024 tokens — hoy estamos en cientos de miles o un millon. Karpathy reprodujo GPT-2 por ~$600 en un dia con hardware moderno. El costo bajo porque: 1) los datasets son mejores, 2) el hardware es mas rapido (H100 vs V100), 3) el software esta mas optimizado. GPT-2 es perfecto para entender el proceso porque es identico a lo que se hace hoy, solo mas chico.
           </aside>
         </section>
 
-        <!-- Training loss curve -->
+        <!-- Training vs inference -->
         <section>
-          <h2>Entrenamiento en la practica</h2>
-          <p style="font-size: 0.8em; color: var(--text-muted);">El loss baja con cada actualizacion = mejores predicciones</p>
-          <div style="margin-top: 12px;">
-            <svg id="loss-chart" viewBox="0 0 420 220" style="width: 100%; max-height: 38vh;">
-              <!-- Axes -->
-              <line x1="45" y1="15" x2="45" y2="190" stroke="#8892b0" stroke-width="1"/>
-              <line x1="45" y1="190" x2="400" y2="190" stroke="#8892b0" stroke-width="1"/>
-              <!-- Labels -->
-              <text x="12" y="105" fill="#8892b0" font-size="11" text-anchor="middle" transform="rotate(-90, 12, 105)" font-family="Inter, sans-serif">Loss</text>
-              <text x="222" y="212" fill="#8892b0" font-size="11" text-anchor="middle" font-family="Inter, sans-serif">Steps de entrenamiento</text>
-              <!-- Y-axis ticks -->
-              <text x="40" y="35" fill="#8892b0" font-size="9" text-anchor="end" font-family="Inter, sans-serif">10.0</text>
-              <text x="40" y="105" fill="#8892b0" font-size="9" text-anchor="end" font-family="Inter, sans-serif">5.0</text>
-              <text x="40" y="188" fill="#8892b0" font-size="9" text-anchor="end" font-family="Inter, sans-serif">0</text>
-              <!-- Loss curve -->
-              <path id="loss-line" class="loss-path"
-                d="M45,30 C70,32 80,50 100,65 S130,80 155,95 S180,105 200,115 S225,125 250,132 S275,140 300,148 S330,155 355,160 S375,163 400,165"
-                fill="none" stroke="#64ffda" stroke-width="2.5" stroke-linecap="round"/>
-              <!-- Reference line for good model -->
-              <line x1="45" y1="165" x2="400" y2="165" stroke="#82aaff" stroke-width="1" stroke-dasharray="5,5" opacity="0.5"/>
-              <text x="402" y="168" fill="#82aaff" font-size="9" font-family="Inter, sans-serif" opacity="0.7">convergencia</text>
-            </svg>
+          <h2>Entrenamiento vs inferencia</h2>
+          <div style="display: flex; gap: var(--spacing-lg); margin-top: 16px; font-size: 0.75em;">
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px;">
+              <p style="color: var(--accent); font-weight: bold; margin-bottom: 8px;">Entrenamiento</p>
+              <ul style="margin: 0; padding-left: 16px;">
+                <li>Se hace una vez</li>
+                <li>Meses de computo, miles de GPUs</li>
+                <li>Millones de USD</li>
+                <li>Produce los parametros</li>
+              </ul>
+            </div>
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px;" class="fragment fade-in">
+              <p style="color: var(--accent-secondary); font-weight: bold; margin-bottom: 8px;">Inferencia</p>
+              <ul style="margin: 0; padding-left: 16px;">
+                <li>Cada vez que un usuario habla con el modelo</li>
+                <li>Parametros congelados, sin mas aprendizaje</li>
+                <li>Fracciones de centavo por consulta</li>
+                <li>Es lo que pasa en ChatGPT</li>
+              </ul>
+            </div>
           </div>
-          <ul style="font-size: 0.75em;">
-            <li class="fragment fade-in">Cada step procesa ~1M tokens y ajusta los parametros</li>
-            <li class="fragment fade-in">GPT-2: ~32,000 steps, ~7 seg/step en 8x H100</li>
-            <li class="fragment fade-in">Loss bajo = el modelo predice mejor los tokens del dataset</li>
-          </ul>
-          <script>
-            document.addEventListener('DOMContentLoaded', function() {
-              if (typeof Reveal === 'undefined') return;
-              Reveal.on('slidechanged', function(e) {
-                var lossLine = document.getElementById('loss-line');
-                if (lossLine && e.currentSlide && e.currentSlide.contains(lossLine)) {
-                  lossLine.classList.add('animate');
-                }
-              });
-            });
-          </script>
+          <p class="fragment fade-in" style="font-size: 0.8em; color: var(--text-muted); margin-top: 16px;">Cuando hablas con ChatGPT, el modelo fue entrenado hace meses. Los parametros estan congelados. Todo lo que ves es inferencia.</p>
           <aside class="notes">
-            Asi se ve entrenar un modelo: cada linea en el log es una actualizacion de los parametros. El numero clave es el loss — un numero que indica que tan buenas son las predicciones. Loss bajo = buenas predicciones. Al principio el loss es alto (predicciones aleatorias) y va bajando con cada step. Cada step procesa un millon de tokens y tarda ~7 segundos en 8x H100. Para GPT-2 se necesitan ~32,000 steps. Al 1% del entrenamiento (~step 420, 15 minutos), el modelo genera texto incoherente pero con cierta estructura local. Al final del entrenamiento, genera ingles bastante coherente. Karpathy mostro la inferencia cada 20 steps para ver el progreso.
+            Es importante distinguir estas dos fases. El entrenamiento es el proceso caro y largo que vimos: procesar billones de tokens, ajustar parametros, reducir el loss. Se hace una vez y tarda meses en miles de GPUs. El resultado son los parametros — los miles de millones de numeros que definen el modelo. La inferencia es lo que pasa cuando un usuario interactua con el modelo. Los parametros estan congelados — no se aprende nada nuevo. El modelo simplemente recibe tokens, los pasa por la red, y predice el siguiente token. Cuando hablas con ChatGPT, ese modelo fue entrenado por OpenAI hace meses. Cada mensaje tuyo es solo inferencia: parametros fijos generando tokens. Esta distincion importa para lo que viene: el post-training (SFT) es una segunda ronda de entrenamiento, mucho mas corta y barata, pero el principio es el mismo.
           </aside>
         </section>
 
         <!-- GPUs and data centers -->
         <section>
           <h2>Hardware: GPUs y data centers</h2>
-          <ul>
-            <li class="fragment fade-in">NVIDIA H100: la GPU dominante para entrenar LLMs</li>
-            <li class="fragment fade-in">8 GPUs en un nodo, miles de nodos en un datacenter</li>
-            <li class="fragment fade-in">~$3/GPU/hora en la nube (<a href="https://lambda.ai/pricing" target="_blank">Lambda Labs</a>)</li>
-            <li class="fragment fade-in">Nvidia vale $3.4 billones de USD — la fiebre del oro son las GPUs</li>
-          </ul>
+          <div style="display: flex; align-items: center; gap: 12px; margin-top: 20px; font-size: 0.7em;">
+            <div style="background: var(--bg-secondary); border-radius: 8px; padding: 12px 16px; text-align: center;">
+              <svg viewBox="0 0 40 32" width="40" height="32" style="display: block; margin: 0 auto 6px;">
+                <rect x="4" y="4" width="32" height="24" rx="3" fill="none" stroke="var(--accent)" stroke-width="2"/>
+                <rect x="10" y="10" width="20" height="12" rx="1" fill="var(--accent)" opacity="0.3"/>
+              </svg>
+              <div style="color: var(--accent); font-weight: bold;">1 GPU</div>
+              <div style="color: var(--text-muted);">NVIDIA H100</div>
+              <div style="color: var(--text-muted);">~$3/hora</div>
+            </div>
+            <svg width="24" height="14" viewBox="0 0 24 14"><path d="M2 7h16m0 0l-5-5m5 5l-5 5" stroke="var(--text-muted)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            <div class="fragment fade-in" style="background: var(--bg-secondary); border-radius: 8px; padding: 12px 16px; text-align: center;">
+              <div style="display: flex; gap: 3px; justify-content: center; margin-bottom: 6px;">
+                <svg viewBox="0 0 18 14" width="18" height="14"><rect x="1" y="1" width="16" height="12" rx="2" fill="var(--accent)" opacity="0.3" stroke="var(--accent)" stroke-width="1"/></svg>
+                <svg viewBox="0 0 18 14" width="18" height="14"><rect x="1" y="1" width="16" height="12" rx="2" fill="var(--accent)" opacity="0.3" stroke="var(--accent)" stroke-width="1"/></svg>
+                <svg viewBox="0 0 18 14" width="18" height="14"><rect x="1" y="1" width="16" height="12" rx="2" fill="var(--accent)" opacity="0.3" stroke="var(--accent)" stroke-width="1"/></svg>
+                <svg viewBox="0 0 18 14" width="18" height="14"><rect x="1" y="1" width="16" height="12" rx="2" fill="var(--accent)" opacity="0.3" stroke="var(--accent)" stroke-width="1"/></svg>
+              </div>
+              <div style="display: flex; gap: 3px; justify-content: center; margin-bottom: 6px;">
+                <svg viewBox="0 0 18 14" width="18" height="14"><rect x="1" y="1" width="16" height="12" rx="2" fill="var(--accent)" opacity="0.3" stroke="var(--accent)" stroke-width="1"/></svg>
+                <svg viewBox="0 0 18 14" width="18" height="14"><rect x="1" y="1" width="16" height="12" rx="2" fill="var(--accent)" opacity="0.3" stroke="var(--accent)" stroke-width="1"/></svg>
+                <svg viewBox="0 0 18 14" width="18" height="14"><rect x="1" y="1" width="16" height="12" rx="2" fill="var(--accent)" opacity="0.3" stroke="var(--accent)" stroke-width="1"/></svg>
+                <svg viewBox="0 0 18 14" width="18" height="14"><rect x="1" y="1" width="16" height="12" rx="2" fill="var(--accent)" opacity="0.3" stroke="var(--accent)" stroke-width="1"/></svg>
+              </div>
+              <div style="color: var(--accent); font-weight: bold;">8 GPUs / nodo</div>
+              <div style="color: var(--text-muted);">~$24/hora</div>
+            </div>
+            <svg width="24" height="14" viewBox="0 0 24 14"><path d="M2 7h16m0 0l-5-5m5 5l-5 5" stroke="var(--text-muted)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            <div class="fragment fade-in" style="background: var(--bg-secondary); border-radius: 8px; padding: 12px 16px; text-align: center; flex-shrink: 0;">
+              <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; margin-bottom: 6px;">
+                <svg viewBox="0 0 10 8" width="10" height="8"><rect x="1" y="1" width="8" height="6" rx="1" fill="var(--accent)" opacity="0.2" stroke="var(--accent)" stroke-width="0.5"/></svg>
+                <svg viewBox="0 0 10 8" width="10" height="8"><rect x="1" y="1" width="8" height="6" rx="1" fill="var(--accent)" opacity="0.2" stroke="var(--accent)" stroke-width="0.5"/></svg>
+                <svg viewBox="0 0 10 8" width="10" height="8"><rect x="1" y="1" width="8" height="6" rx="1" fill="var(--accent)" opacity="0.2" stroke="var(--accent)" stroke-width="0.5"/></svg>
+                <svg viewBox="0 0 10 8" width="10" height="8"><rect x="1" y="1" width="8" height="6" rx="1" fill="var(--accent)" opacity="0.2" stroke="var(--accent)" stroke-width="0.5"/></svg>
+                <svg viewBox="0 0 10 8" width="10" height="8"><rect x="1" y="1" width="8" height="6" rx="1" fill="var(--accent)" opacity="0.2" stroke="var(--accent)" stroke-width="0.5"/></svg>
+                <svg viewBox="0 0 10 8" width="10" height="8"><rect x="1" y="1" width="8" height="6" rx="1" fill="var(--accent)" opacity="0.2" stroke="var(--accent)" stroke-width="0.5"/></svg>
+                <svg viewBox="0 0 10 8" width="10" height="8"><rect x="1" y="1" width="8" height="6" rx="1" fill="var(--accent)" opacity="0.2" stroke="var(--accent)" stroke-width="0.5"/></svg>
+                <svg viewBox="0 0 10 8" width="10" height="8"><rect x="1" y="1" width="8" height="6" rx="1" fill="var(--accent)" opacity="0.2" stroke="var(--accent)" stroke-width="0.5"/></svg>
+                <svg viewBox="0 0 10 8" width="10" height="8"><rect x="1" y="1" width="8" height="6" rx="1" fill="var(--accent)" opacity="0.2" stroke="var(--accent)" stroke-width="0.5"/></svg>
+                <svg viewBox="0 0 10 8" width="10" height="8"><rect x="1" y="1" width="8" height="6" rx="1" fill="var(--accent)" opacity="0.2" stroke="var(--accent)" stroke-width="0.5"/></svg>
+                <svg viewBox="0 0 10 8" width="10" height="8"><rect x="1" y="1" width="8" height="6" rx="1" fill="var(--accent)" opacity="0.2" stroke="var(--accent)" stroke-width="0.5"/></svg>
+                <svg viewBox="0 0 10 8" width="10" height="8"><rect x="1" y="1" width="8" height="6" rx="1" fill="var(--accent)" opacity="0.2" stroke="var(--accent)" stroke-width="0.5"/></svg>
+              </div>
+              <div style="color: var(--accent); font-weight: bold;">Miles de nodos</div>
+              <div style="color: var(--text-muted);">Datacenter</div>
+              <div style="color: var(--text-muted);">Decenas de millones USD</div>
+            </div>
+          </div>
+          <p class="fragment fade-in" style="font-size: 0.75em; color: var(--text-muted); margin-top: 16px;">Las GPUs son ideales porque el entrenamiento es masivamente paralelizable. Todas las big tech compiten por acumularlas — la fiebre del oro de la IA. <a href="https://lambda.ai/pricing" target="_blank">Lambda Labs pricing</a></p>
           <aside class="notes">
-            El entrenamiento no corre en una laptop — corre en GPUs especializadas. La H100 de NVIDIA es la GPU dominante. Se pueden apilar 8 en un nodo, y miles de nodos en un datacenter. Las GPUs son ideales porque el entrenamiento tiene mucho paralelismo — miles de multiplicaciones de matrices independientes al mismo tiempo. Se pueden alquilar en la nube: Lambda Labs cobra ~$3/GPU/hora. Un nodo de 8x H100 cuesta ~$24/hora. Las grandes empresas tienen sus propios datacenters con decenas de miles de GPUs. La valuacion de $3.4 billones de Nvidia es porque todas las big tech quieren estas GPUs para entrenar modelos. Es la fiebre del oro de la IA.
+            El entrenamiento no corre en una laptop — corre en GPUs especializadas. La H100 de NVIDIA es la GPU dominante. Las GPUs son ideales porque el entrenamiento tiene mucho paralelismo: miles de multiplicaciones de matrices independientes al mismo tiempo. Se apilan 8 en un nodo, y miles de nodos en un datacenter. Se pueden alquilar: Lambda Labs cobra ~$3/GPU/hora, un nodo de 8x H100 sale ~$24/hora. Las grandes empresas tienen sus propios datacenters con decenas de miles de GPUs. Nvidia se convirtio en una de las empresas mas valiosas del mundo porque todas las big tech necesitan estas GPUs para entrenar modelos cada vez mas grandes. Es literalmente una carrera por acumular hardware.
           </aside>
         </section>
 
-        <!-- Base model behavior -->
+        <!-- What comes out: the base model -->
         <section>
-          <h2>Modelo base: un simulador de texto</h2>
-          <ul>
-            <li class="fragment fade-in">Lo que sale del pre-training <strong>no es un asistente</strong></li>
-            <li class="fragment fade-in">Es un autocompletado de tokens — genera "remixes" de internet</li>
-            <li class="fragment fade-in">405B parametros de Llama 3 = una compresion lossy de internet</li>
-          </ul>
-          <p class="fragment fade-in"><a href="https://app.hyperbolic.ai/models/llama31-405b" target="_blank">Demo: Llama 3.1 405B base</a></p>
+          <h2>Que sale del pre-training?</h2>
+          <p style="font-size: 0.8em; color: var(--text-muted);">Para "publicar" un modelo se necesitan dos cosas:</p>
+          <div style="display: flex; gap: var(--spacing-lg); margin-top: 16px; font-size: 0.75em;">
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px;">
+              <p style="color: var(--accent); font-weight: bold;">Codigo</p>
+              <p>~200 lineas de Python que describen la arquitectura (el forward pass de la red)</p>
+            </div>
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px;" class="fragment fade-in">
+              <p style="color: var(--accent-secondary); font-weight: bold;">Parametros</p>
+              <p>Miles de millones de numeros: el ajuste preciso de cada "perilla" de la red. Aca esta el valor.</p>
+            </div>
+          </div>
+          <p class="fragment fade-in" style="font-size: 0.8em; margin-top: 16px;">Los 405 mil millones de parametros de Llama 3 son una <strong style="color: var(--accent);">compresion lossy de internet</strong>: se queda con la esencia, no con la copia exacta.</p>
           <aside class="notes">
-            El modelo que sale del pre-training se llama "modelo base" y NO es un asistente. No responde preguntas — simplemente continua secuencias de tokens. Es un simulador de texto de internet. Si le das el inicio de un articulo de Wikipedia, lo va a continuar. Si le das un prompt aleatorio, genera texto que estadisticamente se parece a paginas de internet. Los 405 mil millones de parametros de Llama 3 son como un archivo zip de internet — pero con compresion lossy. Se queda con la "esencia" de los patrones. Usar Hyperbolic para demostrar: darle "Top 10 landmarks in Paris:" y ver que genera una lista. Darle texto de Wikipedia y ver que lo continua. Esto demuestra que ya tiene conocimiento, pero no sabe ser asistente todavia.
+            Lo que sale del pre-training se llama "modelo base". Para publicarlo se necesitan dos cosas. Primero, el codigo: unas pocas cientos de lineas de Python que describen la arquitectura de la red — la secuencia exacta de operaciones del forward pass. Esto es codigo estandar. Segundo, los parametros: miles de millones de numeros, el resultado de todo ese entrenamiento. Los parametros son el valor real — cualquiera puede escribir la arquitectura, pero producir un buen set de parametros requiere meses de computo y millones de dolares. Llama 3 de Meta tiene 405 mil millones de parametros. Una forma util de pensarlos: son como un archivo zip de internet, pero con compresion lossy. No es una copia exacta — es la esencia de los patrones estadisticos de billones de paginas web, comprimida en esos numeros.
+          </aside>
+        </section>
+
+        <!-- Base model capabilities -->
+        <section>
+          <h2>Conocimiento del modelo base</h2>
+          <p style="font-size: 0.8em; color: var(--text-muted);">No es un asistente — es un autocompletado. Pero al predecir tokens, aprendio sobre el mundo.</p>
+          <div style="display: flex; align-items: stretch; gap: 12px; margin-top: 16px; font-size: 0.7em;">
+            <div style="flex: 1; background: var(--bg-code); border-radius: 8px; padding: 10px 14px;">
+              <p style="color: var(--text-muted); margin-bottom: 4px;">Prompt:</p>
+              <p>"Here is my top 10 list of landmarks to see in Paris:"</p>
+            </div>
+            <div style="display: flex; align-items: center;">
+              <svg width="28" height="14" viewBox="0 0 24 14"><path d="M2 7h16m0 0l-5-5m5 5l-5 5" stroke="var(--accent)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            </div>
+            <div style="flex: 1; background: var(--bg-code); border-radius: 8px; padding: 10px 14px;">
+              <p style="color: var(--text-muted); margin-bottom: 4px;">Completado:</p>
+              <p style="color: var(--accent);">1. Eiffel Tower<br/>2. Louvre Museum<br/>3. Notre-Dame Cathedral<br/>4. Arc de Triomphe<br/>5. ...</p>
+            </div>
+          </div>
+          <div class="fragment fade-in" style="background: var(--bg-secondary); border-radius: 8px; padding: 10px 14px; font-size: 0.75em; margin-top: 12px; display: flex; align-items: baseline; gap: 8px;">
+            <span style="color: var(--accent-secondary); font-weight: bold; flex-shrink: 0;">Clave:</span>
+            <span>el conocimiento es una reconstruccion estadistica, no una base de datos. Lo frecuente en internet se recuerda bien. Lo raro se puede reconstruir mal.</span>
+          </div>
+          <aside class="notes">
+            El modelo base NO es un asistente. No responde preguntas — simplemente continua secuencias de tokens, genera "remixes" de internet. Pero aca esta lo interesante: para poder predecir bien el siguiente token, el modelo tuvo que aprender una enorme cantidad sobre el mundo. Sabe de geografia, historia, ciencia, idiomas, codigo — todo eso esta codificado en los parametros. Se puede extraer ese conocimiento con los prompts adecuados. Si le damos "Top 10 landmarks in Paris:" el modelo genera una lista razonable porque ha visto miles de articulos turisticos sobre Paris. Pero es importante entender que esto es una reconstruccion estadistica, no una base de datos. Las cosas que aparecen frecuentemente en internet se recuerdan con mas precision. Las cosas raras o poco frecuentes pueden reconstruirse mal.
           </aside>
         </section>
 
         <!-- Memorization and hallucination -->
         <section>
-          <h2>Memorizacion y alucinacion del modelo base</h2>
-          <ul>
-            <li class="fragment fade-in">Documentos vistos muchas veces (Wikipedia) se memorizan casi verbatim</li>
-            <li class="fragment fade-in">Datos del futuro (post knowledge cutoff) se inventan</li>
-            <li class="fragment fade-in">El modelo toma su mejor guess estadistico</li>
-          </ul>
-          <div class="fragment fade-in" style="background: var(--bg-code); border-radius: 8px; padding: 10px 14px; font-size: 0.7em; margin-top: 12px;">
-            <p style="color: var(--text-muted);">Prompt: texto de Wikipedia sobre cebras &#8594; recita de memoria</p>
-            <p style="color: var(--text-muted); margin-top: 8px;">Prompt: "En las elecciones de 2028..." &#8594; inventa universos paralelos</p>
+          <h2>Memorizacion y alucinacion</h2>
+          <div style="display: flex; gap: var(--spacing-lg); margin-top: 16px; font-size: 0.75em;">
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px;">
+              <p style="color: var(--accent); font-weight: bold; margin-bottom: 6px;">Memorizacion</p>
+              <p>Documentos de alta calidad (Wikipedia) vistos 10+ veces durante el entrenamiento se recitan casi verbatim</p>
+              <div style="background: var(--bg-code); border-radius: 4px; padding: 6px 8px; margin-top: 8px; font-size: 0.9em;">
+                <span style="color: var(--text-muted);">Prompt:</span> primer parrafo de Wikipedia sobre cebras<br/>
+                <span style="color: var(--accent);">&#8594;</span> lo continua de memoria
+              </div>
+            </div>
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px;" class="fragment fade-in">
+              <p style="color: var(--accent-secondary); font-weight: bold; margin-bottom: 6px;">Alucinacion</p>
+              <p>Datos fuera de su fecha de corte: el modelo inventa, tomando su mejor guess estadistico</p>
+              <div style="background: var(--bg-code); border-radius: 4px; padding: 6px 8px; margin-top: 8px; font-size: 0.9em;">
+                <span style="color: var(--text-muted);">Prompt:</span> "En las elecciones de 2028..."<br/>
+                <span style="color: var(--accent-secondary);">&#8594;</span> inventa un universo paralelo distinto cada vez
+              </div>
+            </div>
           </div>
           <aside class="notes">
-            El modelo base tiene comportamientos interesantes. Para documentos de alta calidad como Wikipedia, que probablemente vio 10+ veces durante el entrenamiento, puede recitar de memoria. Si le das el primer parrafo del articulo de Wikipedia sobre cebras, continua con una copia casi perfecta. Esto se llama regurgitacion y generalmente no es deseable. Para datos fuera de su knowledge cutoff (cosas que pasaron despues del entrenamiento), el modelo simplemente inventa. Si le preguntas sobre elecciones futuras, genera "universos paralelos" — cada vez una historia diferente. Esto es alucinacion del modelo base. Karpathy mostro que al preguntarle sobre las elecciones de 2024, el modelo invento que Mike Pence era running mate, luego en otro intento dijo Ron DeSantis. Todo esto es alucinacion — el modelo tomando su mejor guess estadistico.
+            El modelo base exhibe dos comportamientos interesantes que son las dos caras de la misma moneda. Memorizacion: documentos de alta calidad como Wikipedia probablemente fueron vistos 10+ veces durante el entrenamiento (se les da mas peso por ser fuentes confiables). El modelo puede recitarlos casi de memoria — le das el primer parrafo del articulo de cebras y continua con una copia casi perfecta. Es como cuando lees algo 100 veces y lo podes recitar. Esto se llama regurgitacion y generalmente no es deseable. Alucinacion: para cosas fuera de su fecha de corte de conocimiento (eventos futuros, datos que no vio), el modelo no dice "no se" — inventa. Karpathy mostro que al preguntarle sobre elecciones de 2024, una vez dijo que Mike Pence era running mate, otra vez dijo Ron DeSantis. Cada generacion es un "universo paralelo" diferente. El modelo toma su mejor guess estadistico basado en lo que sabe, pero no tiene forma de distinguir lo que sabe de lo que inventa.
           </aside>
         </section>
 
-        <!-- Few-shot prompting -->
+        <!-- Live base model demo -->
+        <section>
+          <h2 style="font-size: 1.2em; margin-bottom: 8px;">Demo: modelo base en vivo</h2>
+          <p style="font-size: 0.65em; color: var(--text-muted); margin-bottom: 8px;">Llama 3.1 405B (base, sin instruct) corriendo en 8x H100 80GB</p>
+          <div id="base-model-demo"></div>
+          <script src="base-model-chat.js"></script>
+          <script>initBaseModelChat({ containerId: 'base-model-demo' });</script>
+          <aside class="notes">
+            Aca vamos a interactuar con un modelo base real — Llama 3.1 de 405 mil millones de parametros, el mas grande de Meta. No es la version instruct (la de chat), es el modelo base puro que solo sabe autocompletar texto. A la izquierda tenemos una interfaz tipo chat, pero es una ilusion — a la derecha pueden ver lo que realmente esta pasando: todo es una cadena de texto continua. El modelo no tiene concepto de "turnos" ni "conversacion". Simplemente recibe texto y genera la continuacion mas probable. Noten que este modelo esta corriendo en 8 GPUs H100 de 80GB cada una — mas de 600GB de VRAM solo para tener los parametros en memoria. Esto da una idea de la escala de computo necesaria para inferencia en modelos de frontera.
+          </aside>
+        </section>
+
+        <!-- Few-shot prompting and bridge to SFT -->
         <section>
           <h2>Few-shot prompting</h2>
-          <ul>
-            <li class="fragment fade-in">El modelo base reconoce patrones en el contexto</li>
-            <li class="fragment fade-in">Darle ejemplos del patron deseado y dejar que lo continue</li>
-          </ul>
-          <div class="fragment fade-in" style="background: var(--bg-code); border-radius: 8px; padding: 10px 14px; font-family: var(--font-mono); font-size: 0.6em; line-height: 1.6; margin-top: 12px;">
-            <div>cat: gato</div>
-            <div>dog: perro</div>
-            <div>house: casa</div>
-            <div>teacher: <span style="color: var(--accent);">maestro</span> <span style="color: var(--text-muted);">&#8592; completado por el modelo</span></div>
+          <p style="font-size: 0.8em; color: var(--text-muted);">In-context learning: el modelo reconoce patrones en el contexto y los continua</p>
+          <div style="display: flex; align-items: stretch; gap: 12px; margin-top: 16px; font-size: 0.7em;">
+            <div style="flex: 1; background: var(--bg-code); border-radius: 8px; padding: 10px 14px; font-family: var(--font-mono); line-height: 1.8;">
+              <div style="color: var(--text-muted);">cat: gato</div>
+              <div style="color: var(--text-muted);">dog: perro</div>
+              <div style="color: var(--text-muted);">house: casa</div>
+              <div>teacher: <span style="color: var(--accent);">maestro</span></div>
+            </div>
+            <div style="flex: 1; background: var(--bg-code); border-radius: 8px; padding: 10px 14px; font-family: var(--font-mono); line-height: 1.8;" class="fragment fade-in">
+              <div style="color: var(--text-muted);">Human: What is 2+2?</div>
+              <div style="color: var(--text-muted);">Assistant: 2+2 is 4.</div>
+              <div style="color: var(--text-muted);">Human: What is the capital of France?</div>
+              <div>Assistant: <span style="color: var(--accent);">The capital...</span></div>
+            </div>
           </div>
-          <p class="fragment fade-in" style="font-size: 0.8em; color: var(--text-muted);">Se puede instanciar un asistente solo con el prompt correcto: simular una pagina de conversacion humano/IA</p>
+          <div style="display: flex; gap: 12px; margin-top: 12px; font-size: 0.7em;">
+            <div style="flex: 1; text-align: center; color: var(--text-muted);">Traductor instantaneo</div>
+            <div style="flex: 1; text-align: center; color: var(--text-muted);" class="fragment fade-in">Asistente simulado — pero fragil</div>
+          </div>
+          <p class="fragment fade-in" style="font-size: 0.85em; margin-top: 16px;"><strong>El conocimiento esta en los parametros. El comportamiento de asistente, no.</strong></p>
           <aside class="notes">
-            Aunque el modelo base no es un asistente, se puede aprovechar con prompts inteligentes. El few-shot prompting es darle ejemplos del patron que queres que siga y dejarlo completar. Karpathy mostro 10 pares ingles-coreano y al darle "teacher:" el modelo completo con la traduccion correcta. Esto se llama in-context learning — el modelo aprende el patron sobre la marcha leyendo el contexto. Tambien se puede instanciar un asistente completo: si el prompt parece una pagina web de conversacion entre humano y IA, el modelo toma ese rol. Pero esto es fragil e incomodo — necesitamos algo mejor. Para eso existe el post-training.
+            Aunque el modelo base no es un asistente, se puede usar con prompts inteligentes. El few-shot prompting es darle ejemplos del patron que queres que siga y dejarlo completar. Karpathy mostro 10 pares ingles-coreano y al darle "teacher:" el modelo completo con la traduccion correcta. Esto se llama in-context learning: el modelo reconoce el patron algoritmico en el contexto y lo continua. A la derecha un ejemplo mas ambicioso: se puede simular un asistente completo armando un prompt que parece una conversacion humano-IA. El modelo toma ese rol porque esta continuando el patron. Pero es fragil, incomodo, y limitado. El punto clave aca es este: todo el conocimiento del mundo ya esta almacenado en los parametros gracias al pre-training. Lo que falta es darle el comportamiento de asistente — que responda preguntas, sea util, rechace pedidos peligrosos. Eso es exactamente lo que hace el post-training con Supervised Fine-Tuning.
           </aside>
         </section>
 
