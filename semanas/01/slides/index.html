@@ -1444,6 +1444,67 @@
           </aside>
         </section>
 
+        <!-- Memory beyond the GPU -->
+        <section>
+          <h2>No solo la GPU necesita memoria</h2>
+          <p style="font-size: 0.8em; color: var(--text-muted);">Un servidor de IA tipico: NVIDIA DGX H100</p>
+          <div style="display: flex; gap: var(--spacing-lg); margin-top: 16px; font-size: 0.7em;">
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px;">
+              <p style="color: var(--accent); font-weight: bold; margin-bottom: 6px;">HBM (en las GPUs)</p>
+              <p style="font-size: 1.4em; color: var(--accent); font-weight: bold;">640 GB</p>
+              <p style="color: var(--text-muted); font-size: 0.9em;">8x H100 x 80 GB cada una</p>
+              <p style="margin-top: 8px;">Parametros del modelo, KV cache, activaciones</p>
+            </div>
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px;" class="fragment fade-in">
+              <p style="color: var(--accent-secondary); font-weight: bold; margin-bottom: 6px;">DRAM (del sistema)</p>
+              <p style="font-size: 1.4em; color: var(--accent-secondary); font-weight: bold;">2 TB</p>
+              <p style="color: var(--text-muted); font-size: 0.9em;">3x la memoria total de las GPUs</p>
+              <p style="margin-top: 8px;">Carga de datos, preprocesamiento, offloading de estados del optimizador, buffers de red</p>
+            </div>
+          </div>
+          <div class="fragment fade-in" style="margin-top: 16px; font-size: 0.7em; background: var(--bg-code); border-radius: 8px; padding: 10px 14px;">
+            <p style="color: var(--accent-secondary); font-weight: bold; margin-bottom: 4px;">HBM = DRAM apilada</p>
+            <p>La memoria de la GPU (HBM3) se fabrica apilando 8-12 capas de chips DRAM con conexiones verticales (TSVs). Los mismos 3 fabricantes del mundo (Samsung, SK Hynix, Micron) hacen toda la DRAM y toda la HBM.</p>
+          </div>
+          <aside class="notes">
+            Un servidor DGX H100 no solo necesita mucha VRAM — necesita 2 terabytes de RAM del sistema. Eso es 3 veces la memoria total de las 8 GPUs. Para que? Durante entrenamiento, los datos se cargan de disco, se descomprimen, se tokenizan y se preparan en batches en la RAM del sistema antes de ir a la GPU. Tecnicas como ZeRO-Offload mueven los estados del optimizador (que para un modelo de 70B pueden ser mas de 500 GB) de la GPU a la RAM del sistema. Y los buffers de red para InfiniBand y RDMA consumen decenas de GB adicionales. En inferencia, el KV cache — que crece con cada token del contexto — puede offloadearse parcialmente a RAM del sistema cuando la VRAM se llena. Lo interesante es la conexion: HBM, la memoria de alta velocidad de la GPU, no es un chip completamente diferente. Es DRAM apilada verticalmente — 8 o 12 capas de chips DRAM unidos con conexiones de silicio. Los mismos 3 fabricantes que hacen toda la RAM del mundo — Samsung, SK Hynix y Micron — son los que hacen la HBM. Y ahi es donde empieza el problema de supply chain que les voy a contar.
+          </aside>
+        </section>
+
+        <!-- RAM market impact -->
+        <section>
+          <h2>IA y el precio de la RAM</h2>
+          <div style="display: flex; gap: var(--spacing-lg); margin-top: 16px; font-size: 0.7em;">
+            <div style="flex: 1;">
+              <div style="background: var(--bg-secondary); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                <p style="color: var(--accent-secondary); font-weight: bold; margin-bottom: 4px;">El problema</p>
+                <p>HBM usa ~3x mas capacidad de wafer por bit que DDR convencional, pero tiene 5-10x mas margen. Los fabricantes reasignaron produccion de DDR a HBM.</p>
+              </div>
+              <div style="background: var(--bg-secondary); border-radius: 8px; padding: 12px;" class="fragment fade-in">
+                <p style="color: var(--accent); font-weight: bold; margin-bottom: 4px;">El efecto</p>
+                <p>Precios de DRAM (DDR5) subieron ~40-50% acumulado en 2024. Un kit de 32 GB paso de ~$60 a ~$100.</p>
+              </div>
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 6px; font-size: 0.9em;" class="fragment fade-in">
+              <div style="background: var(--bg-code); border-radius: 6px; padding: 8px 12px;">
+                <span style="color: var(--text-muted);">Solo 3 fabricantes:</span> Samsung, SK Hynix, Micron
+              </div>
+              <div style="background: var(--bg-code); border-radius: 6px; padding: 8px 12px;">
+                <span style="color: var(--text-muted);">HBM:</span> ~7% de los bits DRAM, ~20% de la facturacion
+              </div>
+              <div style="background: var(--bg-code); border-radius: 6px; padding: 8px 12px;">
+                <span style="color: var(--text-muted);">Un fab nuevo:</span> $15-20B y 2-3 anios construirlo
+              </div>
+              <div style="background: var(--bg-code); border-radius: 6px; padding: 8px 12px;">
+                <span style="color: var(--text-muted);">SK Hynix 2024:</span> perdidas record &rarr; ganancias record (gracias a HBM)
+              </div>
+            </div>
+          </div>
+          <aside class="notes">
+            Comprar una GPU H100 indirectamente hizo que la RAM de tu PC gamer sea mas cara. Suena loco pero asi funciona. Solo existen 3 fabricantes de DRAM en el mundo: Samsung, SK Hynix y Micron. Ellos hacen toda la memoria — la DDR5 de tu laptop, la HBM de las GPUs, todo. Cuando la demanda de IA exploto, estos fabricantes empezaron a reasignar su capacidad de produccion hacia HBM porque tiene margenes 5 a 10 veces mayores. El problema es que HBM consume 3 veces mas capacidad de wafer por bit que la DDR convencional — se hacen capas de DRAM apiladas que requieren procesos mas complejos y con yields mas bajos. El resultado: menos capacidad disponible para DDR convencional, con demanda estable. Los precios de DDR5 subieron ~40-50% acumulado en 2024. SK Hynix paso de perdidas record en 2023 a ganancias record en 2024, impulsado casi enteramente por ventas de HBM a NVIDIA. Y construir un fab nuevo cuesta 15-20 mil millones de dolares y tarda 2-3 anios, asi que la escasez no se resuelve rapido.
+          </aside>
+        </section>
+
         <!-- Base model capabilities -->
         <section>
           <h2>Conocimiento del modelo base</h2>
