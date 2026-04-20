@@ -24,15 +24,22 @@ import requests
 GRAPHQL_URL = "https://api.runpod.io/graphql"
 POD_FILE = os.path.join(os.path.dirname(__file__), "..", ".runpod-pod")
 
+# GPU types to try, in order of preference
+GPU_TYPES = [
+    "NVIDIA H100 80GB HBM3",
+    "NVIDIA H100 NVL",
+    "NVIDIA A100-SXM4-80GB",
+    "NVIDIA A100 80GB PCIe",
+]
+
 # Pod configuration
 POD_CONFIG = {
     "name": "vllm-llama405b-base",
     "imageName": "vllm/vllm-openai:latest",
-    "gpuTypeId": "NVIDIA H100 80GB HBM3",
     "gpuCount": 8,
     "containerDiskInGb": 50,
     "volumeInGb": 300,
-    "volumeMountPath": "/root/.cache",
+    "volumeMountPath": "/root/.cache/huggingface",
     "supportPublicIp": True,
     "startSsh": True,
     "ports": "8000/http,22/tcp",
@@ -40,8 +47,7 @@ POD_CONFIG = {
         "--model meta-llama/Llama-3.1-405B-FP8 "
         "--tensor-parallel-size 8 "
         "--max-model-len 4096 "
-        "--enforce-eager "
-        "--allowed-origins '*'"
+        "--enforce-eager"
     ),
 }
 
@@ -116,6 +122,25 @@ def remove_pod_file():
         os.remove(POD_FILE)
 
 
+def graphql_no_exit(api_key, query, variables=None):
+    """Execute a GraphQL query, return (data, errors) without exiting."""
+    payload = {"query": query}
+    if variables:
+        payload["variables"] = variables
+    resp = requests.post(
+        GRAPHQL_URL,
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}",
+        },
+        json=payload,
+        timeout=30,
+    )
+    resp.raise_for_status()
+    result = resp.json()
+    return result.get("data", {}), result.get("errors")
+
+
 def cmd_start():
     api_key = get_api_key()
     hf_token = get_hf_token()
@@ -139,23 +164,33 @@ def cmd_start():
       }
     }
     """
-    variables = {
-        "input": {
-            **POD_CONFIG,
-            "cloudType": "ALL",
-            "env": env_vars,
+
+    # Try each GPU type until one is available
+    pod = None
+    for gpu_type in GPU_TYPES:
+        variables = {
+            "input": {
+                **POD_CONFIG,
+                "gpuTypeId": gpu_type,
+                "cloudType": "ALL",
+                "env": env_vars,
+            }
         }
-    }
 
-    print(f"Creating pod: {POD_CONFIG['name']}")
-    print(f"  GPU: {POD_CONFIG['gpuCount']}x {POD_CONFIG['gpuTypeId']}")
-    print(f"  Model: meta-llama/Llama-3.1-405B-FP8")
-    print()
+        print(f"Trying: {POD_CONFIG['gpuCount']}x {gpu_type}...")
+        data, errors = graphql_no_exit(api_key, mutation, variables)
+        pod = data.get("podFindAndDeployOnDemand")
+        if pod:
+            print(f"  Success! Pod created with {gpu_type}")
+            break
+        else:
+            reason = ""
+            if errors:
+                reason = errors[0].get("message", "")
+            print(f"  Not available: {reason}")
 
-    data = graphql(api_key, mutation, variables)
-    pod = data.get("podFindAndDeployOnDemand")
     if not pod:
-        print("Error: Failed to create pod.")
+        print("\nError: No GPU type available. Try again later.")
         sys.exit(1)
 
     pod_id = pod["id"]
