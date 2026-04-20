@@ -1272,17 +1272,17 @@
               </table>
             </div>
             <div style="flex: 1;" class="fragment fade-in">
-              <p style="color: var(--text-muted);">Modelos modernos:</p>
+              <p style="color: var(--text-muted);">Llama 3.1 405B (Meta, 2024):</p>
               <table style="width: 100%; border-collapse: collapse;">
-                <tr><td style="padding: 6px; color: var(--text-muted);">Parametros</td><td style="padding: 6px; color: var(--accent-secondary);">~1 billon</td></tr>
-                <tr><td style="padding: 6px; color: var(--text-muted);">Contexto</td><td style="padding: 6px; color: var(--accent-secondary);">128K - 1M tokens</td></tr>
-                <tr><td style="padding: 6px; color: var(--text-muted);">Tokens</td><td style="padding: 6px; color: var(--accent-secondary);">~15 billones</td></tr>
-                <tr><td style="padding: 6px; color: var(--text-muted);">Costo</td><td style="padding: 6px; color: var(--accent-secondary);">decenas de millones USD</td></tr>
+                <tr><td style="padding: 6px; color: var(--text-muted);">Parametros</td><td style="padding: 6px; color: var(--accent-secondary);">405 mil millones</td></tr>
+                <tr><td style="padding: 6px; color: var(--text-muted);">Contexto</td><td style="padding: 6px; color: var(--accent-secondary);">128K tokens</td></tr>
+                <tr><td style="padding: 6px; color: var(--text-muted);">Tokens de entrenamiento</td><td style="padding: 6px; color: var(--accent-secondary);">15 billones (~15T)</td></tr>
+                <tr><td style="padding: 6px; color: var(--text-muted);">GPU-horas</td><td style="padding: 6px; color: var(--accent-secondary);">30.84 millones (H100)</td></tr>
               </table>
             </div>
           </div>
           <aside class="notes">
-            GPT-2 fue publicado en 2019 y es el primer modelo con un stack reconocible por estandares modernos — mismo tipo de red (Transformer), misma idea de pre-training. La diferencia con modelos actuales es solo de escala. GPT-2 tenia 1.6 mil millones de parametros; modelos actuales tienen cientos de miles de millones. El contexto era 1,024 tokens — hoy estamos en cientos de miles o un millon. Karpathy reprodujo GPT-2 por ~$600 en un dia con hardware moderno. El costo bajo porque: 1) los datasets son mejores, 2) el hardware es mas rapido (H100 vs V100), 3) el software esta mas optimizado. GPT-2 es perfecto para entender el proceso porque es identico a lo que se hace hoy, solo mas chico.
+            GPT-2 fue publicado en 2019 y es el primer modelo con un stack reconocible por estandares modernos — mismo tipo de red (Transformer), misma idea de pre-training. La diferencia con modelos actuales es solo de escala. GPT-2 tenia 1.6 mil millones de parametros; Llama 3.1 405B de Meta tiene 405 mil millones — 250 veces mas. El contexto paso de 1,024 a 128,000 tokens. Y los datos de entrenamiento pasaron de ~100 mil millones de tokens a 15 billones — 150 veces mas. En terminos de computo, entrenar Llama 3.1 405B consumio 30.84 millones de GPU-horas en H100s. Para dimensionar: si tuvieras una sola GPU, tardarias 3,500 anios. Karpathy reprodujo GPT-2 por ~$600 en un dia con hardware moderno. Pero Llama 3.1 405B es otra escala completamente distinta.
           </aside>
         </section>
 
@@ -1366,9 +1366,9 @@
               <div style="color: var(--text-muted);">Decenas de millones USD</div>
             </div>
           </div>
-          <p class="fragment fade-in" style="font-size: 0.75em; color: var(--text-muted); margin-top: 16px;">Las GPUs son ideales porque el entrenamiento es masivamente paralelizable. Todas las big tech compiten por acumularlas — la fiebre del oro de la IA. <a href="https://lambda.ai/pricing" target="_blank">Lambda Labs pricing</a></p>
+          <p class="fragment fade-in" style="font-size: 0.75em; color: var(--text-muted); margin-top: 16px;">Llama 3.1 405B: 30.84M GPU-horas en H100. Emisiones: 8,930 toneladas de CO2eq. <a href="https://lambda.ai/pricing" target="_blank">Lambda Labs pricing</a></p>
           <aside class="notes">
-            El entrenamiento no corre en una laptop — corre en GPUs especializadas. La H100 de NVIDIA es la GPU dominante. Las GPUs son ideales porque el entrenamiento tiene mucho paralelismo: miles de multiplicaciones de matrices independientes al mismo tiempo. Se apilan 8 en un nodo, y miles de nodos en un datacenter. Se pueden alquilar: Lambda Labs cobra ~$3/GPU/hora, un nodo de 8x H100 sale ~$24/hora. Las grandes empresas tienen sus propios datacenters con decenas de miles de GPUs. Nvidia se convirtio en una de las empresas mas valiosas del mundo porque todas las big tech necesitan estas GPUs para entrenar modelos cada vez mas grandes. Es literalmente una carrera por acumular hardware.
+            El entrenamiento no corre en una laptop — corre en GPUs especializadas. La H100 de NVIDIA es la GPU dominante, con 80GB de memoria de alta velocidad. Las GPUs son ideales porque el entrenamiento es masivamente paralelizable. Se apilan 8 en un nodo, y miles de nodos en un datacenter. Se pueden alquilar: un nodo de 8x H100 sale ~$24/hora. Para dimensionar: Meta publico que entrenar Llama 3.1 405B consumio 30.84 millones de GPU-horas en H100. Si alquilaras esas GPUs a $3/hora, el costo seria mas de $90 millones solo en computo. Y generaron 8,930 toneladas de CO2 equivalente — como manejar un auto 2,000 veces alrededor de la Tierra. Las grandes empresas tienen sus propios datacenters con decenas de miles de GPUs. Nvidia se convirtio en una de las empresas mas valiosas del mundo porque todas las big tech necesitan estas GPUs.
           </aside>
         </section>
 
@@ -1386,9 +1386,9 @@
               <p>Miles de millones de numeros: el ajuste preciso de cada "perilla" de la red. Aca esta el valor.</p>
             </div>
           </div>
-          <p class="fragment fade-in" style="font-size: 0.8em; margin-top: 16px;">Los 405 mil millones de parametros de Llama 3 son una <strong style="color: var(--accent);">compresion lossy de internet</strong>: se queda con la esencia, no con la copia exacta.</p>
+          <p class="fragment fade-in" style="font-size: 0.8em; margin-top: 16px;">Los 405 mil millones de parametros de Llama 3.1 son una <strong style="color: var(--accent);">compresion lossy</strong> de 15 billones de tokens en 8 idiomas. Formato: BF16, ~800GB en disco.</p>
           <aside class="notes">
-            Lo que sale del pre-training se llama "modelo base". Para publicarlo se necesitan dos cosas. Primero, el codigo: unas pocas cientos de lineas de Python que describen la arquitectura de la red — la secuencia exacta de operaciones del forward pass. Esto es codigo estandar. Segundo, los parametros: miles de millones de numeros, el resultado de todo ese entrenamiento. Los parametros son el valor real — cualquiera puede escribir la arquitectura, pero producir un buen set de parametros requiere meses de computo y millones de dolares. Llama 3 de Meta tiene 405 mil millones de parametros. Una forma util de pensarlos: son como un archivo zip de internet, pero con compresion lossy. No es una copia exacta — es la esencia de los patrones estadisticos de billones de paginas web, comprimida en esos numeros.
+            Lo que sale del pre-training se llama "modelo base". Para publicarlo se necesitan dos cosas. Primero, el codigo: unas pocas cientos de lineas de Python que describen la arquitectura de la red — la secuencia exacta de operaciones del forward pass. Esto es codigo estandar. Segundo, los parametros: miles de millones de numeros, el resultado de todo ese entrenamiento. Llama 3.1 de Meta tiene 405 mil millones de parametros almacenados en formato BF16 (Brain Float 16), ocupando unos 800GB en disco. Para correr inferencia necesitas al menos 8 GPUs de 80GB cada una — mas de 600GB de VRAM solo para cargar los parametros. El valor no esta en el codigo, que es relativamente simple — esta en los parametros, que representan meses de computo en miles de H100s procesando 15 billones de tokens de internet en 8 idiomas. Son como un archivo zip de internet, pero con compresion lossy: la esencia de los patrones estadisticos, no una copia exacta.
           </aside>
         </section>
 
@@ -1414,7 +1414,7 @@
             <span>el conocimiento es una reconstruccion estadistica, no una base de datos. Lo frecuente en internet se recuerda bien. Lo raro se puede reconstruir mal.</span>
           </div>
           <aside class="notes">
-            El modelo base NO es un asistente. No responde preguntas — simplemente continua secuencias de tokens, genera "remixes" de internet. Pero aca esta lo interesante: para poder predecir bien el siguiente token, el modelo tuvo que aprender una enorme cantidad sobre el mundo. Sabe de geografia, historia, ciencia, idiomas, codigo — todo eso esta codificado en los parametros. Se puede extraer ese conocimiento con los prompts adecuados. Si le damos "Top 10 landmarks in Paris:" el modelo genera una lista razonable porque ha visto miles de articulos turisticos sobre Paris. Pero es importante entender que esto es una reconstruccion estadistica, no una base de datos. Las cosas que aparecen frecuentemente en internet se recuerdan con mas precision. Las cosas raras o poco frecuentes pueden reconstruirse mal.
+            El modelo base NO es un asistente. No responde preguntas — simplemente continua secuencias de tokens, genera "remixes" de internet. Pero aca esta lo interesante: para poder predecir bien el siguiente token, el modelo tuvo que aprender una enorme cantidad sobre el mundo. Llama 3.1 405B base saca 85.2 en MMLU (un examen de conocimiento general con preguntas de 57 materias), 96.1 en ARC-Challenge (razonamiento cientifico), y 91.8 en TriviaQA. Sabe de geografia, historia, ciencia, idiomas, codigo — todo eso esta codificado en los parametros. Se puede extraer ese conocimiento con los prompts adecuados. Si le damos "Top 10 landmarks in Paris:" el modelo genera una lista razonable porque ha visto miles de articulos turisticos sobre Paris. Pero es una reconstruccion estadistica, no una base de datos. Lo frecuente en internet se recuerda bien. Lo raro se puede reconstruir mal. Vamos a ver esto en accion con el modelo real en unos minutos.
           </aside>
         </section>
 
@@ -1434,13 +1434,14 @@
               <p style="color: var(--accent-secondary); font-weight: bold; margin-bottom: 6px;">Alucinacion</p>
               <p>Datos fuera de su fecha de corte: el modelo inventa, tomando su mejor guess estadistico</p>
               <div style="background: var(--bg-code); border-radius: 4px; padding: 6px 8px; margin-top: 8px; font-size: 0.9em;">
-                <span style="color: var(--text-muted);">Prompt:</span> "En las elecciones de 2028..."<br/>
+                <span style="color: var(--text-muted);">Llama 3.1 cutoff:</span> diciembre 2023<br/>
+                <span style="color: var(--text-muted);">Prompt:</span> "En las elecciones de 2025..."<br/>
                 <span style="color: var(--accent-secondary);">&#8594;</span> inventa un universo paralelo distinto cada vez
               </div>
             </div>
           </div>
           <aside class="notes">
-            El modelo base exhibe dos comportamientos interesantes que son las dos caras de la misma moneda. Memorizacion: documentos de alta calidad como Wikipedia probablemente fueron vistos 10+ veces durante el entrenamiento (se les da mas peso por ser fuentes confiables). El modelo puede recitarlos casi de memoria — le das el primer parrafo del articulo de cebras y continua con una copia casi perfecta. Es como cuando lees algo 100 veces y lo podes recitar. Esto se llama regurgitacion y generalmente no es deseable. Alucinacion: para cosas fuera de su fecha de corte de conocimiento (eventos futuros, datos que no vio), el modelo no dice "no se" — inventa. Karpathy mostro que al preguntarle sobre elecciones de 2024, una vez dijo que Mike Pence era running mate, otra vez dijo Ron DeSantis. Cada generacion es un "universo paralelo" diferente. El modelo toma su mejor guess estadistico basado en lo que sabe, pero no tiene forma de distinguir lo que sabe de lo que inventa.
+            El modelo base exhibe dos comportamientos interesantes que son las dos caras de la misma moneda. Memorizacion: documentos de alta calidad como Wikipedia probablemente fueron vistos 10+ veces durante el entrenamiento (se les da mas peso por ser fuentes confiables). El modelo puede recitarlos casi de memoria — le das el primer parrafo del articulo de cebras y continua con una copia casi perfecta. Esto se llama regurgitacion y generalmente no es deseable. Alucinacion: Llama 3.1 tiene un cutoff de conocimiento de diciembre 2023. Todo lo que paso despues de esa fecha no existe en sus parametros. Pero el modelo no dice "no se" — inventa. Si le preguntas sobre las elecciones de 2025, cada generacion es un "universo paralelo" diferente. Karpathy demostro esto con un modelo anterior: una vez dijo que Mike Pence era running mate, otra vez dijo Ron DeSantis. El modelo toma su mejor guess estadistico basado en lo que sabe, pero no tiene forma de distinguir lo que sabe de lo que inventa. Esto lo vamos a poder probar en vivo con el modelo que tenemos corriendo.
           </aside>
         </section>
 
@@ -1452,7 +1453,7 @@
           <script src="base-model-chat.js"></script>
           <script>initBaseModelChat({ containerId: 'base-model-demo' });</script>
           <aside class="notes">
-            Aca vamos a interactuar con un modelo base real — Llama 3.1 de 405 mil millones de parametros, el mas grande de Meta. No es la version instruct (la de chat), es el modelo base puro que solo sabe autocompletar texto. A la izquierda tenemos una interfaz tipo chat, pero es una ilusion — a la derecha pueden ver lo que realmente esta pasando: todo es una cadena de texto continua. El modelo no tiene concepto de "turnos" ni "conversacion". Simplemente recibe texto y genera la continuacion mas probable. Noten que este modelo esta corriendo en 8 GPUs H100 de 80GB cada una — mas de 600GB de VRAM solo para tener los parametros en memoria. Esto da una idea de la escala de computo necesaria para inferencia en modelos de frontera.
+            Aca vamos a interactuar con el modelo que venimos describiendo — Llama 3.1 405B de Meta, el modelo base puro. Esos 405 mil millones de parametros entrenados con 30 millones de GPU-horas en 15 billones de tokens. No es la version instruct — es el modelo que solo sabe autocompletar texto. A la izquierda tenemos una interfaz tipo chat, pero es una ilusion — a la derecha pueden ver lo que realmente esta pasando: todo es una cadena de texto continua. El modelo no tiene concepto de "turnos" ni "conversacion". Simplemente recibe texto y genera la continuacion mas probable. Recuerden que este modelo tiene un cutoff de diciembre 2023 — cualquier cosa posterior a eso la va a inventar. Noten que esta corriendo en 8 GPUs H100 de 80GB cada una — los mismos 800GB de parametros que vimos. Si activan "Mostrar tokens especiales" pueden ver el token de inicio de secuencia que Llama usa internamente.
           </aside>
         </section>
 
@@ -1480,7 +1481,7 @@
           </div>
           <p class="fragment fade-in" style="font-size: 0.85em; margin-top: 16px;"><strong>El conocimiento esta en los parametros. El comportamiento de asistente, no.</strong></p>
           <aside class="notes">
-            Aunque el modelo base no es un asistente, se puede usar con prompts inteligentes. El few-shot prompting es darle ejemplos del patron que queres que siga y dejarlo completar. Karpathy mostro 10 pares ingles-coreano y al darle "teacher:" el modelo completo con la traduccion correcta. Esto se llama in-context learning: el modelo reconoce el patron algoritmico en el contexto y lo continua. A la derecha un ejemplo mas ambicioso: se puede simular un asistente completo armando un prompt que parece una conversacion humano-IA. El modelo toma ese rol porque esta continuando el patron. Pero es fragil, incomodo, y limitado. El punto clave aca es este: todo el conocimiento del mundo ya esta almacenado en los parametros gracias al pre-training. Lo que falta es darle el comportamiento de asistente — que responda preguntas, sea util, rechace pedidos peligrosos. Eso es exactamente lo que hace el post-training con Supervised Fine-Tuning.
+            Si probaron en la demo anterior a darle un prompt tipo "Human: ... Assistant: ...", puede que el modelo haya seguido el patron. Eso es in-context learning: el modelo reconoce el patron algoritmico en el contexto y lo continua. El few-shot prompting es darle ejemplos del patron que queres que siga y dejarlo completar. A la izquierda, un ejemplo simple de traduccion. A la derecha, algo mas ambicioso: simular un asistente completo armando un prompt que parece una conversacion. El modelo toma ese rol porque esta continuando el patron. Pero es fragil, incomodo, y limitado. El punto clave: todo el conocimiento del mundo ya esta en los parametros gracias al pre-training — Llama 3.1 405B saca 85 en MMLU solo con completado de texto. Lo que falta es darle el comportamiento de asistente — que responda preguntas, sea util, rechace pedidos peligrosos. Eso es exactamente lo que hace el post-training.
           </aside>
         </section>
 
@@ -1493,7 +1494,7 @@
           <h2>Post-Training: SFT</h2>
           <p class="muted">Supervised Fine-Tuning</p>
           <aside class="notes">
-            El pre-training nos da un modelo base — un simulador de internet muy capaz pero no un asistente. Ahora viene la segunda etapa: el post-training, donde convertimos ese modelo base en un asistente. La tecnica principal se llama Supervised Fine-Tuning (SFT). Es computacionalmente mucho mas barato que el pre-training pero igualmente importante.
+            El pre-training nos da un modelo base — como el Llama 3.1 405B que acabamos de ver en accion. Un simulador de internet muy capaz pero no un asistente. Ahora viene la segunda etapa: el post-training, donde convertimos ese modelo base en un asistente. En el caso de Llama, Meta uso mas de 25 millones de ejemplos sinteticos ademas de datasets publicos de instrucciones. La tecnica principal se llama Supervised Fine-Tuning (SFT). Es computacionalmente mucho mas barato que el pre-training pero igualmente importante.
           </aside>
         </section>
 
