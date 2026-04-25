@@ -1257,30 +1257,40 @@
           </aside>
         </section>
 
-        <!-- GPT-2 as concrete example -->
+        <!-- GPT-2 vs Llama 3.1: same stack, different scale -->
         <section>
-          <h2>GPT-2: un ejemplo concreto</h2>
-          <p style="font-size: 0.8em; color: var(--text-muted);">OpenAI, 2019 — primer stack moderno reconocible</p>
+          <h2>Mismo stack, otra escala</h2>
+          <p style="font-size: 0.8em; color: var(--text-muted);">GPT-2 (2019) fue el primer stack moderno reconocible. Lo demas es escala.</p>
           <div style="display: flex; gap: var(--spacing-lg); margin-top: 12px; font-size: 0.8em;">
             <div style="flex: 1;">
+              <div style="margin-bottom: 8px;">
+                <p style="color: var(--accent); font-weight: bold; font-size: 1.3em; margin: 0;">GPT-2</p>
+                <p style="color: var(--text-muted); font-size: 0.85em; margin: 0;">2019 &middot; OpenAI</p>
+              </div>
               <table style="width: 100%; border-collapse: collapse;">
                 <tr><td style="padding: 6px; color: var(--text-muted);">Parametros</td><td style="padding: 6px; color: var(--accent);">1.6 mil millones</td></tr>
                 <tr><td style="padding: 6px; color: var(--text-muted);">Contexto</td><td style="padding: 6px; color: var(--accent);">1,024 tokens</td></tr>
                 <tr><td style="padding: 6px; color: var(--text-muted);">Tokens de entrenamiento</td><td style="padding: 6px; color: var(--accent);">~100 mil millones</td></tr>
                 <tr><td style="padding: 6px; color: var(--text-muted);">Costo estimado (2019)</td><td style="padding: 6px; color: var(--accent);">~$40,000</td></tr>
-                <tr><td style="padding: 6px; color: var(--text-muted);">Costo hoy</td><td style="padding: 6px; color: var(--accent);">~$100-600</td></tr>
+                <tr><td style="padding: 6px; color: var(--text-muted);">Costo hoy</td><td style="padding: 6px; color: var(--accent);">~$600</td></tr>
               </table>
             </div>
             <div style="flex: 1;" class="fragment fade-in">
-              <p style="color: var(--text-muted);">Llama 3.1 405B (Meta, 2024):</p>
+              <div style="margin-bottom: 8px;">
+                <p style="color: var(--accent-secondary); font-weight: bold; font-size: 1.3em; margin: 0;">Llama 3.1 405B</p>
+                <p style="color: var(--text-muted); font-size: 0.85em; margin: 0;">2024 &middot; Meta</p>
+              </div>
               <table style="width: 100%; border-collapse: collapse;">
                 <tr><td style="padding: 6px; color: var(--text-muted);">Parametros</td><td style="padding: 6px; color: var(--accent-secondary);">405 mil millones</td></tr>
                 <tr><td style="padding: 6px; color: var(--text-muted);">Contexto</td><td style="padding: 6px; color: var(--accent-secondary);">128K tokens</td></tr>
                 <tr><td style="padding: 6px; color: var(--text-muted);">Tokens de entrenamiento</td><td style="padding: 6px; color: var(--accent-secondary);">15 billones (~15T)</td></tr>
-                <tr><td style="padding: 6px; color: var(--text-muted);">GPU-horas</td><td style="padding: 6px; color: var(--accent-secondary);">30.84 millones (H100)</td></tr>
+                <tr><td style="padding: 6px; color: var(--text-muted);">GPU-horas</td><td style="padding: 6px; color: var(--accent-secondary);"><a href="https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/MODEL_CARD.md" target="_blank">30.84 millones</a> (<a href="https://www.nvidia.com/es-la/data-center/h100/" target="_blank">H100</a>)</td></tr>
               </table>
             </div>
           </div>
+          <p style="font-size: 0.6em; color: var(--text-muted); margin-top: 16px;">
+            Fuentes: <a href="https://openai.com/index/better-language-models/" target="_blank">GPT-2 (OpenAI 2019)</a> &middot; <a href="https://github.com/karpathy/llm.c/discussions/677" target="_blank">llm.c reproduction (Karpathy)</a> &middot; <a href="https://arxiv.org/pdf/2407.21783" target="_blank">Llama 3 paper (Meta 2024)</a>
+          </p>
           <aside class="notes">
             GPT-2 fue publicado en 2019 y es el primer modelo con un stack reconocible por estandares modernos — mismo tipo de red (Transformer), misma idea de pre-training. La diferencia con modelos actuales es solo de escala. GPT-2 tenia 1.6 mil millones de parametros; Llama 3.1 405B de Meta tiene 405 mil millones — 250 veces mas. El contexto paso de 1,024 a 128,000 tokens. Y los datos de entrenamiento pasaron de ~100 mil millones de tokens a 15 billones — 150 veces mas. En terminos de computo, entrenar Llama 3.1 405B consumio 30.84 millones de GPU-horas en H100s. Para dimensionar: si tuvieras una sola GPU, tardarias 3,500 anios. Karpathy reprodujo GPT-2 por ~$600 en un dia con hardware moderno. Pero Llama 3.1 405B es otra escala completamente distinta.
           </aside>
@@ -1309,7 +1319,6 @@
               </ul>
             </div>
           </div>
-          <p class="fragment fade-in" style="font-size: 0.8em; color: var(--text-muted); margin-top: 16px;">Cuando hablas con ChatGPT, el modelo fue entrenado hace meses. Los parametros estan congelados. Todo lo que ves es inferencia.</p>
           <aside class="notes">
             Es importante distinguir estas dos fases. El entrenamiento es el proceso caro y largo que vimos: procesar billones de tokens, ajustar parametros, reducir el loss. Se hace una vez y tarda meses en miles de GPUs. El resultado son los parametros — los miles de millones de numeros que definen el modelo. La inferencia es lo que pasa cuando un usuario interactua con el modelo. Los parametros estan congelados — no se aprende nada nuevo. El modelo simplemente recibe tokens, los pasa por la red, y predice el siguiente token. Cuando hablas con ChatGPT, ese modelo fue entrenado por OpenAI hace meses. Cada mensaje tuyo es solo inferencia: parametros fijos generando tokens. Esta distincion importa para lo que viene: el post-training (SFT) es una segunda ronda de entrenamiento, mucho mas corta y barata, pero el principio es el mismo.
           </aside>
@@ -1317,7 +1326,7 @@
 
         <!-- GPUs and data centers -->
         <section>
-          <h2>Hardware: GPUs y data centers</h2>
+          <h2>Hardware del pre-training</h2>
           <div style="display: flex; align-items: center; gap: 12px; margin-top: 20px; font-size: 0.7em;">
             <div style="background: var(--bg-secondary); border-radius: 8px; padding: 12px 16px; text-align: center;">
               <svg viewBox="0 0 40 32" width="40" height="32" style="display: block; margin: 0 auto 6px;">
@@ -1366,9 +1375,10 @@
               <div style="color: var(--text-muted);">Decenas de millones USD</div>
             </div>
           </div>
-          <p class="fragment fade-in" style="font-size: 0.75em; color: var(--text-muted); margin-top: 16px;">Llama 3.1 405B: 30.84M GPU-horas en H100. Emisiones: 8,930 toneladas de CO2eq. <a href="https://lambda.ai/pricing" target="_blank">Lambda Labs pricing</a></p>
+          <p class="fragment fade-in" style="font-size: 0.75em; color: var(--text-muted); margin-top: 16px;">Llama 3.1 405B: 30.84M GPU-horas en H100. Emisiones: 8,930 toneladas de CO2eq. <a href="https://www.runpod.io/pricing" target="_blank">RunPod pricing</a></p>
+          <p class="fragment fade-in" style="font-size: 0.8em; color: var(--accent); margin-top: 8px;">Pero correr el modelo entrenado (inferencia) requiere muchisimo menos &mdash; ya lo vamos a ver.</p>
           <aside class="notes">
-            El entrenamiento no corre en una laptop — corre en GPUs especializadas. La H100 de NVIDIA es la GPU dominante, con 80GB de memoria de alta velocidad. Las GPUs son ideales porque el entrenamiento es masivamente paralelizable. Se apilan 8 en un nodo, y miles de nodos en un datacenter. Se pueden alquilar: un nodo de 8x H100 sale ~$24/hora. Para dimensionar: Meta publico que entrenar Llama 3.1 405B consumio 30.84 millones de GPU-horas en H100. Si alquilaras esas GPUs a $3/hora, el costo seria mas de $90 millones solo en computo. Y generaron 8,930 toneladas de CO2 equivalente — como manejar un auto 2,000 veces alrededor de la Tierra. Las grandes empresas tienen sus propios datacenters con decenas de miles de GPUs. Nvidia se convirtio en una de las empresas mas valiosas del mundo porque todas las big tech necesitan estas GPUs.
+            El entrenamiento no corre en una laptop — corre en GPUs especializadas. La H100 de NVIDIA es la GPU dominante, con 80GB de memoria de alta velocidad. Las GPUs son ideales porque el entrenamiento es masivamente paralelizable. Se apilan 8 en un nodo, y miles de nodos en un datacenter. Se pueden alquilar: un nodo de 8x H100 sale ~$24/hora. Para dimensionar: Meta publico que entrenar Llama 3.1 405B consumio 30.84 millones de GPU-horas en H100. Si alquilaras esas GPUs a $3/hora, el costo seria mas de $90 millones solo en computo. Y generaron 8,930 toneladas de CO2 equivalente — como manejar un auto 2,000 veces alrededor de la Tierra. Las grandes empresas tienen sus propios datacenters con decenas de miles de GPUs. Nvidia se convirtio en una de las empresas mas valiosas del mundo porque todas las big tech necesitan estas GPUs. Importante destacar: esta es la escala del pre-training. Para inferencia (correr el modelo ya entrenado) alcanza con una fraccion de eso, como vamos a ver en las proximas slides.
           </aside>
         </section>
 
@@ -1379,14 +1389,14 @@
           <div style="display: flex; gap: var(--spacing-lg); margin-top: 16px; font-size: 0.75em;">
             <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px;">
               <p style="color: var(--accent); font-weight: bold;">Codigo</p>
-              <p>~200 lineas de Python que describen la arquitectura (el forward pass de la red)</p>
+              <p>~300 lineas de Python que describen la arquitectura (el forward pass de la red). <a href="https://github.com/meta-llama/llama-models/blob/main/models/llama3/model.py" target="_blank">Ver model.py de Llama 3</a></p>
             </div>
             <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px;" class="fragment fade-in">
               <p style="color: var(--accent-secondary); font-weight: bold;">Parametros</p>
               <p>Miles de millones de numeros: el ajuste preciso de cada "perilla" de la red. Aca esta el valor.</p>
             </div>
           </div>
-          <p class="fragment fade-in" style="font-size: 0.8em; margin-top: 16px;">Los 405 mil millones de parametros de Llama 3.1 son una <strong style="color: var(--accent);">compresion lossy</strong> de 15 billones de tokens en 8 idiomas. Formato: BF16, ~800GB en disco.</p>
+          <p class="fragment fade-in" style="font-size: 0.8em; margin-top: 16px;">Los 405 mil millones de parametros de Llama 3.1 capturan los <strong style="color: var(--accent);">patrones estadisticos</strong> de 15 billones de tokens en 8 idiomas &mdash; no el texto original (compresion lossy, como JPEG o MP3). Formato: BF16 (2 bytes por parametro), ~800GB en disco.</p>
           <aside class="notes">
             Lo que sale del pre-training se llama "modelo base". Para publicarlo se necesitan dos cosas. Primero, el codigo: unas pocas cientos de lineas de Python que describen la arquitectura de la red — la secuencia exacta de operaciones del forward pass. Esto es codigo estandar. Segundo, los parametros: miles de millones de numeros, el resultado de todo ese entrenamiento. Llama 3.1 de Meta tiene 405 mil millones de parametros almacenados en formato BF16 (Brain Float 16), ocupando unos 800GB en disco. Para correr inferencia necesitas al menos 8 GPUs de 80GB cada una — mas de 600GB de VRAM solo para cargar los parametros. El valor no esta en el codigo, que es relativamente simple — esta en los parametros, que representan meses de computo en miles de H100s procesando 15 billones de tokens de internet en 8 idiomas. Son como un archivo zip de internet, pero con compresion lossy: la esencia de los patrones estadisticos, no una copia exacta.
           </aside>
@@ -1404,8 +1414,8 @@
               <tr style="border-bottom: 1px solid var(--text-muted);">
                 <th style="padding: 6px; text-align: left; color: var(--text-muted);">Modelo</th>
                 <th style="padding: 6px; text-align: right; color: var(--text-muted);">Params</th>
-                <th style="padding: 6px; text-align: right; color: var(--text-muted);">BF16 (2B)</th>
-                <th style="padding: 6px; text-align: right; color: var(--text-muted);">FP8 (1B)</th>
+                <th style="padding: 6px; text-align: right; color: var(--text-muted);">BF16 (2 bytes)</th>
+                <th style="padding: 6px; text-align: right; color: var(--text-muted);">FP8 (1 byte)</th>
                 <th style="padding: 6px; text-align: left; color: var(--text-muted);">Donde corre</th>
               </tr>
               <tr>
@@ -1427,81 +1437,20 @@
                 <td style="padding: 6px; text-align: right; color: var(--accent);">70B</td>
                 <td style="padding: 6px; text-align: right;">140 GB</td>
                 <td style="padding: 6px; text-align: right;">70 GB</td>
-                <td style="padding: 6px; color: var(--code-text);">1 nodo (2x A100)</td>
+                <td style="padding: 6px; color: var(--code-text);">2x H100 (BF16)</td>
               </tr>
-              <tr class="fragment fade-in" style="background: var(--accent); background: rgba(100,255,218,0.08);">
-                <td style="padding: 6px; font-weight: bold;">Llama 3.1 405B</td>
-                <td style="padding: 6px; text-align: right; color: var(--accent); font-weight: bold;">405B</td>
-                <td style="padding: 6px; text-align: right; font-weight: bold;">810 GB</td>
-                <td style="padding: 6px; text-align: right; font-weight: bold;">405 GB</td>
-                <td style="padding: 6px; color: var(--accent); font-weight: bold;">8x H100 (nuestro pod)</td>
+              <tr class="fragment fade-in">
+                <td style="padding: 6px;">Llama 3.1 405B</td>
+                <td style="padding: 6px; text-align: right; color: var(--accent);">405B</td>
+                <td style="padding: 6px; text-align: right;">810 GB</td>
+                <td style="padding: 6px; text-align: right;">405 GB</td>
+                <td style="padding: 6px; color: var(--code-text);">8x H100 (FP8)</td>
               </tr>
             </table>
           </div>
-          <p class="fragment fade-in" style="font-size: 0.75em; color: var(--text-muted); margin-top: 12px;">Cuantizar (BF16 &rarr; FP8) reduce la precision pero corta la memoria a la mitad. Por eso nuestro pod usa la version FP8.</p>
+          <p class="fragment fade-in" style="font-size: 0.75em; color: var(--text-muted); margin-top: 12px;">Cuantizar (BF16 &rarr; FP8) corta la memoria a la mitad. Asi es como Meta hace caber 405B en 8 H100s con la version FP8 oficial.</p>
           <aside class="notes">
-            Cada parametro del modelo necesita estar en la memoria de la GPU para hacer inferencia. En formato BF16 (el formato nativo de entrenamiento), cada parametro ocupa 2 bytes. La cuenta es directa: 405 mil millones de parametros por 2 bytes = 810 GB de VRAM. Una GPU H100 tiene 80 GB. No alcanza con una — necesitas al menos 8 para que quepa el modelo repartido entre todas (tensor parallelism). Por eso cuantizar es tan importante: en FP8 cada parametro ocupa 1 byte en vez de 2, reduciendo a 405 GB. Perdemos un poco de precision numerica pero en la practica la calidad es casi identica. Meta publico una version oficial en FP8, que es la que estamos usando en nuestro pod con 8x H100 — 640 GB de VRAM total, suficiente para los 405 GB del modelo mas el overhead de KV cache y el contexto. Los modelos mas chicos de la familia Llama caben en hardware mucho mas accesible: el 8B entra en una GPU gaming comun, y el 3B puede correr hasta en un celular moderno.
-          </aside>
-        </section>
-
-        <!-- Memory beyond the GPU -->
-        <section>
-          <h2>No solo la GPU necesita memoria</h2>
-          <p style="font-size: 0.8em; color: var(--text-muted);">Un servidor de IA tipico: NVIDIA DGX H100</p>
-          <div style="display: flex; gap: var(--spacing-lg); margin-top: 16px; font-size: 0.7em;">
-            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px;">
-              <p style="color: var(--accent); font-weight: bold; margin-bottom: 6px;">HBM (en las GPUs)</p>
-              <p style="font-size: 1.4em; color: var(--accent); font-weight: bold;">640 GB</p>
-              <p style="color: var(--text-muted); font-size: 0.9em;">8x H100 x 80 GB cada una</p>
-              <p style="margin-top: 8px;">Parametros del modelo, KV cache, activaciones</p>
-            </div>
-            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px;" class="fragment fade-in">
-              <p style="color: var(--accent-secondary); font-weight: bold; margin-bottom: 6px;">DRAM (del sistema)</p>
-              <p style="font-size: 1.4em; color: var(--accent-secondary); font-weight: bold;">2 TB</p>
-              <p style="color: var(--text-muted); font-size: 0.9em;">3x la memoria total de las GPUs</p>
-              <p style="margin-top: 8px;">Carga de datos, preprocesamiento, offloading de estados del optimizador, buffers de red</p>
-            </div>
-          </div>
-          <div class="fragment fade-in" style="margin-top: 16px; font-size: 0.7em; background: var(--bg-code); border-radius: 8px; padding: 10px 14px;">
-            <p style="color: var(--accent-secondary); font-weight: bold; margin-bottom: 4px;">HBM = DRAM apilada</p>
-            <p>La memoria de la GPU (HBM3) se fabrica apilando 8-12 capas de chips DRAM con conexiones verticales (TSVs). Los mismos 3 fabricantes del mundo (Samsung, SK Hynix, Micron) hacen toda la DRAM y toda la HBM.</p>
-          </div>
-          <aside class="notes">
-            Un servidor DGX H100 no solo necesita mucha VRAM — necesita 2 terabytes de RAM del sistema. Eso es 3 veces la memoria total de las 8 GPUs. Para que? Durante entrenamiento, los datos se cargan de disco, se descomprimen, se tokenizan y se preparan en batches en la RAM del sistema antes de ir a la GPU. Tecnicas como ZeRO-Offload mueven los estados del optimizador (que para un modelo de 70B pueden ser mas de 500 GB) de la GPU a la RAM del sistema. Y los buffers de red para InfiniBand y RDMA consumen decenas de GB adicionales. En inferencia, el KV cache — que crece con cada token del contexto — puede offloadearse parcialmente a RAM del sistema cuando la VRAM se llena. Lo interesante es la conexion: HBM, la memoria de alta velocidad de la GPU, no es un chip completamente diferente. Es DRAM apilada verticalmente — 8 o 12 capas de chips DRAM unidos con conexiones de silicio. Los mismos 3 fabricantes que hacen toda la RAM del mundo — Samsung, SK Hynix y Micron — son los que hacen la HBM. Y ahi es donde empieza el problema de supply chain que les voy a contar.
-          </aside>
-        </section>
-
-        <!-- RAM market impact -->
-        <section>
-          <h2>IA y el precio de la RAM</h2>
-          <div style="display: flex; gap: var(--spacing-lg); margin-top: 16px; font-size: 0.7em;">
-            <div style="flex: 1;">
-              <div style="background: var(--bg-secondary); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
-                <p style="color: var(--accent-secondary); font-weight: bold; margin-bottom: 4px;">El problema</p>
-                <p>HBM usa ~3x mas capacidad de wafer por bit que DDR convencional, pero tiene 5-10x mas margen. Los fabricantes reasignaron produccion de DDR a HBM.</p>
-              </div>
-              <div style="background: var(--bg-secondary); border-radius: 8px; padding: 12px;" class="fragment fade-in">
-                <p style="color: var(--accent); font-weight: bold; margin-bottom: 4px;">El efecto</p>
-                <p>Precios de DRAM (DDR5) subieron ~40-50% acumulado en 2024. Un kit de 32 GB paso de ~$60 a ~$100.</p>
-              </div>
-            </div>
-            <div style="flex: 1; display: flex; flex-direction: column; gap: 6px; font-size: 0.9em;" class="fragment fade-in">
-              <div style="background: var(--bg-code); border-radius: 6px; padding: 8px 12px;">
-                <span style="color: var(--text-muted);">Solo 3 fabricantes:</span> Samsung, SK Hynix, Micron
-              </div>
-              <div style="background: var(--bg-code); border-radius: 6px; padding: 8px 12px;">
-                <span style="color: var(--text-muted);">HBM:</span> ~7% de los bits DRAM, ~20% de la facturacion
-              </div>
-              <div style="background: var(--bg-code); border-radius: 6px; padding: 8px 12px;">
-                <span style="color: var(--text-muted);">Un fab nuevo:</span> $15-20B y 2-3 anios construirlo
-              </div>
-              <div style="background: var(--bg-code); border-radius: 6px; padding: 8px 12px;">
-                <span style="color: var(--text-muted);">SK Hynix 2024:</span> perdidas record &rarr; ganancias record (gracias a HBM)
-              </div>
-            </div>
-          </div>
-          <aside class="notes">
-            Comprar una GPU H100 indirectamente hizo que la RAM de tu PC gamer sea mas cara. Suena loco pero asi funciona. Solo existen 3 fabricantes de DRAM en el mundo: Samsung, SK Hynix y Micron. Ellos hacen toda la memoria — la DDR5 de tu laptop, la HBM de las GPUs, todo. Cuando la demanda de IA exploto, estos fabricantes empezaron a reasignar su capacidad de produccion hacia HBM porque tiene margenes 5 a 10 veces mayores. El problema es que HBM consume 3 veces mas capacidad de wafer por bit que la DDR convencional — se hacen capas de DRAM apiladas que requieren procesos mas complejos y con yields mas bajos. El resultado: menos capacidad disponible para DDR convencional, con demanda estable. Los precios de DDR5 subieron ~40-50% acumulado en 2024. SK Hynix paso de perdidas record en 2023 a ganancias record en 2024, impulsado casi enteramente por ventas de HBM a NVIDIA. Y construir un fab nuevo cuesta 15-20 mil millones de dolares y tarda 2-3 anios, asi que la escasez no se resuelve rapido.
+            Cada parametro del modelo necesita estar en la memoria de la GPU para hacer inferencia. En formato BF16 (el formato nativo de entrenamiento), cada parametro ocupa 2 bytes. La cuenta es directa: 70 mil millones de parametros por 2 bytes = 140 GB de VRAM; 405 mil millones por 2 bytes = 810 GB. Una GPU H100 tiene 80 GB, asi que para 70B en BF16 hacen falta 2 GPUs (tensor parallelism reparte el modelo entre ellas), y para 405B en BF16 ni siquiera 8 H100s alcanzan. Por eso cuantizar es tan importante: en FP8 cada parametro ocupa 1 byte en vez de 2, reduciendo la memoria a la mitad. Es asi como Meta hace caber el 405B en 8 H100s con la version FP8 oficial — pasamos de 810 GB a 405 GB, y entra en 640 GB de VRAM con margen para el KV cache. Perdemos un poco de precision numerica pero en la practica la calidad es casi identica. Los modelos mas chicos caben en hardware mucho mas accesible: el 8B entra en una GPU gaming comun, y el 3B puede correr hasta en un celular moderno.
           </aside>
         </section>
 
@@ -1512,14 +1461,14 @@
           <div style="display: flex; align-items: stretch; gap: 12px; margin-top: 16px; font-size: 0.7em;">
             <div style="flex: 1; background: var(--bg-code); border-radius: 8px; padding: 10px 14px;">
               <p style="color: var(--text-muted); margin-bottom: 4px;">Prompt:</p>
-              <p>"Here is my top 10 list of landmarks to see in Paris:"</p>
+              <p>"Here is my top 10 list of landmarks to see in Paris:<br/>1. Eiffel Tower<br/>2. Louvre Museum"</p>
             </div>
             <div style="display: flex; align-items: center;">
               <svg width="28" height="14" viewBox="0 0 24 14"><path d="M2 7h16m0 0l-5-5m5 5l-5 5" stroke="var(--accent)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
             </div>
             <div style="flex: 1; background: var(--bg-code); border-radius: 8px; padding: 10px 14px;">
               <p style="color: var(--text-muted); margin-bottom: 4px;">Completado:</p>
-              <p style="color: var(--accent);">1. Eiffel Tower<br/>2. Louvre Museum<br/>3. Notre-Dame Cathedral<br/>4. Arc de Triomphe<br/>5. ...</p>
+              <p style="color: var(--accent);">3. Notre-Dame Cathedral<br/>4. Arc de Triomphe<br/>5. Sacr&eacute;-C&oelig;ur Basilica<br/>6. ...</p>
             </div>
           </div>
           <div class="fragment fade-in" style="background: var(--bg-secondary); border-radius: 8px; padding: 10px 14px; font-size: 0.75em; margin-top: 12px; display: flex; align-items: baseline; gap: 8px;">
@@ -1527,7 +1476,7 @@
             <span>el conocimiento es una reconstruccion estadistica, no una base de datos. Lo frecuente en internet se recuerda bien. Lo raro se puede reconstruir mal.</span>
           </div>
           <aside class="notes">
-            El modelo base NO es un asistente. No responde preguntas — simplemente continua secuencias de tokens, genera "remixes" de internet. Pero aca esta lo interesante: para poder predecir bien el siguiente token, el modelo tuvo que aprender una enorme cantidad sobre el mundo. Llama 3.1 405B base saca 85.2 en MMLU (un examen de conocimiento general con preguntas de 57 materias), 96.1 en ARC-Challenge (razonamiento cientifico), y 91.8 en TriviaQA. Sabe de geografia, historia, ciencia, idiomas, codigo — todo eso esta codificado en los parametros. Se puede extraer ese conocimiento con los prompts adecuados. Si le damos "Top 10 landmarks in Paris:" el modelo genera una lista razonable porque ha visto miles de articulos turisticos sobre Paris. Pero es una reconstruccion estadistica, no una base de datos. Lo frecuente en internet se recuerda bien. Lo raro se puede reconstruir mal. Vamos a ver esto en accion con el modelo real en unos minutos.
+            El modelo base NO es un asistente. No responde preguntas — simplemente continua secuencias de tokens, genera "remixes" de internet. Pero aca esta lo interesante: para poder predecir bien el siguiente token, el modelo tuvo que aprender una enorme cantidad sobre el mundo. Llama 3.1 70B base saca 79.3 en MMLU (un examen de conocimiento general con preguntas de 57 materias), 92.9 en ARC-Challenge (razonamiento cientifico), y 89.7 en TriviaQA. El 405B saca un poco mas (85.2, 96.1, 91.8), pero el 70B ya es muy capaz. Sabe de geografia, historia, ciencia, idiomas, codigo — todo eso esta codificado en los parametros. Se puede extraer ese conocimiento con los prompts adecuados. Si le damos "Top 10 landmarks in Paris:" el modelo genera una lista razonable porque ha visto miles de articulos turisticos sobre Paris. Pero es una reconstruccion estadistica, no una base de datos. Lo frecuente en internet se recuerda bien. Lo raro se puede reconstruir mal. Vamos a ver esto en accion con el modelo real en unos minutos.
           </aside>
         </section>
 
@@ -1554,19 +1503,19 @@
             </div>
           </div>
           <aside class="notes">
-            El modelo base exhibe dos comportamientos interesantes que son las dos caras de la misma moneda. Memorizacion: documentos de alta calidad como Wikipedia probablemente fueron vistos 10+ veces durante el entrenamiento (se les da mas peso por ser fuentes confiables). El modelo puede recitarlos casi de memoria — le das el primer parrafo del articulo de cebras y continua con una copia casi perfecta. Esto se llama regurgitacion y generalmente no es deseable. Alucinacion: Llama 3.1 tiene un cutoff de conocimiento de diciembre 2023. Todo lo que paso despues de esa fecha no existe en sus parametros. Pero el modelo no dice "no se" — inventa. Si le preguntas sobre las elecciones de 2025, cada generacion es un "universo paralelo" diferente. Karpathy demostro esto con un modelo anterior: una vez dijo que Mike Pence era running mate, otra vez dijo Ron DeSantis. El modelo toma su mejor guess estadistico basado en lo que sabe, pero no tiene forma de distinguir lo que sabe de lo que inventa. Esto lo vamos a poder probar en vivo con el modelo que tenemos corriendo.
+            El modelo base exhibe dos comportamientos interesantes que son las dos caras de la misma moneda. Memorizacion: documentos de alta calidad como Wikipedia probablemente fueron vistos 10+ veces durante el entrenamiento (se les da mas peso por ser fuentes confiables). El modelo puede recitarlos casi de memoria — le das el primer parrafo del articulo de cebras y continua con una copia casi perfecta. Esto se llama regurgitacion y generalmente no es deseable. Alucinacion: Llama 3.1 tiene un cutoff de conocimiento de diciembre 2023. Todo lo que paso despues de esa fecha no existe en sus parametros. Pero el modelo no dice "no se" — inventa. Si le preguntas sobre las elecciones de 2025, cada generacion es un "universo paralelo" diferente. Karpathy demostro esto con un modelo anterior: una vez dijo que Mike Pence era running mate, otra vez dijo Ron DeSantis. El modelo toma su mejor guess estadistico basado en lo que sabe, pero no tiene forma de distinguir lo que sabe de lo que inventa. Esto lo vamos a poder probar en vivo en unos minutos.
           </aside>
         </section>
 
         <!-- Live base model demo -->
         <section>
           <h2 style="font-size: 1.2em; margin-bottom: 8px;">Demo: modelo base en vivo</h2>
-          <p style="font-size: 0.65em; color: var(--text-muted); margin-bottom: 8px;">Llama 3.1 405B (base, sin instruct) corriendo en 8x H100 80GB</p>
+          <p style="font-size: 0.65em; color: var(--text-muted); margin-bottom: 8px;">Llama 3.1 70B (base, sin instruct) corriendo en 2x H100 80GB (BF16)</p>
           <div id="base-model-demo"></div>
           <script src="base-model-chat.js"></script>
           <script>initBaseModelChat({ containerId: 'base-model-demo' });</script>
           <aside class="notes">
-            Aca vamos a interactuar con el modelo que venimos describiendo — Llama 3.1 405B de Meta, el modelo base puro. Esos 405 mil millones de parametros entrenados con 30 millones de GPU-horas en 15 billones de tokens. No es la version instruct — es el modelo que solo sabe autocompletar texto. A la izquierda tenemos una interfaz tipo chat, pero es una ilusion — a la derecha pueden ver lo que realmente esta pasando: todo es una cadena de texto continua. El modelo no tiene concepto de "turnos" ni "conversacion". Simplemente recibe texto y genera la continuacion mas probable. Recuerden que este modelo tiene un cutoff de diciembre 2023 — cualquier cosa posterior a eso la va a inventar. Noten que esta corriendo en 8 GPUs H100 de 80GB cada una — los mismos 800GB de parametros que vimos. Si activan "Mostrar tokens especiales" pueden ver el token de inicio de secuencia que Llama usa internamente.
+            Aca vamos a interactuar con un primo cercano del modelo que venimos describiendo — Llama 3.1 70B de Meta, el modelo base puro (no la version instruct). 70 mil millones de parametros entrenados con 7 millones de GPU-horas en 15 billones de tokens, mismo cutoff de diciembre 2023 que el 405B. Solo sabe autocompletar texto. A la izquierda tenemos una interfaz tipo chat, pero es una ilusion — a la derecha pueden ver lo que realmente esta pasando: todo es una cadena de texto continua. El modelo no tiene concepto de "turnos" ni "conversacion". Simplemente recibe texto y genera la continuacion mas probable. Recuerden el cutoff de diciembre 2023 — cualquier cosa posterior a eso la va a inventar. Noten que esta corriendo en 2 GPUs H100 de 80GB cada una — 160 GB de VRAM, suficiente para los 140 GB del modelo en BF16. Usamos 70B y no 405B por costo: 2 H100 sale ~$5/h vs ~$24/h para 8 H100. Si activan "Mostrar tokens especiales" pueden ver el token de inicio de secuencia que Llama usa internamente.
           </aside>
         </section>
 
@@ -1594,7 +1543,7 @@
           </div>
           <p class="fragment fade-in" style="font-size: 0.85em; margin-top: 16px;"><strong>El conocimiento esta en los parametros. El comportamiento de asistente, no.</strong></p>
           <aside class="notes">
-            Si probaron en la demo anterior a darle un prompt tipo "Human: ... Assistant: ...", puede que el modelo haya seguido el patron. Eso es in-context learning: el modelo reconoce el patron algoritmico en el contexto y lo continua. El few-shot prompting es darle ejemplos del patron que queres que siga y dejarlo completar. A la izquierda, un ejemplo simple de traduccion. A la derecha, algo mas ambicioso: simular un asistente completo armando un prompt que parece una conversacion. El modelo toma ese rol porque esta continuando el patron. Pero es fragil, incomodo, y limitado. El punto clave: todo el conocimiento del mundo ya esta en los parametros gracias al pre-training — Llama 3.1 405B saca 85 en MMLU solo con completado de texto. Lo que falta es darle el comportamiento de asistente — que responda preguntas, sea util, rechace pedidos peligrosos. Eso es exactamente lo que hace el post-training.
+            Si probaron en la demo anterior a darle un prompt tipo "Human: ... Assistant: ...", puede que el modelo haya seguido el patron. Eso es in-context learning: el modelo reconoce el patron algoritmico en el contexto y lo continua. El few-shot prompting es darle ejemplos del patron que queres que siga y dejarlo completar. A la izquierda, un ejemplo simple de traduccion. A la derecha, algo mas ambicioso: simular un asistente completo armando un prompt que parece una conversacion. El modelo toma ese rol porque esta continuando el patron. Pero es fragil, incomodo, y limitado. El punto clave: todo el conocimiento del mundo ya esta en los parametros gracias al pre-training — Llama 3.1 70B saca 79 en MMLU (y el 405B 85) solo con completado de texto. Lo que falta es darle el comportamiento de asistente — que responda preguntas, sea util, rechace pedidos peligrosos. Eso es exactamente lo que hace el post-training.
           </aside>
         </section>
 
@@ -1607,7 +1556,7 @@
           <h2>Post-Training: SFT</h2>
           <p class="muted">Supervised Fine-Tuning</p>
           <aside class="notes">
-            El pre-training nos da un modelo base — como el Llama 3.1 405B que acabamos de ver en accion. Un simulador de internet muy capaz pero no un asistente. Ahora viene la segunda etapa: el post-training, donde convertimos ese modelo base en un asistente. En el caso de Llama, Meta uso mas de 25 millones de ejemplos sinteticos ademas de datasets publicos de instrucciones. La tecnica principal se llama Supervised Fine-Tuning (SFT). Es computacionalmente mucho mas barato que el pre-training pero igualmente importante.
+            El pre-training nos da un modelo base — como el Llama 3.1 70B que acabamos de ver en accion. Un simulador de internet muy capaz pero no un asistente. Ahora viene la segunda etapa: el post-training, donde convertimos ese modelo base en un asistente. En el caso de Llama, Meta uso mas de 25 millones de ejemplos sinteticos ademas de datasets publicos de instrucciones. La tecnica principal se llama Supervised Fine-Tuning (SFT). Es computacionalmente mucho mas barato que el pre-training pero igualmente importante.
           </aside>
         </section>
 

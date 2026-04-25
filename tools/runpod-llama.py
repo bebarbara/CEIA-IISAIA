@@ -1,8 +1,8 @@
 """
-RunPod Pod Manager for Llama 3.1 405B Base
+RunPod Pod Manager for Llama 3.1 70B Base
 
 Start, check, and stop a RunPod GPU pod running vLLM
-with the Llama 3.1 405B base model (FP8 quantized).
+with the Llama 3.1 70B base model (BF16, 2-GPU tensor parallel).
 
 Usage:
     python tools/runpod-llama.py start
@@ -34,18 +34,18 @@ GPU_TYPES = [
 
 # Pod configuration
 POD_CONFIG = {
-    "name": "vllm-llama405b-base",
+    "name": "vllm-llama70b-base",
     "imageName": "vllm/vllm-openai:v0.6.6.post1",
-    "gpuCount": 8,
+    "gpuCount": 2,
     "containerDiskInGb": 50,
-    "volumeInGb": 300,
+    "volumeInGb": 200,
     "volumeMountPath": "/root/.cache/huggingface",
     "supportPublicIp": True,
     "startSsh": True,
     "ports": "8000/http,22/tcp",
     "dockerArgs": (
-        "--model meta-llama/Llama-3.1-405B-FP8 "
-        "--tensor-parallel-size 8 "
+        "--model meta-llama/Llama-3.1-70B "
+        "--tensor-parallel-size 2 "
         "--max-model-len 4096"
     ),
 }
@@ -260,7 +260,7 @@ def poll_pod(api_key, pod_id):
             print(f"API endpoint: {proxy_url}/v1/completions")
             print()
             print("The model is now downloading and loading into GPU memory.")
-            print("This can take 10-20 minutes for the 405B model.")
+            print("This can take 5-15 minutes for the 70B model.")
             print()
             print("Check model readiness with: python tools/runpod-llama.py status")
             return
