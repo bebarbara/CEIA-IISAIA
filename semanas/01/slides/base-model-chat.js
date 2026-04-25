@@ -251,8 +251,8 @@ function initBaseModelChat(opts) {
     var input = document.getElementById('bmc-input');
     if (!input) return;
 
-    var text = input.value.trim();
-    if (!text) return;
+    var text = input.value;
+    if (!text.trim()) return;
 
     if (!endpointUrl) {
       showError('No conectado — ingresa la URL del pod');
