@@ -1,11 +1,12 @@
 """
-RunPod Pod Manager for Llama 3.1 70B Base
+RunPod Pod Manager for Llama 3.1 70B (Base or Instruct)
 
-Start, check, and stop a RunPod GPU pod running vLLM
-with the Llama 3.1 70B base model (BF16, 2-GPU tensor parallel).
+Start, check, and stop a RunPod GPU pod running vLLM with either the
+Llama 3.1 70B base model or the Instruct version (BF16, 2-GPU tensor
+parallel). One pod at a time.
 
 Usage:
-    python tools/runpod-llama.py start
+    python tools/runpod-llama.py start [base|instruct]   # default: base
     python tools/runpod-llama.py status
     python tools/runpod-llama.py stop
 
@@ -32,9 +33,22 @@ GPU_TYPES = [
     "NVIDIA A100 80GB PCIe",
 ]
 
-# Pod configuration
-POD_CONFIG = {
-    "name": "vllm-llama70b-base",
+# Per-variant model details
+MODEL_VARIANTS = {
+    "base": {
+        "pod_name": "vllm-llama70b-base",
+        "hf_id": "meta-llama/Llama-3.1-70B",
+        "label": "Llama 3.1 70B Base",
+    },
+    "instruct": {
+        "pod_name": "vllm-llama70b-instruct",
+        "hf_id": "meta-llama/Llama-3.1-70B-Instruct",
+        "label": "Llama 3.1 70B Instruct",
+    },
+}
+
+# Common pod settings shared by both variants
+POD_BASE_CONFIG = {
     "imageName": "vllm/vllm-openai:v0.6.6.post1",
     "gpuCount": 2,
     "containerDiskInGb": 50,
@@ -43,12 +57,20 @@ POD_CONFIG = {
     "supportPublicIp": True,
     "startSsh": True,
     "ports": "8000/http,22/tcp",
-    "dockerArgs": (
-        "--model meta-llama/Llama-3.1-70B "
-        "--tensor-parallel-size 2 "
-        "--max-model-len 4096"
-    ),
 }
+
+
+def build_pod_config(variant):
+    cfg = MODEL_VARIANTS[variant]
+    return {
+        **POD_BASE_CONFIG,
+        "name": cfg["pod_name"],
+        "dockerArgs": (
+            f"--model {cfg['hf_id']} "
+            "--tensor-parallel-size 2 "
+            "--max-model-len 4096"
+        ),
+    }
 
 
 def load_env():
@@ -140,7 +162,7 @@ def graphql_no_exit(api_key, query, variables=None):
     return result.get("data", {}), result.get("errors")
 
 
-def cmd_start():
+def cmd_start(variant):
     api_key = get_api_key()
     hf_token = get_hf_token()
 
@@ -149,6 +171,11 @@ def cmd_start():
         print(f"A pod ID already exists: {pod_id}")
         print("Run 'status' to check it, or 'stop' to terminate it first.")
         sys.exit(1)
+
+    pod_config = build_pod_config(variant)
+    label = MODEL_VARIANTS[variant]["label"]
+    print(f"Launching {label}...")
+    print()
 
     env_vars = [
         {"key": "HUGGING_FACE_HUB_TOKEN", "value": hf_token},
@@ -169,14 +196,14 @@ def cmd_start():
     for gpu_type in GPU_TYPES:
         variables = {
             "input": {
-                **POD_CONFIG,
+                **pod_config,
                 "gpuTypeId": gpu_type,
                 "cloudType": "ALL",
                 "env": env_vars,
             }
         }
 
-        print(f"Trying: {POD_CONFIG['gpuCount']}x {gpu_type}...")
+        print(f"Trying: {pod_config['gpuCount']}x {gpu_type}...")
         data, errors = graphql_no_exit(api_key, mutation, variables)
         pod = data.get("podFindAndDeployOnDemand")
         if pod:
@@ -364,19 +391,23 @@ def main():
     load_env()
 
     if len(sys.argv) < 2:
-        print("Usage: python tools/runpod-llama.py <start|status|stop>")
+        print("Usage: python tools/runpod-llama.py <start|status|stop> [base|instruct]")
         sys.exit(1)
 
     command = sys.argv[1].lower()
     if command == "start":
-        cmd_start()
+        variant = sys.argv[2].lower() if len(sys.argv) >= 3 else "base"
+        if variant not in MODEL_VARIANTS:
+            print(f"Unknown variant: {variant}. Choices: {list(MODEL_VARIANTS.keys())}")
+            sys.exit(1)
+        cmd_start(variant)
     elif command == "status":
         cmd_status()
     elif command == "stop":
         cmd_stop()
     else:
         print(f"Unknown command: {command}")
-        print("Usage: python tools/runpod-llama.py <start|status|stop>")
+        print("Usage: python tools/runpod-llama.py <start|status|stop> [base|instruct]")
         sys.exit(1)
 
 

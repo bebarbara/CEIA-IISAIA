@@ -1679,11 +1679,11 @@
               <div style="color: var(--accent); font-weight: bold; margin-bottom: 8px; font-size: 1.1em;">3. &hellip;y escribe la respuesta ideal</div>
               <p style="color: var(--text-muted); margin-bottom: 8px;">Siguiendo las instrucciones</p>
               <div style="background: var(--bg-code); border-radius: 4px; padding: 8px; line-height: 1.5;">
-                1. Reflexiona sobre que te entusiasmaba<br>
-                2. Establece metas pequenas y específicas<br>
-                3. Habla con un mentor<br>
-                4. Aprende una skill nueva<br>
-                5. Toma un descanso intencional
+                1. Reflect on what excited you initially<br>
+                2. Set small, specific goals<br>
+                3. Talk to a mentor or colleague<br>
+                4. Learn a new skill outside your area<br>
+                5. Take an intentional break
               </div>
               <p style="color: var(--text-muted); margin-top: 6px; font-size: 0.95em;">El modelo aprende a imitar este patrón</p>
             </div>
@@ -1697,75 +1697,64 @@
           </aside>
         </section>
 
-        <!-- Synthetic data -->
+        <!-- Classical SFT flow (InstructGPT-style) -->
         <section>
-          <h2>De humano a sintético</h2>
-          <p style="font-size: 0.8em; color: var(--text-muted);">Cómo cambió el dataset de SFT en pocos años</p>
-          <div style="display: flex; gap: 14px; margin-top: 16px; align-items: stretch; font-size: 0.7em;">
+          <h2>SFT clásico</h2>
+          <p style="font-size: 0.8em; color: var(--text-muted);">La técnica detrás de la primera versión de ChatGPT (noviembre 2022)</p>
 
-            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 14px;">
-              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;">
-                <span style="color: var(--accent-secondary); font-weight: bold; font-size: 1.15em;">InstructGPT</span>
-                <span style="color: var(--text-muted); font-size: 0.95em;">2022</span>
-              </div>
-              <table style="width: 100%; font-size: 0.95em;">
-                <tr><td style="padding: 4px 0; color: var(--text-muted); width: 32%;">Quien</td><td>Solo humanos</td></tr>
-                <tr><td style="padding: 4px 0; color: var(--text-muted);">Volumen</td><td>~13.000 ejemplos</td></tr>
-                <tr><td style="padding: 4px 0; color: var(--text-muted);">Proceso</td><td>Labeler escribe todo de cero</td></tr>
-              </table>
+          <div style="display: flex; align-items: stretch; gap: 8px; margin-top: 18px; font-size: 0.7em;">
+
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px; border-left: 3px solid var(--accent-secondary);">
+              <div style="color: var(--accent-secondary); font-weight: bold; margin-bottom: 6px; font-size: 1.1em;">Anotador</div>
+              <div style="color: var(--text-muted); line-height: 1.5;">Escribe (prompt, respuesta ideal) siguiendo guidelines</div>
             </div>
 
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; gap: 4px;">
-              <div style="color: var(--text-muted); font-size: 0.75em; text-align: center;">unos años</div>
-              <svg width="36" height="14" viewBox="0 0 36 14"><path d="M2 7h28m0 0l-5-5m5 5l-5 5" stroke="var(--accent)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            <div style="display: flex; align-items: center; flex-shrink: 0;">
+              <svg width="22" height="14" viewBox="0 0 24 14"><path d="M2 7h16m0 0l-5-5m5 5l-5 5" stroke="var(--text-muted)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
             </div>
 
-            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 14px; border: 1px solid var(--accent);" class="fragment fade-in">
-              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;">
-                <span style="color: var(--accent); font-weight: bold; font-size: 1.15em;">Hoy</span>
-                <span style="color: var(--text-muted); font-size: 0.95em;">2024+</span>
-              </div>
-              <table style="width: 100%; font-size: 0.95em;">
-                <tr><td style="padding: 4px 0; color: var(--text-muted); width: 32%;">Quien</td><td>LLM con revisión humana</td></tr>
-                <tr><td style="padding: 4px 0; color: var(--text-muted);">Volumen</td><td>Millones de ejemplos</td></tr>
-                <tr><td style="padding: 4px 0; color: var(--text-muted);">Proceso</td><td>LLM genera borrador, humano edita y valida</td></tr>
-              </table>
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px; border-left: 3px solid var(--text-muted);">
+              <div style="color: var(--text-primary); font-weight: bold; margin-bottom: 6px; font-size: 1.1em;">Dataset SFT</div>
+              <div style="color: var(--text-muted); line-height: 1.5;">~13.000 pares (P, R) escritos por humanos</div>
+            </div>
+
+            <div style="display: flex; align-items: center; flex-shrink: 0;">
+              <svg width="22" height="14" viewBox="0 0 24 14"><path d="M2 7h16m0 0l-5-5m5 5l-5 5" stroke="var(--text-muted)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            </div>
+
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px; border-left: 3px solid var(--accent);">
+              <div style="color: var(--accent); font-weight: bold; margin-bottom: 6px; font-size: 1.1em;">Train</div>
+              <div style="color: var(--text-muted); line-height: 1.5;">Mismo algoritmo que pre-training, sobre el nuevo dataset</div>
+            </div>
+
+            <div style="display: flex; align-items: center; flex-shrink: 0;">
+              <svg width="22" height="14" viewBox="0 0 24 14"><path d="M2 7h16m0 0l-5-5m5 5l-5 5" stroke="var(--text-muted)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            </div>
+
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px; border: 1px solid var(--accent);">
+              <div style="color: var(--accent); font-weight: bold; margin-bottom: 6px; font-size: 1.1em;">Asistente</div>
+              <div style="color: var(--text-muted); line-height: 1.5;">Modelo que responde como un labeler ideal</div>
             </div>
 
           </div>
 
-          <div class="fragment fade-in" style="margin-top: 14px; font-size: 0.7em;">
-            <p style="color: var(--text-muted); margin-bottom: 6px;">Datasets públicos para explorar:</p>
-            <div style="display: flex; gap: 10px;">
-              <div style="flex: 1; background: var(--bg-code); border-radius: 6px; padding: 8px 12px;">
-                <a href="https://github.com/thunlp/UltraChat" target="_blank">UltraChat</a> &middot; ~1.5M conversaciones sinteticas
-              </div>
-              <div style="flex: 1; background: var(--bg-code); border-radius: 6px; padding: 8px 12px;">
-                <a href="https://huggingface.co/datasets/sahíl2801/CodeAlpaca-20k/viewer" target="_blank">CodeAlpaca-20k</a> &middot; 20K ejemplos de código
-              </div>
-            </div>
-          </div>
+          <p class="fragment fade-in" style="font-size: 0.9em; margin-top: 20px; text-align: center; color: var(--accent);">
+            Misma red, mismo algoritmo de pre-training. Solo cambia el dataset y la máscara de loss.
+          </p>
 
           <aside class="notes">
-            En 2022, cuando OpenAI publicó InstructGPT, todo el dataset de SFT venia de humanos escribiendo cada respuesta ideal. Tenian aproximadamente 13.000 ejemplos labeler-written. Eso era el state of the art. En los pocos años desde entonces el proceso cambió mucho. Hoy es muy raro que un humano escriba una respuesta entera de cero — es más común que un LLM existente genere un borrador y un humano lo edite o valide. Eso permite escalar a millones de conversaciones. Los datasets modernos como UltraChat tienen ~1.5 millones de conversaciones sinteticas, mayoritariamente generadas por LLMs y editadas por humanos. Hay datasets especializados como CodeAlpaca-20k para código. Y se mezclan muchas fuentes diferentes en lo que se llama "SFT mixtures". Mostrar UltraChat y CodeAlpaca para que vean ejemplos reales de como se ven estas conversaciones.
+            Con todas las piezas anteriores podemos describir el SFT clásico — la técnica que hizo posible que OpenAI lanzara la primera versión de ChatGPT en noviembre de 2022. Era sorprendentemente simple. Cuatro pasos. Uno: humanos profesionales escriben pares (prompt, respuesta ideal) siguiendo las labeling instructions que vimos. Dos: esos pares forman el dataset de SFT — InstructGPT (el paper que lo introdujo) usaba alrededor de 13.000 ejemplos. Tres: se toma el modelo base de pre-training y se sigue entrenando con la misma red y el mismo algoritmo, pero con dos cambios — el dataset son estos pares humanos, y el loss solo cuenta los tokens del asistente (loss masking). Cuatro: sale el asistente. La elegancia es que es la misma maquinaria del pre-training, con dos pequeños cambios. Y eso fue suficiente para que ChatGPT cambiara la historia. La animación a continuación muestra ese proceso desde adentro: cómo se tokeniza la conversación, qué hace la máscara de loss, y cómo cambia el comportamiento del modelo durante el entrenamiento.
           </aside>
         </section>
 
-        <!-- Conversation tokenization -->
+        <!-- SFT training animation -->
         <section>
-          <h2>Tokens especiales para conversaciones</h2>
-          <div style="background: var(--bg-code); border-radius: 8px; padding: 12px 16px; font-family: var(--font-mono); font-size: 0.55em; line-height: 1.8; margin-top: 12px;">
-            <span style="color: #e8508b;">&lt;|im_start|&gt;</span><span style="color: var(--accent-secondary);">user</span><span style="color: #e8508b;">&lt;|im_sep|&gt;</span><br>
-            <span style="color: var(--text-primary);">Cuanto es 2 + 2?</span><span style="color: #e8508b;">&lt;|im_end|&gt;</span><br>
-            <span style="color: #e8508b;">&lt;|im_start|&gt;</span><span style="color: var(--accent);">assistant</span><span style="color: #e8508b;">&lt;|im_sep|&gt;</span><br>
-            <span style="color: var(--text-primary);">2 + 2 es 4.</span><span style="color: #e8508b;">&lt;|im_end|&gt;</span>
-          </div>
-          <ul style="font-size: 0.75em; margin-top: 12px;">
-            <li class="fragment fade-in"><code>&lt;|im_start|&gt;</code>, <code>&lt;|im_sep|&gt;</code>, <code>&lt;|im_end|&gt;</code> son tokens nuevos, no texto</li>
-            <li class="fragment fade-in">En inferencia: se arma el contexto y se deja al modelo generar desde <code>assistant</code></li>
-          </ul>
+          <h2 style="font-size: 1.2em; margin-bottom: 8px;">Cómo se ve entrenar el SFT</h2>
+          <div id="sft-anim-demo"></div>
+          <script src="sft-anim.js"></script>
+          <script>initSftAnim({ containerId: 'sft-anim-demo' });</script>
           <aside class="notes">
-            Todo tiene que ser tokens porque la red neuronal solo procesa tokens. Las conversaciones se codifican con tokens especiales nuevos que se agregan al vocabulario: im_start (inicio de turno), im_sep (separador), im_end (fin de turno). Estos NO son texto — son tokens especiales que no existian antes. GPT-4o usa "im" (imaginary monologue) como prefijo. Cada LLM tiene su propio formato, es un poco "wild west." En inferencia, cuando vas a ChatGPT, el servidor arma el contexto con im_start user im_sep [tu pregunta] im_end im_start assistant im_sep — y desde ahí el modelo empieza a generar tokens, que es la respuesta que ves.
+            Animación en dos fases. Fase 1, tres pasos de explicación: (1) cómo se serializa una conversación con tokens especiales nuevos que se agregan al vocabulario en post-training, (2) la máscara de loss — el truco clave: el modelo ve toda la conversación pero el gradiente solo cuenta los tokens del asistente, así aprende a ser el asistente y no el usuario, (3) el grafo del paso de entrenamiento — batch de conversaciones, predicción, loss, ajustar parámetros. Fase 2: el comportamiento del modelo durante el entrenamiento, con el mismo prompt en cada checkpoint. Es el paralelo de la animación del modelo base, pero ahora vemos cómo aprende a ser asistente, no a continuar internet. El prompt usado (cómo abrir una cerradura) muestra como el modelo pasa de autocompletar al estilo de Wikipedia, a refusar de forma tosca, y eventualmente a refusar con matiz y ofrecer alternativas legítimas.
           </aside>
         </section>
 
@@ -1821,11 +1810,11 @@
           </div>
 
           <p class="fragment fade-in" style="font-size: 0.85em; margin-top: 16px; text-align: center; color: var(--accent);">
-            Cuando hablas con ChatGPT, hablas con una simulación estadística de un labeler entrenado.
+            Cuando hablas con ChatGPT, hablas con una simulación estadística de un labeler.
           </p>
 
           <aside class="notes">
-            Desmitifiquemos esto. Cuando le hablas a ChatGPT, lo que recibes es estadísticamente consistente con lo que habría en el dataset de entrenamiento. Y ese dataset tiene su origen en humanos siguiendo instrucciones de etiquetado. Por eso la respuesta no viene de una IA mágica — viene de una simulación de un labeler humano. Ese labeler no es cualquier persona de internet: es un experto contratado, que leyo cientos de páginas de instrucciones (helpful, truthful, harmless), y que para temas técnicos esta domain-matched (un labeler de código es probablemente un software engineer; un labeler de medicina, un MD). Entonces cuando le pregunto a ChatGPT, lo que obtengo es la "respuesta promedio" que ese tipo de experto daria, simulada en un instante. La calidad del modelo final esta directamente acotada por la calidad del labeler simulado. Esto también explica los límites: si los labelers no saben algo, el modelo tampoco. Si las instrucciones tienen un sesgo, el modelo lo absorbe.
+            Desmitifiquemos esto. Cuando le hablas a ChatGPT, lo que recibes es estadísticamente consistente con lo que habría en el dataset de entrenamiento. Y ese dataset tiene su origen en humanos siguiendo instrucciones de etiquetado. Por eso la respuesta no viene de una IA mágica — viene de una simulación de un labeler humano. Ese labeler no es cualquier persona de internet: es un experto contratado, que leyó cientos de páginas de instrucciones (helpful, truthful, harmless), y que para temas técnicos está domain-matched (un labeler de código es probablemente un software engineer; un labeler de medicina, un MD). Entonces cuando le pregunto a ChatGPT, lo que obtengo es la "respuesta promedio" que ese tipo de experto daría, simulada en un instante. La calidad del modelo final está directamente acotada por la calidad del labeler simulado. Esto también explica los límites: si los labelers no saben algo, el modelo tampoco. Si las instrucciones tienen un sesgo, el modelo lo absorbe.
           </aside>
         </section>
 
