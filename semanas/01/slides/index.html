@@ -2107,62 +2107,122 @@
 
         <section class="section-divider">
           <h2>Limitaciones Cognitivas</h2>
+          <p class="muted">Las asperezas de un sistema basado en la generación estocastica de tokens</p>
           <aside class="notes">
-            Los LLMs tienen limitaciones cognitivas específicas que surgen de como funcionan a nivel de tokens. Entender estas limitaciones es clave para usarlos bien.
+            Los LLMs pueden alucinar, como vimos. Pero hay otro tipo de limitación más fundamental: limitaciones cognitivas que surgen directamente de cómo funcionan a nivel de tokens. Entender estos bordes afilados es clave para usarlos bien — y para saber cuándo usar herramientas en vez de confiar en la "aritmética mental" del modelo.
           </aside>
         </section>
 
-        <!-- Tokens to think -->
+        <!-- Cognitive deficits: three examples -->
         <section>
-          <h2>Los modelos necesitan tokens para pensar</h2>
-          <div style="display: flex; gap: var(--spacing-md); font-size: 0.65em; margin-top: 12px;">
-            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 10px; border: 1px solid #e74c3c;">
-              <div style="color: #e74c3c; margin-bottom: 6px;">Mala respuesta:</div>
-              <div>"La respuesta es <strong>$3</strong>. Porque los 2 naranjas cuestan $4, y 13-4=9, dividido 3 manzanas..."</div>
-              <div style="color: var(--text-muted); margin-top: 6px;">Toda la computación tiene que caber en un solo token ("3")</div>
+          <h2>Déficits cognitivos: tres ejemplos</h2>
+          <div style="display: flex; gap: 10px; font-size: 0.6em; margin-top: 14px;">
+
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px;">
+              <div style="color: var(--accent-secondary); font-weight: bold; margin-bottom: 8px;">Aritmética mental</div>
+              <div style="background: var(--bg-code); border-radius: 4px; padding: 8px 10px; margin-bottom: 8px; font-family: var(--font-mono); line-height: 1.6;">
+                <div style="color: var(--text-muted);">372 × 847 = ?</div>
+                <div style="color: #e74c3c;">Modelo: "314,884"</div>
+                <div style="color: var(--text-muted); font-size: 0.85em;">(correcto: 315,084)</div>
+              </div>
+              <div style="color: var(--text-muted); line-height: 1.5;">Cada paso intermedio es aritmética mental de la red neuronal. Cualquier paso puede fallar.</div>
             </div>
-            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 10px; border: 1px solid #27ae60;">
-              <div style="color: #27ae60; margin-bottom: 6px;">Buena respuesta:</div>
-              <div>"Costo naranjas: 2 x $2 = $4. Costo manzanas: $13 - $4 = $9. Precio por manzana: $9 / 3 = <strong>$3</strong>"</div>
-              <div style="color: var(--text-muted); margin-top: 6px;">La computación se distribuye en muchos tokens intermedios</div>
+
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px;" class="fragment fade-in">
+              <div style="color: var(--accent-secondary); font-weight: bold; margin-bottom: 8px;">Conteo</div>
+              <div style="background: var(--bg-code); border-radius: 4px; padding: 8px 10px; margin-bottom: 8px; font-family: var(--font-mono); line-height: 1.6;">
+                <div style="color: var(--text-muted);">¿Cuántos puntos? &#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</div>
+                <div style="color: #e74c3c;">Modelo: "8"</div>
+                <div style="color: var(--text-muted); font-size: 0.85em;">(son 11)</div>
+              </div>
+              <div style="color: var(--text-muted); line-height: 1.5;">Tiene que resolver en un solo forward pass. No hay suficiente cómputo en un token.</div>
+            </div>
+
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px;" class="fragment fade-in">
+              <div style="color: var(--accent-secondary); font-weight: bold; margin-bottom: 8px;">Deletreo</div>
+              <div style="background: var(--bg-code); border-radius: 4px; padding: 8px 10px; margin-bottom: 8px; font-family: var(--font-mono); line-height: 1.6;">
+                <div style="color: var(--text-muted);">¿Cuántas R tiene "strawberry"?</div>
+                <div style="color: #e74c3c;">Modelo: "2" <span style="color: var(--text-muted);">(son 3)</span></div>
+                <div style="color: var(--accent); font-size: 0.85em;">Ve: [straw][berry], no letras</div>
+              </div>
+              <div style="color: var(--text-muted); line-height: 1.5;">El modelo ve tokens, no caracteres. Tiene que deducir qué letras hay dentro de cada token.</div>
+            </div>
+
+          </div>
+          <div class="fragment fade-in" style="background: var(--bg-code); border-radius: 8px; padding: 10px 14px; font-size: 0.75em; margin-top: 14px; display: flex; align-items: baseline; gap: 8px;">
+            <span style="color: var(--accent); font-weight: bold; flex-shrink: 0;">Solución:</span>
+            <span>decirle "usá código." El modelo escribe un programa Python, lo ejecuta, y el intérprete da la respuesta correcta.</span>
+          </div>
+          <aside class="notes">
+            Los modelos tienen varios déficits cognitivos específicos, todos causados por la misma raíz: computo finito por token. Aritmética: para números chicos funciona bien, pero para grandes puede fallar en cualquier paso intermedio. Es aritmética mental hecha por la red neuronal — no hay garantía de precisión. Conteo: si le ponés muchos puntos y preguntás cuántos hay, tiene que resolverlo en un solo token. No hay suficiente cómputo para eso. Deletreo: el famoso "cuántas R tiene strawberry" — por mucho tiempo los modelos decían 2 en vez de 3. La razón: el modelo ve [straw, berry], no letras individuales. Tiene que deducir qué letras hay dentro de cada token. La solución para todos estos: "usá código." El modelo escribe un programa Python, lo ejecuta, y el intérprete da la respuesta correcta. Nunca confíes en la aritmética mental de un LLM para cosas importantes.
+          </aside>
+        </section>
+
+        <!-- Bridge: knowledge vs reasoning problems -->
+        <section>
+          <h2>Saber vs pensar</h2>
+          <p style="font-size: 0.8em; color: var(--text-muted);">Las limitaciones que vimos hasta ahora eran de conocimiento. Ahora vamos a otro tipo.</p>
+
+          <div style="display: flex; gap: 14px; margin-top: 16px; font-size: 0.7em; align-items: stretch;">
+
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 14px;">
+              <div style="color: var(--text-muted); font-weight: bold; margin-bottom: 8px; font-size: 1.1em;">Problemas de conocimiento</div>
+              <div style="background: var(--bg-code); border-radius: 4px; padding: 8px 12px; font-style: italic; line-height: 1.5; margin-bottom: 8px;">
+                "¿Quién ganó el Nobel de Física 2024?"
+              </div>
+              <div style="color: var(--text-muted); line-height: 1.5;">
+                Respuesta: <span style="color: #27ae60;">"Hopfield y Hinton"</span> &mdash; un dato. Lo sabe o no lo sabe.
+              </div>
+            </div>
+
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 14px; border: 1px solid var(--accent);" class="fragment fade-in">
+              <div style="color: var(--accent); font-weight: bold; margin-bottom: 8px; font-size: 1.1em;">Problemas de razonamiento</div>
+              <div style="background: var(--bg-code); border-radius: 4px; padding: 8px 12px; font-style: italic; line-height: 1.5; margin-bottom: 8px;">
+                "Si 8 obreros construyen un muro en 10 horas, ¿cuántas horas tardan 5 obreros en construir 3 muros?"
+              </div>
+              <div style="color: var(--text-muted); line-height: 1.5;">
+                Respuesta: <span style="color: var(--accent);">"48 horas"</span> &mdash; llegar a ese número requiere hacer cálculos encadenados, o conocer ese problema exacto de memoria.
+              </div>
+            </div>
+
+          </div>
+
+          <p class="fragment fade-in" style="font-size: 0.85em; margin-top: 14px; text-align: center;">
+            ¿Pero cómo "piensa" una red neuronal que genera tokens de izquierda a derecha?
+          </p>
+          <aside class="notes">
+            Transición clave. Todo lo que vimos en la sección anterior — alucinaciones, uso de herramientas, búsqueda web — eran problemas de conocimiento. El modelo no sabía algo y la solución era darle la información. Pero ahora pensemos en otro tipo de problema: uno donde toda la información ya está en el prompt. El problema de los obreros y los muros no requiere que el modelo sepa nada del mundo. Requiere que razone, que compute, que "piense." Y acá viene la pregunta interesante: ¿cómo piensa una red neuronal? Recordemos que el modelo genera tokens de izquierda a derecha, uno a la vez. Cada token pasa por las mismas ~100 capas de la red neuronal. Esa es una cantidad fija y finita de cómputo por token. ¿Qué implica eso?
+          </aside>
+        </section>
+
+        <!-- Finite compute per token -->
+        <section>
+          <h2>¿Qué respuesta favorece el aprendizaje del modelo?</h2>
+
+          <div style="display: flex; gap: var(--spacing-md); font-size: 0.65em; margin-top: 14px;">
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 10px; border: 1px solid var(--accent-secondary);">
+              <div style="color: var(--accent-secondary); margin-bottom: 6px;">Respuesta A:</div>
+              <div>"La respuesta es <strong>48 horas</strong>. Porque si 8 obreros tardan 10 horas en un muro, entonces..."</div>
+              <div class="fragment fade-in" style="color: var(--text-muted); margin-top: 6px;">Toda la computación tiene que caber en el token "48" &mdash; todo lo que sigue es justificación post-hoc</div>
+            </div>
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 10px; border: 1px solid var(--accent);">
+              <div style="color: var(--accent); margin-bottom: 6px;">Respuesta B:</div>
+              <div>"1 muro = 8 × 10 = 80 obrero-horas. 3 muros = 240 obrero-horas. Con 5 obreros: 240 / 5 = <strong>48 horas</strong>"</div>
+              <div class="fragment fade-in" style="color: var(--text-muted); margin-top: 6px;">La computación se distribuye en muchos tokens intermedios &mdash; cada cálculo es simple</div>
             </div>
           </div>
-          <p class="fragment fade-in" style="font-size: 0.8em; margin-top: 12px;">Cada token tiene una cantidad fija y finita de computo (~100 capas). No se puede esperar razonamiento complejo en un solo token.</p>
-          <aside class="notes">
-            Concepto clave: cada token que genera el modelo usa la misma cantidad fija de computo — ~100 capas de la red neuronal. No se puede hacer razonamiento complejo en un solo forward pass. Ejemplo: "Emily compra 3 manzanas y 2 naranjas. Cada naranja cuesta $2. El total es $13. Cuanto cuesta cada manzana?" La respuesta mala pone "$3" como primer token — tiene que meter toda la computación en un token. La respuesta buena distribuye los calculos intermedios en muchos tokens. Esto no es solo estilo — la respuesta con razonamiento intermedio es FUNDAMENTALMENTE más probable de ser correcta porque el modelo tiene más tokens para distribuir su computación. Por eso chain-of-thought prompting funciona tan bien.
-          </aside>
-        </section>
 
-        <!-- Arithmetic, counting, spelling -->
-        <section>
-          <h2>Aritmética, conteo y deletreo</h2>
-          <ul>
-            <li class="fragment fade-in">Aritmética mental: funciona para números chicos, falla con grandes</li>
-            <li class="fragment fade-in">Conteo: "cuántos puntos hay?" — el modelo adivina en un token</li>
-            <li class="fragment fade-in">Deletreo: "imprime cada tercera letra" — no ve letras, ve tokens</li>
-          </ul>
-          <div class="fragment fade-in" style="background: var(--bg-code); border-radius: 8px; padding: 10px 14px; font-size: 0.7em; margin-top: 12px;">
-            <p style="color: var(--text-muted);">"Cuantas R tiene strawberry?"</p>
-            <p style="color: #e74c3c;">Modelo: "2" (incorrecto — son 3)</p>
-            <p style="color: var(--text-muted); margin-top: 4px;">El modelo ve: [" straw", "berry"] — no tiene acceso a letras individuales</p>
-          </div>
-          <p class="fragment fade-in" style="font-size: 0.8em;">Solución: decirle "usa código" — el interprete de Python no se equivoca</p>
+          <p class="fragment fade-in" style="font-size: 0.8em; margin-top: 14px; color: var(--text-muted); text-align: center;">
+            Cada token pasa por las mismas ~100 capas de la red. No más.
+          </p>
+          <p class="fragment fade-in" style="font-size: 0.85em; margin-top: 8px; text-align: center; color: var(--accent);">
+            Los modelos necesitan generar tokens para pensar. Más tokens intermedios = más cómputo = mejores respuestas.
+          </p>
+          <p class="fragment fade-in" style="font-size: 0.75em; margin-top: 8px; text-align: center;">
+            <a href="https://platform.openai.com/playground/chat?models=gpt-3.5-turbo" target="_blank">Probémoslo en el playground &rarr;</a>
+          </p>
           <aside class="notes">
-            Los modelos tienen varios déficits cognitivos específicos. Aritmética: para números chicos funciona bien, pero para grandes puede fallar en cualquier paso intermedio. Es aritmética mental hecha por la red neuronal — no hay garantia de precisión. Conteo: si le pones muchos puntos y preguntas cuántos hay, tiene que resolverlo en un solo token. No hay suficiente computo para eso. Deletreo: el famoso "cuántas R tiene strawberry" — por mucho tiempo los modelos decían 2 en vez de 3. La razón: el modelo ve [straw, berry], no letras individuales. Tiene que deducir que letras hay dentro de cada token. La solución para todos estos: "usa código." El modelo escribe un programa Python, lo ejecuta, y el interprete da la respuesta correcta. Nunca confies en la aritmética mental de un LLM para cosas importantes.
-          </aside>
-        </section>
-
-        <!-- Swiss cheese capabilities -->
-        <section>
-          <h2>Capacidades "queso suizo"</h2>
-          <ul>
-            <li class="fragment fade-in">"Es 9.11 mayor que 9.9?" &#8594; el modelo dice que si (incorrecto)</li>
-            <li class="fragment fade-in">Resuelve problemas de olimpiada pero falla en esto</li>
-            <li class="fragment fade-in">Neuronas asociadas a versiculos biblicos se activan (9:11 > 9:9)</li>
-          </ul>
-          <p class="fragment fade-in" style="font-size: 0.8em; color: var(--text-muted); margin-top: 12px;">Las capacidades del modelo son como un queso suizo: enormes, pero con agujeros impredecibles. Usalo como herramienta, no como oraculo.</p>
-          <aside class="notes">
-            Un ejemplo famoso: "es 9.11 mayor que 9.9?" Los modelos dicen que si. 9.11 no es mayor que 9.9 como números decimales. Cuando investigaron las activaciones de la red, encontraron que neuronas asociadas con versiculos biblicos se activaban — en la Biblia, versiculo 9:11 viene después de 9:9. El modelo se "distrae" cognitivamente. Lo increíble es que el mismo modelo puede resolver problemas de olimpiada de matemática. Las capacidades son como un queso suizo: inmensas, pero con agujeros impredecibles. No se puede predecir donde van a estar los agujeros. Moraleja: usa los LLMs como herramientas, no como oraculos infalibles. Verifica su trabajo. Usalos para inspiración, primer borrador, pero siempre revisa.
+            Concepto clave: cada token que genera el modelo usa la misma cantidad fija de cómputo — ~100 capas de la red neuronal. No se puede hacer razonamiento complejo en un solo forward pass. Veamos dos respuestas posibles al problema de los obreros. La respuesta A pone "48" como primer token — toda la computación del problema tiene que caber en ese único token. Todo lo que viene después es justificación post-hoc: el modelo ya emitió la respuesta, no puede cambiarla. La respuesta B distribuye los cálculos intermedios en muchos tokens. Cada paso es simple: 8×10=80, 80×3=240, 240/5=48. Ningún token tiene que hacer algo demasiado difícil. Esto no es solo mejor estilo — es FUNDAMENTALMENTE más probable de ser correcto porque el modelo tiene más tokens (más cómputo) para llegar a la respuesta. Por eso chain-of-thought prompting funciona tan bien: le estás dando al modelo más tokens para pensar.
           </aside>
         </section>
 
@@ -2173,8 +2233,9 @@
 
         <section class="section-divider">
           <h2>Reinforcement Learning</h2>
+          <p class="muted">La tercera etapa del pipeline</p>
           <aside class="notes">
-            Hemos cubierto dos etapas: pre-training (conocimiento de internet) y SFT (comportamiento de asistente). La tercera y última etapa es reinforcement learning — y es la que esta cambiando todo en este momento.
+            Hemos cubierto dos etapas: pre-training (conocimiento de internet) y SFT (comportamiento de asistente). La tercera y última etapa es reinforcement learning — y es la que está cambiando todo en este momento.
           </aside>
         </section>
 
@@ -2206,20 +2267,22 @@
 
         <!-- Why SFT isn't enough -->
         <section>
-          <h2>Por que SFT no alcanza</h2>
+          <h2>Por qué SFT no alcanza</h2>
           <div style="display: flex; gap: var(--spacing-sm); font-size: 0.6em; margin-top: 12px;">
             <div class="rl-attempt" style="flex: 1;">Solución A:<br>2*$2=$4<br>$13-$4=$9<br>$9/3=<strong>$3</strong></div>
             <div class="rl-attempt" style="flex: 1;">Solución B:<br>Sea x el precio<br>3x+4=13<br>x=<strong>$3</strong></div>
             <div class="rl-attempt" style="flex: 1;">Solución C:<br>Naranjas=$4<br>Manzanas=$9<br>Cada una=<strong>$3</strong></div>
             <div class="rl-attempt" style="flex: 1;">Solución D:<br>13-4=9, 9/3=<strong>$3</strong></div>
           </div>
-          <ul style="font-size: 0.75em; margin-top: 12px;">
-            <li class="fragment fade-in">Las 4 dan la respuesta correcta, pero cual es mejor <em>para el modelo</em>?</li>
-            <li class="fragment fade-in">Lo que es fácil para un humano puede ser dificil para el LLM y viceversa</li>
-            <li class="fragment fade-in">El modelo necesita descubrir que secuencias de tokens le funcionan a el</li>
-          </ul>
+          <div class="fragment fade-in" style="background: var(--bg-code); border-radius: 8px; padding: 10px 14px; font-size: 0.75em; margin-top: 14px; display: flex; align-items: baseline; gap: 8px;">
+            <span style="color: var(--accent); font-weight: bold; flex-shrink: 0;">Problema:</span>
+            <span>las 4 llegan a $3, pero ¿cuál es mejor <em>para el modelo</em>? Lo que es fácil para un humano puede ser difícil para el LLM, y viceversa.</span>
+          </div>
+          <p class="fragment fade-in" style="font-size: 0.85em; margin-top: 12px; text-align: center; color: var(--accent);">
+            El modelo necesita descubrir qué secuencias de tokens le funcionan a él.
+          </p>
           <aside class="notes">
-            Ejemplo concreto de por que SFT no es suficiente. Para el problema de las manzanas, hay muchas soluciones correctas. Un humano labeler podría escribir cualquiera de estas cuatro. Pero no sabemos cual es optima para el LLM. Algunas usan ecuaciones (quizá triviales para el modelo), otras hablan en lenguaje natural (quizá más difícil de seguir para el modelo). Lo que es un salto mental trivial para un humano puede ser imposible para el LLM en un solo token. Lo que un humano explicaria con muchas palabras puede ser obvio para el modelo. No estamos en posición de escribir las secuencias de tokens ideales para el LLM. Necesitamos que el propio modelo las descubra.
+            Ejemplo concreto de por qué SFT no es suficiente. Para el problema de las manzanas, hay muchas soluciones correctas. Un humano labeler podría escribir cualquiera de estas cuatro. Pero no sabemos cuál es óptima para el LLM. Algunas usan ecuaciones (quizá triviales para el modelo), otras hablan en lenguaje natural (quizá más difícil de seguir para el modelo). Lo que es un salto mental trivial para un humano puede ser imposible para el LLM en un solo token. Lo que un humano explicaría con muchas palabras puede ser obvio para el modelo. No estamos en posición de escribir las secuencias de tokens ideales para el LLM. Necesitamos que el propio modelo las descubra.
           </aside>
         </section>
 
@@ -2234,158 +2297,165 @@
               <div class="rl-attempt fragment fade-in correct" style="flex: 1 1 45%;">Intento 4: "x = (13-4)/3 = 3" &#10003;</div>
             </div>
           </div>
-          <ul style="font-size: 0.75em; margin-top: 12px;">
-            <li class="fragment fade-in">Miles de intentos por problema, miles de problemas</li>
-            <li class="fragment fade-in">Reforzar las secuencias de tokens que llevan a respuestas correctas</li>
-            <li class="fragment fade-in">El modelo no imita a un humano — descubre sus propias estrategias</li>
-          </ul>
+          <div class="fragment fade-in" style="display: flex; align-items: center; gap: 8px; font-size: 0.7em; margin-top: 14px; justify-content: center;">
+            <div class="flow-step">Miles de intentos por problema</div>
+            <span style="color: var(--text-muted);">&#8594;</span>
+            <div class="flow-step">Miles de problemas distintos</div>
+            <span style="color: var(--text-muted);">&#8594;</span>
+            <div class="flow-step active">Reforzar tokens que llevan a respuestas correctas</div>
+          </div>
+          <p class="fragment fade-in" style="font-size: 0.85em; margin-top: 12px; text-align: center; color: var(--accent);">
+            El modelo no imita a un humano &mdash; descubre sus propias estrategias.
+          </p>
           <aside class="notes">
-            El proceso de RL es simple conceptualmente. Para un problema dado: 1) Generar miles de intentos de solución (recordar que el modelo es estocástico, cada intento es diferente). 2) Verificar cuales llegan a la respuesta correcta. 3) Las soluciones correctas (verdes) se usan para entrenar — reforzar esos caminos de tokens. Las incorrectas (rojas) se descartan. 4) Repetir con miles de problemas diferentes. En la práctica, se pueden generar millones de soluciones. Es como un estudiante que practica miles de problemas, revisa cuales hizo bien, y aprende de esos. La diferencia clave con SFT: las soluciones no vienen de un humano experto — vienen del propio modelo. El modelo descubre por si mismo que secuencias de tokens lo llevan a respuestas correctas.
+            El proceso de RL es simple conceptualmente. Para un problema dado: 1) Generar miles de intentos de solución (recordar que el modelo es estocástico, cada intento es diferente). 2) Verificar cuáles llegan a la respuesta correcta. 3) Las soluciones correctas (verdes) se usan para entrenar — reforzar esos caminos de tokens. Las incorrectas (rojas) se descartan. 4) Repetir con miles de problemas diferentes. En la práctica, se pueden generar millones de soluciones. Es como un estudiante que practica miles de problemas, revisa cuáles hizo bien, y aprende de esos. La diferencia clave con SFT: las soluciones no vienen de un humano experto — vienen del propio modelo. El modelo descubre por sí mismo qué secuencias de tokens lo llevan a respuestas correctas.
           </aside>
         </section>
 
         <!-- DeepSeek R1 -->
         <section>
           <h2>DeepSeek R1: emergen cadenas de pensamiento</h2>
-          <ul>
-            <li class="fragment fade-in"><a href="https://arxiv.org/pdf/2501.12948" target="_blank">Paper (enero 2025)</a> — RL para LLMs explicado abiertamente</li>
-            <li class="fragment fade-in">El modelo aprende a generar soluciones cada vez más largas</li>
-            <li class="fragment fade-in">Descubre por su cuenta: reevaluar, reformular, backtracking</li>
-          </ul>
-          <div class="fragment fade-in" style="background: var(--bg-code); border-radius: 8px; padding: 10px 14px; font-family: var(--font-mono); font-size: 0.6em; line-height: 1.6; margin-top: 12px;">
-            <span style="color: var(--text-muted);">"...wait wait wait, that's not right.</span><br>
-            <span style="color: var(--accent);">Let me re-evaluate this step by step...</span><br>
-            <span style="color: var(--text-muted);">Actually, if I approach this differently..."</span>
+          <p style="font-size: 0.75em; color: var(--text-muted);"><a href="https://arxiv.org/pdf/2501.12948" target="_blank">Paper (enero 2025)</a> &mdash; primera explicación abierta de RL para LLMs</p>
+
+          <div style="display: flex; gap: 14px; margin-top: 14px; font-size: 0.65em; align-items: stretch;">
+
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px; border-left: 3px solid var(--text-muted);">
+              <div style="color: var(--text-muted); font-weight: bold; margin-bottom: 8px;">Modelo SFT (antes del RL)</div>
+              <div style="background: var(--bg-code); border-radius: 4px; padding: 8px 12px; font-family: var(--font-mono); line-height: 1.6;">
+                2 × $2 = $4<br>
+                $13 − $4 = $9<br>
+                $9 / 3 = <strong>$3</strong>
+              </div>
+              <div style="color: var(--text-muted); margin-top: 8px;">Respuesta directa, corta</div>
+            </div>
+
+            <div style="display: flex; align-items: center; flex-shrink: 0;">
+              <svg width="28" height="14" viewBox="0 0 24 14"><path d="M2 7h16m0 0l-5-5m5 5l-5 5" stroke="var(--accent)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            </div>
+
+            <div style="flex: 1.2; background: var(--bg-secondary); border-radius: 8px; padding: 12px; border: 1px solid var(--accent);" class="fragment fade-in">
+              <div style="color: var(--accent); font-weight: bold; margin-bottom: 8px;">Modelo RL (después)</div>
+              <div style="background: var(--bg-code); border-radius: 4px; padding: 8px 12px; font-family: var(--font-mono); line-height: 1.6;">
+                <span style="color: var(--text-muted);">...wait wait wait, that's not right.</span><br>
+                <span style="color: var(--accent);">Let me re-evaluate step by step...</span><br>
+                <span style="color: var(--text-muted);">Actually, approaching differently...</span><br>
+                <span style="color: var(--accent);">Verify: 3×$3 + 2×$2 = $13 &#10003;</span>
+              </div>
+              <div style="color: var(--text-muted); margin-top: 8px;">Reevalúa, reformula, verifica &mdash; nadie programó esto</div>
+            </div>
+
           </div>
+
+          <p class="fragment fade-in" style="font-size: 0.85em; margin-top: 14px; text-align: center; color: var(--accent);">
+            El modelo descubrió cómo pensar. Propiedad emergente de la optimización.
+          </p>
           <aside class="notes">
-            El paper de DeepSeek R1 de enero 2025 fue revolucionario porque explicó publicamente como hacer RL para LLMs. Lo más increíble no son los números sino lo cualitativo. A medida que el RL avanza, el modelo genera soluciones cada vez más largas. Por que? Porque descubrio que pensar más le da mejores resultados. El modelo aprende a hacer cosas como: "wait wait wait, that's not right. Let me re-evaluate..." — reevaluar pasos, probar desde diferentes perspectivas, hacer backtracking. Estas son estrategias cognitivas que emergen del RL sin que nadie las programe. Ningun humano podría hardcodear esto en un dataset de SFT. Es una propiedad emergente de la optimización. El modelo descubre como pensar.
+            El paper de DeepSeek R1 de enero 2025 fue revolucionario porque explicó públicamente cómo hacer RL para LLMs. Lo más increíble no son los números sino lo cualitativo. A medida que el RL avanza, el modelo genera soluciones cada vez más largas. ¿Por qué? Porque descubrió que pensar más le da mejores resultados. El modelo aprende a hacer cosas como: "wait wait wait, that's not right. Let me re-evaluate..." — reevaluar pasos, probar desde diferentes perspectivas, hacer backtracking. Estas son estrategias cognitivas que emergen del RL sin que nadie las programe. Ningún humano podría hardcodear esto en un dataset de SFT. Es una propiedad emergente de la optimización. El modelo descubre cómo pensar.
           </aside>
         </section>
 
         <!-- AlphaGo -->
         <section>
           <h2>AlphaGo: precedente del poder del RL</h2>
-          <ul>
-            <li class="fragment fade-in">Supervised learning: imitar a los mejores jugadores humanos &#8594; techo</li>
-            <li class="fragment fade-in">Reinforcement learning: jugar contra si mismo &#8594; supera a todos</li>
-            <li class="fragment fade-in">"Move 37": jugada con probabilidad 1/10,000 de ser humana, pero brillante</li>
-          </ul>
-          <p class="fragment fade-in" style="font-size: 0.8em; color: var(--text-muted); margin-top: 12px;">En dominios verificables, RL puede descubrir estrategias que ningun humano conoce</p>
+          <div style="display: flex; gap: 14px; margin-top: 16px; font-size: 0.7em; align-items: stretch;">
+
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 14px; border-left: 3px solid var(--text-muted);">
+              <div style="color: var(--text-muted); font-weight: bold; margin-bottom: 8px; font-size: 1.1em;">Supervised Learning</div>
+              <div style="color: var(--text-primary); line-height: 1.6; margin-bottom: 12px;">Imita a los mejores jugadores humanos de Go</div>
+              <div style="background: var(--bg-code); border-radius: 4px; padding: 8px 12px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="flex: 1; height: 6px; background: linear-gradient(to right, var(--text-muted) 75%, transparent 75%); border-radius: 3px;"></div>
+                </div>
+                <div style="color: var(--text-muted); font-size: 0.9em; margin-top: 6px;">Techo: nivel de los mejores humanos</div>
+              </div>
+            </div>
+
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 14px; border: 1px solid var(--accent);" class="fragment fade-in">
+              <div style="color: var(--accent); font-weight: bold; margin-bottom: 8px; font-size: 1.1em;">Reinforcement Learning</div>
+              <div style="color: var(--text-primary); line-height: 1.6; margin-bottom: 12px;">Juega contra sí mismo, descubre qué movimientos ganan</div>
+              <div style="background: var(--bg-code); border-radius: 4px; padding: 8px 12px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="flex: 1; height: 6px; background: var(--accent); border-radius: 3px;"></div>
+                </div>
+                <div style="color: var(--accent); font-size: 0.9em; margin-top: 6px;">Sin techo &mdash; supera a todos los humanos</div>
+              </div>
+            </div>
+
+          </div>
+          <div class="fragment fade-in" style="background: var(--bg-code); border-radius: 8px; padding: 10px 14px; font-size: 0.75em; margin-top: 14px; display: flex; align-items: baseline; gap: 8px;">
+            <span style="color: var(--accent); font-weight: bold; flex-shrink: 0;">"Move 37":</span>
+            <span>jugada con probabilidad 1/10,000 de ser humana, pero brillante. RL descubrió una estrategia desconocida para la humanidad.</span>
+          </div>
           <aside class="notes">
-            El poder del RL no es nuevo en IA. AlphaGo de DeepMind lo demostró en el juego de Go. Primero entrenaron imitando a jugadores expertos (supervised learning) — llegó a ser muy bueno pero nunca supero a los mejores. Después usaron RL: el sistema juega contra si mismo y aprende que movimientos llevan a ganar. El RL supero dramaticamente al supervised learning y vencio a Lee Sedol, el mejor jugador del mundo. El famoso "Move 37" fue una jugada que ningun experto humano habría hecho — probabilidad 1/10,000 de ser jugada por un humano. Pero fue brillante. AlphaGo descubrio una estrategia desconocida para la humanidad. En principio, lo mismo puede pasar con LLMs: descubrir formas de razonar que no se nos ocurririan.
+            El poder del RL no es nuevo en IA. AlphaGo de DeepMind lo demostró en el juego de Go. Primero entrenaron imitando a jugadores expertos (supervised learning) — llegó a ser muy bueno pero nunca superó a los mejores. Después usaron RL: el sistema juega contra sí mismo y aprende qué movimientos llevan a ganar. El RL superó dramáticamente al supervised learning y venció a Lee Sedol, el mejor jugador del mundo. El famoso "Move 37" fue una jugada que ningún experto humano habría hecho — probabilidad 1/10,000 de ser jugada por un humano. Pero fue brillante. AlphaGo descubrió una estrategia desconocida para la humanidad. En principio, lo mismo puede pasar con LLMs: descubrir formas de razonar que no se nos ocurrirían.
           </aside>
         </section>
 
         <!-- RLHF -->
         <section>
           <h2>RLHF: RL en dominios no verificables</h2>
-          <ul>
-            <li class="fragment fade-in">Problemas de matemática: fácil verificar si la respuesta es correcta</li>
-            <li class="fragment fade-in">"Escribe un chiste sobre pelicanos": como puntuar?</li>
-            <li class="fragment fade-in">Solución: entrenar un <strong>reward model</strong> que simule preferencias humanas</li>
-          </ul>
-          <div class="fragment fade-in" style="font-size: 0.75em; margin-top: 12px;">
-            <p>Humanos ordenan respuestas de mejor a peor &#8594; red neuronal aprende a puntuar &#8594; RL contra ese puntaje simulado</p>
+          <p style="font-size: 0.75em; color: var(--text-muted);">Matemática y código tienen respuesta correcta. Pero "escribí un chiste sobre pelícanos"...</p>
+
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.7em; margin-top: 14px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div class="flow-step" style="flex: 1;">Humanos ordenan respuestas de mejor a peor</div>
+            </div>
+            <div class="fragment fade-in" style="display: flex; align-items: center; gap: 8px;">
+              <div class="flow-step" style="flex: 1; border-color: var(--accent-secondary);">Se entrena un <strong style="color: var(--accent-secondary);">reward model</strong> (red neuronal separada) que imita esas preferencias</div>
+            </div>
+            <div class="fragment fade-in" style="display: flex; align-items: center; gap: 8px;">
+              <div class="flow-step active" style="flex: 1;">RL contra el reward model en vez de contra una respuesta correcta</div>
+            </div>
           </div>
+
+          <p class="fragment fade-in" style="font-size: 0.8em; margin-top: 14px; color: var(--text-muted);">
+            En vez de preguntar a un humano cada vez (imposible a escala), le preguntamos a un <strong style="color: var(--accent);">simulador de humanos</strong>.
+          </p>
           <aside class="notes">
-            Todo lo que vimos de RL funciona en dominios verificables: matemática, código, Go — donde hay una respuesta correcta clara. Pero que pasa con tareas como escritura creativa, resumen, chistes? No hay respuesta correcta objetiva. La solución se llama RLHF (Reinforcement Learning from Human Feedback). El truco: entrenar una red neuronal separada (reward model) que simule las preferencias humanas. Le mostramos pares de respuestas a humanos, les pedimos que ordenen de mejor a peor. Con esos datos entrenamos el reward model para dar puntajes. Luego hacemos RL contra el reward model en vez de contra una respuesta correcta. Es un nivel de indirecion: en vez de preguntar a un humano cada vez (imposible con miles de evaluaciones), le preguntamos a un simulador de humanos.
+            Todo lo que vimos de RL funciona en dominios verificables: matemática, código, Go — donde hay una respuesta correcta clara. Pero ¿qué pasa con tareas como escritura creativa, resumen, chistes? No hay respuesta correcta objetiva. La solución se llama RLHF (Reinforcement Learning from Human Feedback). El truco: entrenar una red neuronal separada (reward model) que simule las preferencias humanas. Le mostramos pares de respuestas a humanos, les pedimos que ordenen de mejor a peor. Con esos datos entrenamos el reward model para dar puntajes. Luego hacemos RL contra el reward model en vez de contra una respuesta correcta. Es un nivel de indirección: en vez de preguntar a un humano cada vez (imposible con miles de evaluaciones), le preguntamos a un simulador de humanos.
           </aside>
         </section>
 
         <!-- RLHF limitations -->
         <section>
           <h2>Limitaciones de RLHF</h2>
-          <ul>
-            <li class="fragment fade-in">El reward model es una red neuronal con fallas propias</li>
-            <li class="fragment fade-in">RL es MUY bueno en encontrar como hackear el reward model</li>
-            <li class="fragment fade-in">Después de ~200 steps los resultados colapsan</li>
-          </ul>
-          <div class="fragment fade-in" style="background: var(--bg-code); border-radius: 8px; padding: 10px 14px; font-size: 0.7em; margin-top: 12px;">
-            <p style="color: var(--text-muted);">Mejor chiste después de mucho RLHF:</p>
-            <p style="color: #e74c3c;">"the the the the the the" (score: 1.0)</p>
-            <p style="color: var(--text-muted); font-size: 0.85em;">El RL encontro un adversarial example que engana al reward model</p>
+          <div style="display: flex; gap: 14px; margin-top: 14px; font-size: 0.65em; align-items: stretch;">
+
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px; border: 1px solid #27ae60;">
+              <div style="color: #27ae60; font-weight: bold; margin-bottom: 8px;">Primeros ~200 updates</div>
+              <div style="background: var(--bg-code); border-radius: 4px; padding: 8px 12px; line-height: 1.6;">
+                "Why did the pelican go to the restaurant? Because he had a big bill!"
+              </div>
+              <div style="color: var(--text-muted); margin-top: 6px;">Los chistes mejoran genuinamente</div>
+            </div>
+
+            <div style="display: flex; align-items: center; flex-shrink: 0;">
+              <svg width="28" height="14" viewBox="0 0 24 14"><path d="M2 7h16m0 0l-5-5m5 5l-5 5" stroke="var(--text-muted)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            </div>
+
+            <div style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px; border: 1px solid #e74c3c;" class="fragment fade-in">
+              <div style="color: #e74c3c; font-weight: bold; margin-bottom: 8px;">Después de muchos updates</div>
+              <div style="background: var(--bg-code); border-radius: 4px; padding: 8px 12px; line-height: 1.6;">
+                <div style="color: #e74c3c; font-size: 1.2em; font-family: var(--font-mono);">"the the the the the the"</div>
+                <div style="color: var(--text-muted); margin-top: 4px;">Reward model score: <span style="color: #e74c3c; font-weight: bold;">1.0</span></div>
+              </div>
+              <div style="color: var(--text-muted); margin-top: 6px;">RL encontró un adversarial example que engaña al reward model</div>
+            </div>
+
           </div>
-          <p class="fragment fade-in" style="font-size: 0.8em; color: var(--text-muted);">RLHF no es el RL "mágico" de AlphaGo. Es un fine-tuning limitado, no una mejora indefinida.</p>
-          <aside class="notes">
-            RLHF tiene un problema grave: el reward model es gameable. Recordar que el reward model es una red neuronal con miles de millones de parámetros. RL es EXTREMADAMENTE bueno en encontrar inputs que obtienen puntajes altos pero de forma falsa — adversarial examples. Si corres RLHF por mucho tiempo: las primeras ~200 actualizaciones, los chistes sobre pelicanos mejoran. Después de eso, colapsan completamente. El mejor "chiste" se convierte en algo como "the the the the" con puntaje 1.0. Es nonsense que engana al reward model. Por eso RLHF se corre por pocos cientos de steps y se corta. No se puede ejecutar indefinidamente como el RL de AlphaGo (donde ganar un juego no se puede hackear). Karpathy dice: "RLHF no es RL de verdad" — es un fine-tuning marginal, no la mejora mágica e indefinida del RL en dominios verificables.
-          </aside>
-        </section>
 
-      </section>
-
-      <!-- ==================== SECTION 9: FUTURE & RESOURCES ==================== -->
-      <section>
-
-        <section class="section-divider">
-          <h2>Futuro y Recursos</h2>
-          <aside class="notes">
-            Para cerrar, un resumen del pipeline completo y las tendencias que vienen.
-          </aside>
-        </section>
-
-        <!-- Pipeline summary -->
-        <section>
-          <h2>El pipeline completo</h2>
-          <div style="display: flex; gap: 8px; margin-top: 16px; font-size: 0.65em;">
-            <div class="stage-box">
-              <h3 style="font-size: 1em;">1. Pre-training</h3>
-              <p>Internet &#8594; tokens &#8594; red neuronal</p>
-              <p style="color: var(--text-muted);">3 meses, miles de GPUs</p>
-              <p style="color: var(--text-muted);">Resultado: modelo base</p>
+          <div class="fragment fade-in" style="display: flex; gap: 12px; margin-top: 14px; font-size: 0.7em;">
+            <div style="flex: 1; background: var(--bg-code); border-radius: 8px; padding: 10px 14px; display: flex; align-items: baseline; gap: 8px;">
+              <span style="color: var(--accent); font-weight: bold; flex-shrink: 0;">RL verificable:</span>
+              <span>se puede correr indefinidamente, descubrir estrategias (AlphaGo)</span>
             </div>
-            <div style="display: flex; align-items: center; color: var(--text-muted);">&#8594;</div>
-            <div class="stage-box">
-              <h3 style="font-size: 1em;">2. SFT</h3>
-              <p>Conversaciones humano/asistente</p>
-              <p style="color: var(--text-muted);">~3 horas</p>
-              <p style="color: var(--text-muted);">Resultado: asistente básico</p>
-            </div>
-            <div style="display: flex; align-items: center; color: var(--text-muted);">&#8594;</div>
-            <div class="stage-box highlight">
-              <h3 style="font-size: 1em;">3. RL</h3>
-              <p>Practica con prueba y error</p>
-              <p style="color: var(--text-muted);">Variable</p>
-              <p style="color: var(--text-muted);">Resultado: modelo de razonamiento</p>
+            <div style="flex: 1; background: var(--bg-code); border-radius: 8px; padding: 10px 14px; display: flex; align-items: baseline; gap: 8px;">
+              <span style="color: #e74c3c; font-weight: bold; flex-shrink: 0;">RLHF:</span>
+              <span>fine-tuning limitado, no mejora indefinida &mdash; el reward model es gameable</span>
             </div>
           </div>
           <aside class="notes">
-            Resumen del pipeline completo. Tres etapas: 1) Pre-training: descargar internet, tokenizar, entrenar red neuronal a predecir el siguiente token. Toma meses y cuesta millones de dolares. Sale un modelo base que es un simulador de texto de internet. 2) SFT: cambiar el dataset por conversaciones, seguir entrenando. Toma horas. Sale un asistente que puede responder preguntas. 3) RL: darle problemas de práctica, dejar que descubra como resolverlos. Sale un modelo de razonamiento que puede pensar paso a paso. Modelos como GPT-4o son principalmente SFT (con un poco de RLHF que no es el RL "mágico"). Modelos como o1, o3, DeepSeek R1 son thinking models entrenados con RL real.
-          </aside>
-        </section>
-
-        <!-- Future capabilities -->
-        <section>
-          <h2>Lo que viene</h2>
-          <ul>
-            <li class="fragment fade-in"><strong>Multimodalidad:</strong> audio, imágenes, video como tokens adicionales</li>
-            <li class="fragment fade-in"><strong>Agentes:</strong> tareas de largo plazo con supervisión humana</li>
-            <li class="fragment fade-in"><strong>Uso de computadoras:</strong> teclado y mouse controlados por el modelo</li>
-            <li class="fragment fade-in"><strong>Test-time training:</strong> modelos que aprenden mientras los usas</li>
-          </ul>
-          <aside class="notes">
-            Tendencias: 1) Multimodalidad: los modelos van a manejar audio, imágenes y video nativamente. No es un cambio fundamental — se tokeniza audio (espectrograma) e imágenes (patches) y se aplica el mismo pipeline. 2) Agentes: en vez de tareas individuales, los modelos van a ejecutar trabajos complejos a lo largo del tiempo, reportando progreso. Vamos a hablar de ratios humano-a-agente. 3) Uso de computadoras: modelos que controlan teclado y mouse. ChatGPT Operator es un ejemplo temprano. 4) Test-time training: actualmente los parámetros son fijos después del entrenamiento. En el futuro, los modelos podrán actualizar sus parámetros mientras los usas — como tu cerebro cuando duerme y consolida memorias.
-          </aside>
-        </section>
-
-        <!-- Where to follow & find models -->
-        <section>
-          <h2>Recursos</h2>
-          <div style="font-size: 0.8em;">
-            <h3>Seguir el campo</h3>
-            <ul>
-              <li><a href="https://lmarena.ai/" target="_blank">LM Arena</a> — leaderboard de LLMs por comparación humana</li>
-              <li><a href="https://buttondown.com/ainews" target="_blank">AI News</a> — newsletter comprehensive</li>
-            </ul>
-            <h3 style="margin-top: 16px;">Usar los modelos</h3>
-            <ul>
-              <li>Propietarios: <a href="https://chatgpt.com" target="_blank">ChatGPT</a>, <a href="https://claude.ai" target="_blank">Claude</a>, <a href="https://gemini.google.com" target="_blank">Gemini</a></li>
-              <li>Open weights: <a href="https://together.ai" target="_blank">Together.ai</a> (playground en la nube)</li>
-              <li>Local: <a href="https://lmstudio.ai" target="_blank">LM Studio</a> (correr modelos en tu computadora)</li>
-              <li>Base models: <a href="https://app.hyperbolic.ai" target="_blank">Hyperbolic</a> (Llama 3.1 base)</li>
-            </ul>
-          </div>
-          <aside class="notes">
-            Recursos para seguir el campo: LM Arena (lmarena.ai) rankea modelos por comparación humana ciega. Google esta primero ahora, seguido de OpenAI y DeepSeek en tercer lugar. DeepSeek es notable porque es open weights (MIT license). La newsletter AI News de Swyx es comprehensiva y sale cada 2-3 dias. Para usar modelos: los propietarios (ChatGPT, Claude, Gemini) se usan desde sus webs. Para open weights, Together.ai tiene un playground donde podes probar muchos modelos. LM Studio permite correr modelos localmente en tu MacBook (versiones distilled/más chicas). Hyperbolic sirve modelos base — útiles e interesantes para experimentar.
+            RLHF tiene un problema grave: el reward model es gameable. Recordar que el reward model es una red neuronal con miles de millones de parámetros. RL es EXTREMADAMENTE bueno en encontrar inputs que obtienen puntajes altos pero de forma falsa — adversarial examples. Si corrés RLHF por mucho tiempo: las primeras ~200 actualizaciones, los chistes sobre pelícanos mejoran. Después de eso, colapsan completamente. El mejor "chiste" se convierte en algo como "the the the the" con puntaje 1.0. Es nonsense que engaña al reward model. Por eso RLHF se corre por pocos cientos de steps y se corta. No se puede ejecutar indefinidamente como el RL de AlphaGo (donde ganar un juego no se puede hackear). Karpathy dice: "RLHF no es RL de verdad" — es un fine-tuning marginal, no la mejora mágica e indefinida del RL en dominios verificables.
           </aside>
         </section>
 
@@ -2393,22 +2463,6 @@
 
       <!-- ==================== CLOSING ==================== -->
       <section>
-        <section class="section-divider">
-          <h2>Resumen</h2>
-          <div style="font-size: 0.8em; text-align: left; max-width: 600px; margin: 16px auto 0;">
-            <ul>
-              <li class="fragment fade-in">Son herramientas poderosas, no oraculos infalibles</li>
-              <li class="fragment fade-in">Verificar siempre su trabajo</li>
-              <li class="fragment fade-in">Usar para inspiración, primer borrador, preguntas</li>
-              <li class="fragment fade-in">Las alucinaciones mejoran pero no desaparecen</li>
-              <li class="fragment fade-in">Las capacidades "queso suizo" son reales</li>
-            </ul>
-          </div>
-          <aside class="notes">
-            Mensaje final de Karpathy: los LLMs son herramientas increíblemente poderosas que uso cientos de veces por día. Pero hay que ser consciente de sus limitaciones. Alucinan. Tienen agujeros impredecibles en sus capacidades. Fallan en cosas triviales. Usalos como herramientas en tu toolbox. Verificá su trabajo. Usalos para inspiración, para el primer borrador, para hacer preguntas — pero siempre revisa y se responsable del producto final.
-          </aside>
-        </section>
-
         <section class="section-divider">
           <h2>Preguntas?</h2>
         </section>
