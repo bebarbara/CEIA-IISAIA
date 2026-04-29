@@ -35,6 +35,24 @@ CTAs and headings must be specific: "Ver tokenización en vivo", not "Empezar".
 
 7. **Live demo > prose explanation** when the concept is observable. If you can show inference happening, run inference. If you can show a tokenizer's output, embed the tokenizer animation.
 
+## Speaker notes structure
+
+Speaker notes go in `<aside class="notes">` blocks. **Two labeled blocks** separate silent stage direction from what the professor actually says aloud:
+
+```html
+<aside class="notes">
+  <p><strong>Pantalla:</strong> Lo que el slide muestra y qué hacer en silencio. Cuándo abrir otra pestaña. Qué fragmento se revela. Qué demostración correr antes de avanzar.</p>
+  <p><strong>Decir:</strong> "Lo que sale de tu boca, en primera persona, conversacional. Hooks, preguntas retóricas, transiciones. Como si fuera un guion de clase."</p>
+</aside>
+```
+
+Rules:
+- **`Decir:` is always present.** Even short slides have something to say.
+- **`Pantalla:` appears only when there's silent stage direction.** If the slide just needs to be spoken without demos/tab-switches/specific things to point at, omit the `Pantalla:` block.
+- **`Decir:` content goes in quotes** to make it scannable as "this is the script". Use natural conversational Spanish — second-person ("vamos a", "podés"), rhetorical questions, the actual phrasing the professor would use.
+- **Word count target: ~80–200 words combined**, weighted toward `Decir:`. Stage direction stays terse.
+- **Don't paraphrase the slide content in `Decir:`** — students can read the slide. Speak the *connective tissue*: why this slide matters, what to emphasize, the transition to the next idea.
+
 ## Tone calibration
 
 The voice is "smart professor talking to capable students who are seeing this for the first time". It is NOT:

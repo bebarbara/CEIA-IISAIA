@@ -64,7 +64,7 @@ Invoke `superpowers:executing-plans`. For each section task:
 - [ ] Voice matches `voice-and-didactics.md` — second-person collaborative ("vamos a", "podés", "recordá"), Spanish technical-but-accessible, no AI filler.
 - [ ] One concept per slide.
 - [ ] No emojis.
-- [ ] Speaker notes present, ~80–200 words each, conversational tone.
+- [ ] Speaker notes present, ~80–200 words each, structured with `<p><strong>Pantalla:</strong>` (silent stage direction, optional) and `<p><strong>Decir:</strong>` (spoken script, always). See voice-and-didactics.md.
 - [ ] Section opens with hook from spine if spine specifies one.
 - [ ] Key analogy from spine appears as a slide if spine specifies one.
 - [ ] All "what students walk away knowing" bullets are addressed somewhere in the section.
