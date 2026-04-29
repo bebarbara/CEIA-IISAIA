@@ -37,21 +37,27 @@ CTAs and headings must be specific: "Ver tokenización en vivo", not "Empezar".
 
 ## Speaker notes structure
 
-Speaker notes go in `<aside class="notes">` blocks. **Two labeled blocks** separate silent stage direction from what the professor actually says aloud:
+Speaker notes go in `<aside class="notes">` blocks. **Three visual formats** separate three kinds of content:
 
 ```html
 <aside class="notes">
-  <p><strong>Pantalla:</strong> Lo que el slide muestra y qué hacer en silencio. Cuándo abrir otra pestaña. Qué fragmento se revela. Qué demostración correr antes de avanzar.</p>
-  <p><strong>Decir:</strong> "Lo que sale de tu boca, en primera persona, conversacional. Hooks, preguntas retóricas, transiciones. Como si fuera un guion de clase."</p>
+  <p><strong>Acciones a realizar — terse, imperative, concrete.</strong></p>
+  <p><u>Descripción de qué es este slide — terse, concrete, no fluff.</u></p>
+  <p><em>"Lo que sale de tu boca, conversacional, entre comillas."</em></p>
 </aside>
 ```
 
-Rules:
-- **`Decir:` is always present.** Even short slides have something to say.
-- **`Pantalla:` appears only when there's silent stage direction.** If the slide just needs to be spoken without demos/tab-switches/specific things to point at, omit the `Pantalla:` block.
-- **`Decir:` content goes in quotes** to make it scannable as "this is the script". Use natural conversational Spanish — second-person ("vamos a", "podés"), rhetorical questions, the actual phrasing the professor would use.
-- **Word count target: ~80–200 words combined**, weighted toward `Decir:`. Stage direction stays terse.
-- **Don't paraphrase the slide content in `Decir:`** — students can read the slide. Speak the *connective tissue*: why this slide matters, what to emphasize, the transition to the next idea.
+Format meanings:
+- **Bold** (`<strong>`): actions you perform. "Click para revelar fragmento 2." "Abrí Tik Tokenizer en otra pestaña." "Esperar 5s antes de avanzar." Imperative.
+- <u>Underline</u> (`<u>`): description of what this slide is about / context for you. NOT spoken aloud. Used to refresh your memory at a glance.
+- *Italic* (`<em>`): the script — what comes out of your mouth. Always between quotes, conversational Spanish.
+
+Concision rules:
+- **Bold and underlined parts must be glanceable in under 2 seconds.** Specific and terse — no full sentences if a phrase will do. The non-spoken content is consumed *while you're already talking* — if you have to stop and read it, it's too long. If it's vague, it's not useful.
+- **Italic (script) can be longer.** It's what you actually say. Use natural conversational Spanish — second-person ("vamos a", "podés"), rhetorical questions, the actual phrasing.
+- Each format goes in its own `<p>` block for visual separation. Order: actions (bold), then description (underline), then script (italic).
+- **Not every note needs all three.** Some slides only have a script (italic only). Some only have an action and a script. Use what serves the slide.
+- **Don't paraphrase on-slide content in the script** — students can read the slide. Speak the connective tissue: why this slide matters, what to emphasize, the transition.
 
 ## Tone calibration
 
