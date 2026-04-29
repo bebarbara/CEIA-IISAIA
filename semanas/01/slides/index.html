@@ -1648,7 +1648,8 @@
         <section class="section-divider">
           <h2>Alucinaciones y Uso de Herramientas</h2>
           <aside class="notes">
-            Ahora entramos en lo que Karpathy llama "psicología de LLMs" — los efectos cognitivos emergentes del pipeline de entrenamiento. El primero y más importante: las alucinaciones.
+            <p><u>Divisor de sección. Alucinaciones y uso de herramientas.</u></p>
+            <p><em>"Ahora entramos en lo que Karpathy llama psicología de LLMs: los efectos cognitivos emergentes del pipeline de entrenamiento. El primero y más importante: las alucinaciones."</em></p>
           </aside>
         </section>
 
@@ -1688,7 +1689,9 @@
           </p>
 
           <aside class="notes">
-            Conexión directa con el punchline anterior. El SFT entrena al modelo a imitar al labeler. El labeler, cuando escribe respuestas en el dataset, siempre las escribe con confianza — porque sabe la respuesta o la investigó antes. Nunca escribe "no sé". Como el modelo aprende a imitar al labeler, hereda ese patrón: cuando le preguntan algo, responde con confianza. El problema es cuando le preguntan algo que no está en sus parámetros — no tiene un patrón de "no sé" para imitar, así que inventa con el mismo tono confiado. La siguiente slide muestra el mecanismo en detalle.
+            <p><strong>Click para revelar el panel del modelo y luego el punchline.</strong></p>
+            <p><u>Bridge entre SFT y alucinaciones. Tono confiado heredado del labeler.</u></p>
+            <p><em>"Conexión directa con el punchline anterior. El SFT entrena al modelo a imitar al labeler. El labeler, cuando escribe respuestas en el dataset, siempre las escribe con confianza, porque sabe la respuesta o la investigó antes. Nunca escribe 'no sé'. Como el modelo aprende a imitar al labeler, hereda ese patrón: cuando le preguntan algo, responde con confianza. El problema es cuando le preguntan algo que no está en sus parámetros: no tiene un patrón de 'no sé' para imitar, así que inventa con el mismo tono confiado. Esa es la receta de las alucinaciones."</em></p>
           </aside>
         </section>
 
@@ -1709,7 +1712,9 @@
             </div>
           </div>
           <aside class="notes">
-            Las alucinaciones son cuando el LLM inventa información. El mecanismo es simple: en el dataset de entrenamiento, TODAS las preguntas de la forma "Quien es X?" se responden con confianza con la respuesta correcta. El modelo aprende ese patrón — tono confiado + respuesta informativa. Cuando le preguntas por alguien que no existe (como "Orson Kovats" que Karpathy invento), el modelo no dice "no se." Dice una biografia inventada, con el mismo tono confiado. Incluso si internamente hay neuronas que "saben" que no tiene información sobre esa persona, el patrón estadístico del dataset dice: responde con confianza. Demostrar con HuggingFace Playground: preguntarle por Orson Kovats y mostrar como cada vez inventa algo diferente.
+            <p><strong>Abrir HuggingFace Playground en otra pestaña. Preguntar por "Orson Kovats" varias veces para mostrar que inventa cosas distintas.</strong></p>
+            <p><u>Mecanismo de las alucinaciones. Ejemplo de Karpathy: Orson Kovats.</u></p>
+            <p><em>"Las alucinaciones son cuando el LLM inventa información. El mecanismo es simple: en el dataset de entrenamiento, todas las preguntas de la forma '¿Quién es X?' se responden con confianza con la respuesta correcta. El modelo aprende ese patrón: tono confiado + respuesta informativa. Cuando le preguntás por alguien que no existe, como Orson Kovats que inventó Karpathy, el modelo no dice 'no sé'. Dice una biografía inventada, con el mismo tono confiado. Incluso si internamente hay neuronas que saben que no tiene información sobre esa persona, el patrón estadístico del dataset dice: respondé con confianza."</em></p>
           </aside>
         </section>
 
@@ -1793,7 +1798,9 @@
           </p>
 
           <aside class="notes">
-            Meta explicó en el paper de Llama 3 cómo atacaron las alucinaciones. Cuatro pasos. Uno: tomar documentos del corpus. Dos: usar otro LLM para generar preguntas sobre esos documentos. Tres: interrogar al modelo 3 veces con cada pregunta y comparar con la respuesta correcta. Cuatro: si el modelo no sabe, crear una conversación donde la respuesta es "No tengo esa información" y agregarla al dataset de fine-tuning. Click en cada caja para ver un ejemplo concreto del paso — usa el caso de Manuel Belgrano para mostrar tanto cuando el modelo sabe (consistente entre 3 intentos) como cuando no sabe (respuestas inconsistentes que disparan el paso 4). La clave conceptual: probablemente hay una neurona interna que se activa cuando el modelo no tiene certeza. Pero esa neurona NO estaba conectada a la salida verbal — porque ningún labeler le mostró nunca cómo expresarla. Al agregar ejemplos de "no sé" al dataset, le damos al modelo la oportunidad de aprender esa conexión. Es como cablear la neurona de incertidumbre a la capacidad de decir "no sé" en palabras.
+            <p><strong>Click en cada caja del proceso para abrir el ejemplo concreto. Usar el caso Belgrano: paso 3 muestra ambos casos (consistente vs inconsistente).</strong></p>
+            <p><u>Mitigación de alucinaciones según el paper Llama 3. 4 pasos. Cablear neurona de incertidumbre.</u></p>
+            <p><em>"Meta explicó en el paper de Llama 3 cómo atacaron las alucinaciones. Cuatro pasos. Uno: tomar documentos del corpus. Dos: usar otro LLM para generar preguntas sobre esos documentos. Tres: interrogar al modelo 3 veces con cada pregunta y comparar con la respuesta correcta. Cuatro: si el modelo no sabe, crear una conversación donde la respuesta es 'No tengo esa información' y agregarla al dataset de fine-tuning. La clave conceptual: probablemente hay una neurona interna que se activa cuando el modelo no tiene certeza. Pero esa neurona no estaba conectada a la salida verbal, porque ningún labeler le mostró nunca cómo expresarla. Al agregar ejemplos de 'no sé' al dataset, le damos al modelo la oportunidad de aprender esa conexión. Es como cablear la neurona de incertidumbre a la capacidad de decir 'no sé' en palabras."</em></p>
           </aside>
         </section>
 
@@ -1837,7 +1844,9 @@
           </p>
 
           <aside class="notes">
-            Distinción fundamental. El conocimiento en los parámetros es como un recuerdo vago — algo que leíste hace un mes. Puede ser correcto para cosas que el modelo vio muchas veces (como datos de Wikipedia), pero impreciso para cosas que vio pocas veces. El contexto window es como la memoria de trabajo — datos que tenés directamente frente a los ojos. Acceso directo, preciso. La implicación práctica está en el ejemplo: si le pedís al modelo que resuma el capítulo 1 de Pride and Prejudice "de memoria", vas a obtener algo vago — la historia general, posiblemente mezclada con detalles de adaptaciones de cine. Si le pegás el texto del capítulo en el prompt, vas a obtener un resumen preciso, fiel al original, con citas. Es la diferencia entre escribir un resumen de memoria de algo que leíste hace meses, vs escribirlo después de releerlo. Tomarse el trabajo de poner el contexto correcto en el prompt es uno de los hábitos más rentables de un usuario competente de LLMs. La próxima slide hace este principio en vivo con el playground de OpenAI.
+            <p><strong>Click para revelar el ejemplo Pride and Prejudice y el punchline.</strong></p>
+            <p><u>Distinción central: parámetros = recuerdo vago vs contexto = memoria de trabajo.</u></p>
+            <p><em>"Distinción fundamental. El conocimiento en los parámetros es como un recuerdo vago, algo que leíste hace un mes. Puede ser correcto para cosas que el modelo vio muchas veces, como datos de Wikipedia, pero impreciso para cosas que vio pocas veces. La ventana de contexto es como la memoria de trabajo: datos que tenés directamente frente a los ojos. Acceso directo, preciso. La implicación práctica: si le pedís al modelo que resuma el capítulo 1 de Pride and Prejudice de memoria, vas a obtener algo vago, posiblemente mezclado con detalles de adaptaciones de cine. Si le pegás el texto del capítulo en el prompt, vas a obtener un resumen preciso, con citas. Tomarse el trabajo de poner el contexto correcto en el prompt es uno de los hábitos más rentables de un usuario competente de LLMs."</em></p>
           </aside>
         </section>
 
@@ -1882,7 +1891,9 @@
           </p>
 
           <aside class="notes">
-            Hagamos la prueba en vivo. Abrir el playground de OpenAI con GPT-3.5-turbo. Vamos a probar con la letra de Cambalache (tango de Enrique Santos Discépolo, 1934) — una canción que el modelo conoce, pero recordar exactamente cómo empieza una estrofa específica es algo distinto a tener una idea general de la canción. Paso 1: preguntarle "¿Cómo empieza la quinta estrofa de Cambalache?". Lo más probable es que mezcle versos de distintas estrofas o invente algo que suena Discépolo pero no es la quinta. Paso 2: abrir el archivo `semanas/01/slides/cambalache.md` que está en el repo, copiar la letra completa, abrir nueva conversación, pegar la letra y volver a preguntar lo mismo. Ahora la respuesta va a ser exactamente correcta — el modelo cuenta las estrofas y cita el primer verso. El punto: el mismo modelo, la misma pregunta — la única diferencia es que en el segundo caso la letra está en el contexto, no en sus parámetros. Vago recuerdo vs memoria de trabajo, en vivo. Cualquier letra de canción famosa con varias estrofas sirve para esta prueba.
+            <p><strong>Abrir el playground de OpenAI con GPT-3.5-turbo. Paso 1: preguntar por la quinta estrofa de Cambalache. Paso 2: abrir cambalache.md, copiar letra, nueva conversación, pegar y repreguntar.</strong></p>
+            <p><u>Demo en vivo del principio: misma pregunta sin y con contexto. Cambalache (Discépolo, 1934).</u></p>
+            <p><em>"Hagamos la prueba en vivo. Vamos a probar con la letra de Cambalache, tango de Enrique Santos Discépolo de 1934. Una canción que el modelo conoce, pero recordar exactamente cómo empieza una estrofa específica es algo distinto a tener una idea general. Sin contexto, lo más probable es que mezcle versos de distintas estrofas o invente algo que suena Discépolo pero no es la quinta. Cuando le pego la letra completa, la respuesta va a ser exactamente correcta: el modelo cuenta las estrofas y cita el primer verso. El mismo modelo, la misma pregunta. La única diferencia es que en el segundo caso la letra está en el contexto, no en sus parámetros. Vago recuerdo versus memoria de trabajo, en vivo."</em></p>
           </aside>
         </section>
 
@@ -1918,7 +1929,9 @@
           </div>
 
           <aside class="notes">
-            Esta slide es la idea de la slide anterior, en acción. En vez de confiar en parámetros (recuerdo vago), el modelo trae el contexto que necesita. Mecanismo: se agregan tokens especiales al vocabulario (search_start, search_end). Cuando el modelo emite search_start, el sistema de inferencia pausa la generación, toma la query entre los dos tokens, la ejecuta contra un buscador (Bing en el caso de OpenAI), y pega los resultados como texto en la ventana de contexto. Ahora esa información está directamente disponible para el modelo — no es un recuerdo vago, es datos frescos en su memoria de trabajo. El modelo aprende a usar la herramienta con unos miles de ejemplos en el dataset de SFT. Gracias al conocimiento del pre-training, ya "sabe" qué es una búsqueda web y qué tipo de queries funcionan bien. Web search es solo una herramienta — también puede usar Python (code interpreter), DALL-E, etc. La intuición universal: cualquier herramienta que un LLM usa funciona bajo el mismo principio — devuelve texto que se vuelve contexto que el modelo puede leer y usar con confianza.
+            <p><strong>Avanzar fragmentos paso a paso del flujo de búsqueda.</strong></p>
+            <p><u>Tool use como inyección dinámica de contexto. Tokens especiales search_start/search_end.</u></p>
+            <p><em>"Esta slide es la idea anterior en acción. En vez de confiar en parámetros, recuerdo vago, el modelo trae el contexto que necesita. Mecanismo: se agregan tokens especiales al vocabulario, search_start y search_end. Cuando el modelo emite search_start, el sistema de inferencia pausa la generación, toma la query entre los dos tokens, la ejecuta contra un buscador, y pega los resultados como texto en la ventana de contexto. Ahora esa información está directamente disponible para el modelo: no es un recuerdo vago, son datos frescos en su memoria de trabajo. El modelo aprende a usar la herramienta con unos miles de ejemplos en el dataset de SFT. Web search es solo una herramienta. La intuición universal: cualquier herramienta que un LLM usa funciona bajo el mismo principio. Devuelve texto que se vuelve contexto."</em></p>
           </aside>
         </section>
 
