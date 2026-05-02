@@ -9,6 +9,38 @@
   <link rel="stylesheet" href="../../../node_modules/reveal.js/plugin/highlight/monokai.css">
   <link rel="stylesheet" href="../../../_config/theme/custom.css">
   <link rel="stylesheet" href="../../../_config/theme/components.css">
+  <style>
+    /* Week-02 specific: 5-layer roadmap re-highlight.
+       Active layer pulses with accent color; inactive ones dim. */
+    .layer-roadmap { display: flex; gap: 8px; align-items: center; justify-content: center;
+      font-size: 0.55em; margin: 12px 0 8px; }
+    .layer-roadmap .pipe-node { min-width: 110px; transition: opacity 0.4s, border-color 0.4s, box-shadow 0.4s; }
+    .layer-roadmap .pipe-arrow { color: var(--text-muted); }
+    .layer-roadmap.active-1 .pipe-node:not([data-layer="1"]),
+    .layer-roadmap.active-2 .pipe-node:not([data-layer="2"]),
+    .layer-roadmap.active-3 .pipe-node:not([data-layer="3"]),
+    .layer-roadmap.active-4 .pipe-node:not([data-layer="4"]),
+    .layer-roadmap.active-5 .pipe-node:not([data-layer="5"]) { opacity: 0.35; }
+    .layer-roadmap.active-1 .pipe-node[data-layer="1"],
+    .layer-roadmap.active-2 .pipe-node[data-layer="2"],
+    .layer-roadmap.active-3 .pipe-node[data-layer="3"],
+    .layer-roadmap.active-4 .pipe-node[data-layer="4"],
+    .layer-roadmap.active-5 .pipe-node[data-layer="5"] {
+      border-color: var(--accent);
+      box-shadow: 0 0 16px rgba(100, 255, 218, 0.2);
+    }
+    /* Big-question hook (§1). Centered, large, restrained. */
+    .big-question { font-size: 1.6em; line-height: 1.3; color: var(--text-primary);
+      max-width: 18em; margin: 0 auto; text-align: center; }
+    .big-question .accent { color: var(--accent); }
+    .big-question .muted-q { color: var(--text-muted); font-size: 0.6em; display: block;
+      margin-top: 1em; font-style: italic; }
+    /* Three-consequence row (§1). */
+    .consequence-row { display: flex; gap: 16px; align-items: stretch; margin-top: 16px; }
+    .consequence-row .bg-secondary-card { flex: 1; }
+    .consequence-row h3 { color: var(--accent); margin-bottom: 8px; font-size: 1em; }
+    .consequence-row p { font-size: 0.75em; line-height: 1.5; margin: 0; }
+  </style>
 </head>
 <body>
   <div class="reveal">
@@ -30,6 +62,154 @@
       <!-- ============================================================
            §1 — Frontend y el supervisor arquitectónico
            ============================================================ -->
+      <section>
+
+        <!-- §1.1: Hook — la pregunta incómoda -->
+        <section>
+          <p class="big-question">
+            Si la IA puede escribir el código,<br>
+            <span class="accent">¿para qué seguís aprendiendo</span><br>
+            qué es un <code>flexbox</code> o un <code>&lt;section&gt;</code>?
+            <span class="muted-q">La pregunta honesta con la que arranca esta clase.</span>
+          </p>
+          <aside class="notes">
+            <p><strong>Dejar la pregunta en pantalla 5–10 segundos sin responder.</strong></p>
+            <p><u>Hook de la clase. La pregunta incómoda que motiva todo lo que sigue.</u></p>
+            <p><em>"Empezamos con una pregunta que probablemente ya se hicieron al menos una vez en esta diplomatura. Si Claude o ChatGPT te resuelven el `display: grid` en dos segundos, ¿qué sentido tiene memorizarlo? La pregunta incomoda porque parece honesta. Y la respuesta corta es: ninguno. Memorizar sintaxis nunca fue el punto, ni siquiera antes de la IA. Pero hay otra cosa que sí importa, y es lo que vamos a desarmar hoy."</em></p>
+          </aside>
+        </section>
+
+        <!-- §1.2: La respuesta — cuello de botella es la decisión -->
+        <section>
+          <h2>El cuello de botella ya no es la sintaxis</h2>
+          <div class="comparison-2col">
+            <div class="bg-secondary-card fragment fade-in" style="border-left: 4px solid var(--text-muted);">
+              <h3 style="color: var(--text-muted);">Antes</h3>
+              <p>80% del tiempo escribiendo código.<br>20% leyendo.</p>
+              <p style="color: var(--text-muted); font-size: 0.85em; margin-top: 12px;">Memorizar sintaxis tenía algún payoff.</p>
+            </div>
+            <div class="bg-secondary-card fragment fade-in" style="border-left: 4px solid var(--accent);">
+              <h3 style="color: var(--accent);">Ahora</h3>
+              <p>20% escribiendo. <strong>80% leyendo</strong> lo que la IA devuelve.</p>
+              <p style="color: var(--text-muted); font-size: 0.85em; margin-top: 12px;">El cuello de botella se mueve a la decisión.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <p><strong>Revelar Antes. Pausa breve. Revelar Ahora.</strong></p>
+            <p><u>La inversión del ratio escribir/leer es el dato central de la clase.</u></p>
+            <p><em>"Cuando vos delegás la sintaxis a un modelo, el ratio entre escribir y leer se invierte. Antes pasabas la mayor parte del tiempo escribiendo, hoy la mayor parte del tiempo es leyendo respuestas que la IA te tira y decidiendo si las pegás en producción o las descartás. Y leer código que no entendés es lo mismo que aceptar una decisión que vos no tomaste."</em></p>
+          </aside>
+        </section>
+
+        <!-- §1.3: El rol — supervisor arquitectónico -->
+        <section>
+          <h2>Tu rol esta clase: <span style="color: var(--accent);">supervisor arquitectónico</span></h2>
+          <div class="comparison-2col" style="margin-top: 12px;">
+            <div class="bg-secondary-card">
+              <h3 style="color: var(--text-muted);">La IA</h3>
+              <p style="font-size: 0.85em;">Tu equipo de implementación.<br>Tipea cada llave.<br>Hace exactamente lo que pediste.</p>
+            </div>
+            <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+              <h3 style="color: var(--accent);">Vos</h3>
+              <p style="font-size: 0.85em;">Decidís qué se construye, en qué orden, con qué piezas y por qué.<br>La IA escribe; vos dirigís.</p>
+            </div>
+          </div>
+          <p class="fragment fade-in" style="margin-top: 24px; font-size: 0.85em; color: var(--accent); text-align: center;">
+            Para dirigir hace falta una cosa básica: <strong>saber cómo se llaman las cosas.</strong>
+          </p>
+          <aside class="notes">
+            <p><u>Slide del rol. La frase que cierra es el setup del resto de la clase.</u></p>
+            <p><em>"Vienen del programa de la diplomatura, y el rol que vamos a practicar durante ocho semanas no es el de programador clásico. Es el de supervisor arquitectónico. Tu trabajo es decidir qué se construye, en qué orden, con qué piezas y por qué. La IA escribe; vos dirigís. Y para dirigir hace falta vocabulario técnico propio: saber cómo se llaman las cosas."</em></p>
+          </aside>
+        </section>
+
+        <!-- §1.4: Tres consecuencias de delegar la sintaxis -->
+        <section>
+          <h2>Qué cambia cuando delegás la sintaxis</h2>
+          <div class="consequence-row">
+            <div class="bg-secondary-card fragment fade-in">
+              <h3>1 — Velocidad explota</h3>
+              <p>Lo que era una tarde de Stack Overflow ahora son tres prompts. Bueno, pero las decisiones malas también se aceleran.</p>
+            </div>
+            <div class="bg-secondary-card fragment fade-in">
+              <h3>2 — Especificar mal cuesta caro</h3>
+              <p>La IA no hace lo que querías, hace lo que pediste. "Centrado" puede ser flex, grid o margin auto. Si no leés el código, aceptás cualquiera.</p>
+            </div>
+            <div class="bg-secondary-card fragment fade-in">
+              <h3>3 — Leer &gt; escribir</h3>
+              <p>Cada respuesta de la IA es un texto que tenés que auditar antes de pegarlo. Sin entenderlo, no lo podés auditar.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <p><strong>Revelar las tres tarjetas en orden.</strong></p>
+            <p><u>Las tres consecuencias concretas de delegar la sintaxis a un modelo.</u></p>
+            <p><em>"Cuando delegás la sintaxis, tres cosas se mueven al mismo tiempo. La velocidad explota, eso es real y es bueno. Pero el costo de equivocarte al especificar también explota: la IA elige por vos si no le decís exactamente qué querés. Y leer pasa a ser más importante que escribir, porque cada respuesta es un texto que tenés que auditar. Las tres apuntan al mismo lugar: necesitás vocabulario."</em></p>
+          </aside>
+        </section>
+
+        <!-- §1.5: Roadmap de las 5 capas -->
+        <section>
+          <h2>La anatomía en cinco capas</h2>
+          <div class="layer-roadmap" id="layer-roadmap-overview">
+            <div class="pipe-node fragment" data-layer="1">
+              <div class="pipe-label">Estructura</div>
+              <div class="pipe-sub">HTML</div>
+            </div>
+            <span class="pipe-arrow fragment">→</span>
+            <div class="pipe-node fragment" data-layer="2">
+              <div class="pipe-label">Estilo</div>
+              <div class="pipe-sub">CSS</div>
+            </div>
+            <span class="pipe-arrow fragment">→</span>
+            <div class="pipe-node fragment" data-layer="3">
+              <div class="pipe-label">Comportamiento</div>
+              <div class="pipe-sub">JavaScript</div>
+            </div>
+            <span class="pipe-arrow fragment">→</span>
+            <div class="pipe-node fragment" data-layer="4">
+              <div class="pipe-label">Estado</div>
+              <div class="pipe-sub">datos en memoria</div>
+            </div>
+            <span class="pipe-arrow fragment">→</span>
+            <div class="pipe-node fragment" data-layer="5">
+              <div class="pipe-label">Empaque</div>
+              <div class="pipe-sub">single-file</div>
+            </div>
+          </div>
+          <p class="fragment fade-in" style="font-size: 0.75em; color: var(--text-muted); text-align: center; margin-top: 16px;">
+            El orden no es arbitrario. Estructura primero, estilo después, comportamiento y estado encima, empaque al final.<br>
+            Vamos a volver a este mapa al inicio de cada capa.
+          </p>
+          <aside class="notes">
+            <p><strong>Revelar las 5 capas en orden con flechas. Cada click suma una capa. Último click revela la nota inferior.</strong></p>
+            <p><u>Roadmap de la anatomía. Mapa al que se vuelve al inicio de §§2–5.</u></p>
+            <p><em>"El resto de la clase la vamos a pasar mirando una página real, demo.html, que está armada como un showroom de las cinco capas que componen cualquier interfaz web. Estructura: los sustantivos, qué cosa es cada bloque. Estilo: cómo se ven esos sustantivos. Comportamiento: qué pasa cuando el usuario interactúa. Estado: el dato que la página recuerda entre clicks. Y empaque: cómo distribuís todo eso en un archivo. Cada capa la vamos a abrir con sus propios términos, y vamos a volver a este mapa cada vez."</em></p>
+          </aside>
+        </section>
+
+        <!-- §1.6: A qué prestamos atención (transición) -->
+        <section>
+          <h2>A qué prestamos atención hoy</h2>
+          <div class="comparison-2col">
+            <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+              <h3 style="color: var(--text-muted);">Lo que NO es esta clase</h3>
+              <p style="font-size: 0.8em;">Aprender HTML, CSS o JavaScript de producción. Para eso hay carreras enteras y no caben en 90 minutos.</p>
+            </div>
+            <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+              <h3 style="color: var(--accent);">Lo que SÍ es</h3>
+              <p style="font-size: 0.8em;">Aprender a <em>nombrar las cosas</em>. Reconocer las piezas en la respuesta de un modelo y pedirlas con el término correcto cuando todavía no aparecieron.</p>
+            </div>
+          </div>
+          <p style="font-size: 0.75em; color: var(--text-muted); text-align: center; margin-top: 24px;">
+            Cada concepto que veas hoy tiene payoff directo: o te ayuda a escribir un prompt mejor, o te ayuda a leer la respuesta sin tragarte un error.
+          </p>
+          <aside class="notes">
+            <p><u>Disclaimer + transición a la sección 2.</u></p>
+            <p><em>"Quiero ser explícito con lo que esta clase no es. No te estoy enseñando a escribir HTML, CSS o JavaScript de producción. Te estoy enseñando a nombrar las cosas. Cada término que veas hoy tiene payoff directo en cómo dialogás con la IA: o te ayuda a escribir un prompt mejor, o te ayuda a auditar la respuesta. Volvé al rol cuando dudes: sos supervisor arquitectónico, la IA es tu equipo de implementación. Arrancamos con la primera capa: estructura."</em></p>
+          </aside>
+        </section>
+
+      </section>
 
       <!-- ============================================================
            §2 — Estructura HTML
