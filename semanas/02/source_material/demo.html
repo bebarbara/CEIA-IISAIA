@@ -315,6 +315,52 @@
       outline: 2px dashed var(--color-warn) !important;
       outline-offset: 4px;
     }
+
+    /* === §5 Single-file === */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-md);
+    }
+    .modal[hidden] { display: none; }
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+    }
+    .modal-panel {
+      position: relative;
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      max-width: 1000px;
+      width: 100%;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-md);
+      border-bottom: 1px solid var(--color-surface-2);
+    }
+    .modal-header h3 { margin: 0; }
+    .modal-panel pre {
+      margin: 0;
+      padding: var(--space-md);
+      overflow: auto;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      line-height: 1.5;
+      flex: 1;
+    }
   </style>
 </head>
 <body>
@@ -419,7 +465,25 @@
     <section class="demo-section" id="single-file">
       <h2>5. Single-file: todo en un archivo</h2>
       <p class="lead">Esta página entera vive en un solo .html. Vela.</p>
-      <!-- Task 14 fills this section -->
+      <p>Esta página entera — los cinco demos, los toggles, el árbol del DOM, el theming — vive en <strong>un solo archivo HTML</strong>. Sin <code>node_modules</code>, sin pipeline, sin servidor. Sólo tres tecnologías inline: HTML, CSS, JS.</p>
+      <div class="demo-area">
+        <p>¿No me creés? Vela:</p>
+        <button id="btn-view-source">Ver el código fuente</button>
+        <p class="estado-state" style="margin-top: var(--space-sm)">
+          También podés copiar este archivo, pegarlo en un Gist y servirlo como GitHub Pages.
+        </p>
+      </div>
+
+      <div class="modal" id="source-modal" hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-panel">
+          <div class="modal-header">
+            <h3>demo.html — código fuente</h3>
+            <button id="btn-close-modal" class="secondary">Cerrar</button>
+          </div>
+          <pre id="source-content"></pre>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -641,7 +705,33 @@
       observer.observe(root, { childList: true, subtree: true });
     }
     initDOM();
-    // Task 14: initSingleFile()
+    // === §5 Single-file ===
+    function initSingleFile() {
+      const btn = document.getElementById('btn-view-source');
+      const modal = document.getElementById('source-modal');
+      const close = document.getElementById('btn-close-modal');
+      const content = document.getElementById('source-content');
+      const backdrop = modal.querySelector('.modal-backdrop');
+
+      btn.addEventListener('click', async () => {
+        try {
+          const response = await fetch(window.location.href);
+          const text = await response.text();
+          content.textContent = text;
+        } catch (err) {
+          content.textContent = '// No se pudo leer el archivo (estás abriendo desde el filesystem y el navegador bloquea fetch). Servilo con `npm start` para ver el código.';
+        }
+        modal.hidden = false;
+      });
+
+      function closeModal() { modal.hidden = true; }
+      close.addEventListener('click', closeModal);
+      backdrop.addEventListener('click', closeModal);
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.hidden) closeModal();
+      });
+    }
+    initSingleFile();
   </script>
 </body>
 </html>
