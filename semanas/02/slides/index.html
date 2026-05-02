@@ -41,12 +41,15 @@
     .layer-roadmap.active-2 .pipe-node:not([data-layer="2"]),
     .layer-roadmap.active-3 .pipe-node:not([data-layer="3"]),
     .layer-roadmap.active-4 .pipe-node:not([data-layer="4"]),
-    .layer-roadmap.active-5 .pipe-node:not([data-layer="5"]) { opacity: 0.35; }
+    .layer-roadmap.active-5 .pipe-node:not([data-layer="5"]),
+    .layer-roadmap.active-3-4 .pipe-node:not([data-layer="3"]):not([data-layer="4"]) { opacity: 0.35; }
     .layer-roadmap.active-1 .pipe-node[data-layer="1"],
     .layer-roadmap.active-2 .pipe-node[data-layer="2"],
     .layer-roadmap.active-3 .pipe-node[data-layer="3"],
     .layer-roadmap.active-4 .pipe-node[data-layer="4"],
-    .layer-roadmap.active-5 .pipe-node[data-layer="5"] {
+    .layer-roadmap.active-5 .pipe-node[data-layer="5"],
+    .layer-roadmap.active-3-4 .pipe-node[data-layer="3"],
+    .layer-roadmap.active-3-4 .pipe-node[data-layer="4"] {
       border-color: var(--accent);
       box-shadow: 0 0 16px rgba(100, 255, 218, 0.2);
     }
@@ -593,6 +596,161 @@
       <!-- ============================================================
            §4 — Estado, DOM y eventos
            ============================================================ -->
+      <section>
+
+        <!-- §4.1: Apertura — roadmap activa "Comportamiento + Estado" -->
+        <section>
+          <h2>Capas 3 y 4 — Comportamiento y Estado</h2>
+          <div class="layer-roadmap active-3-4">
+            <div class="pipe-node" data-layer="1"><div class="pipe-label">Estructura</div><div class="pipe-sub">HTML</div></div>
+            <span class="pipe-arrow">→</span>
+            <div class="pipe-node" data-layer="2"><div class="pipe-label">Estilo</div><div class="pipe-sub">CSS</div></div>
+            <span class="pipe-arrow">→</span>
+            <div class="pipe-node" data-layer="3"><div class="pipe-label">Comportamiento</div><div class="pipe-sub">JavaScript</div></div>
+            <span class="pipe-arrow">→</span>
+            <div class="pipe-node" data-layer="4"><div class="pipe-label">Estado</div><div class="pipe-sub">datos</div></div>
+            <span class="pipe-arrow">→</span>
+            <div class="pipe-node" data-layer="5"><div class="pipe-label">Empaque</div><div class="pipe-sub">single-file</div></div>
+          </div>
+          <p style="margin-top: 32px; font-size: 0.95em; text-align: center; max-width: 32em; margin-left: auto; margin-right: auto;">
+            Cuando una página <em>hace algo</em>, hay un triángulo de tres conceptos en juego al mismo tiempo.
+          </p>
+          <aside class="notes">
+            <p><u>Apertura de §4. Capas 3 y 4 activas — comportamiento y estado son la misma sección porque van juntos.</u></p>
+            <p><em>"Una página estática se entiende sola: hay HTML, lo dibuja el navegador, listo. Pero en cuanto pasa cualquier otra cosa cuando el usuario interactúa, ya sea un click que suma uno, un input que filtra una lista, o un botón que cambia el tema, entran tres piezas en juego al mismo tiempo. Comportamiento y estado son la misma sección porque van pegados. Las tres tienen nombre, y saberlos es la diferencia entre pedirle a una IA hacé que funcione y pedirle algo que el modelo pueda traducir directo a código."</em></p>
+          </aside>
+        </section>
+
+        <!-- §4.2: Hook — contador + pregunta -->
+        <section>
+          <h2>Un click. Aparece "1".</h2>
+          <div style="display: flex; gap: 32px; align-items: center; justify-content: center; margin-top: 16px;">
+            <div class="bg-secondary-card" style="text-align: center; padding: 32px;">
+              <div style="font-size: 4em; font-family: var(--font-mono); color: var(--accent); line-height: 1;">1</div>
+              <button style="margin-top: 16px; padding: 8px 18px; background: var(--accent); color: var(--bg-primary); border: none; border-radius: 6px; font-size: 0.7em; cursor: default;">+1</button>
+            </div>
+            <div style="font-size: 0.85em; max-width: 14em;">
+              <p class="fragment fade-in">¿Qué se actualizó exactamente entre el click y el render?</p>
+              <p class="fragment fade-in" style="color: var(--accent); margin-top: 16px;">Tres cosas, en este orden.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <p><strong>Mostrar el contador. Pausa. Revelar la pregunta. Pausa larga (5–8s). Revelar "tres cosas, en este orden".</strong></p>
+            <p><u>Hook de §4. La pregunta abre el espacio para los tres conceptos.</u></p>
+            <p><em>"Mirá esto. Un contador clásico. Hago click, aparece uno. Otro click, dos. Pero pensemos un segundo: ¿qué se actualizó exactamente entre el click y el número que viste en pantalla? No es una sola cosa. Son tres cosas, en orden. Las tres tienen nombre. Vamos a ponérselos."</em></p>
+          </aside>
+        </section>
+
+        <!-- §4.3: Los tres conceptos -->
+        <section>
+          <h2>El triángulo dinámico</h2>
+          <div class="consequence-row" style="margin-top: 12px;">
+            <div class="bg-secondary-card fragment fade-in" style="border-left: 4px solid var(--accent);">
+              <h3 style="color: var(--accent);">Estado</h3>
+              <p style="font-size: 0.78em;">El <em>dato</em> que la página recuerda. Vive en variables, no en pantalla.</p>
+              <p style="font-size: 0.65em; color: var(--text-muted); margin-top: 8px;">Ej.: <code>count = 0</code>, items de una todo list, modo dark/light.</p>
+            </div>
+            <div class="bg-secondary-card fragment fade-in" style="border-left: 4px solid var(--accent-secondary);">
+              <h3 style="color: var(--accent-secondary);">DOM</h3>
+              <p style="font-size: 0.78em;">El HTML, pero <em>vivo</em>. Un árbol en memoria que JavaScript puede mutar.</p>
+              <p style="font-size: 0.65em; color: var(--text-muted); margin-top: 8px;">Mutar el DOM cambia lo que el usuario ve sin recargar.</p>
+            </div>
+            <div class="bg-secondary-card fragment fade-in" style="border-left: 4px solid #f59e0b;">
+              <h3 style="color: #f59e0b;">Eventos</h3>
+              <p style="font-size: 0.78em;">La voz del usuario. Click, tecla, scroll, input.</p>
+              <p style="font-size: 0.65em; color: var(--text-muted); margin-top: 8px;">Un <code>listener</code> escucha; un <code>handler</code> responde.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <p><strong>Revelar los tres conceptos en orden.</strong></p>
+            <p><u>Las tres entidades del triángulo dinámico, una por columna.</u></p>
+            <p><em>"Tres conceptos. El estado es el dato que la página recuerda: vive en variables, no en pantalla. El DOM es el HTML pero vivo: un árbol en memoria que JavaScript puede modificar. Los eventos son la voz del usuario: cualquier cosa que el usuario hace genera uno. Para escuchar uno registrás un listener; la función que se ejecuta es el handler. Las tres palabras son las que la IA necesita para no inventar atajos malos."</em></p>
+          </aside>
+        </section>
+
+        <!-- §4.4: El ciclo de 5 pasos -->
+        <section>
+          <h2>El ciclo: evento → estado → DOM</h2>
+          <div style="display: flex; align-items: center; gap: 8px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+            <div class="flow-step fragment fade-in">Estado inicial<br><code style="font-size: 0.8em;">count = 0</code></div>
+            <span class="flow-arrow fragment fade-in">→</span>
+            <div class="flow-step fragment fade-in">Click<br><span style="color: var(--text-muted); font-size: 0.85em;">evento</span></div>
+            <span class="flow-arrow fragment fade-in">→</span>
+            <div class="flow-step fragment fade-in">Listener<br><span style="color: var(--text-muted); font-size: 0.85em;">se activa</span></div>
+            <span class="flow-arrow fragment fade-in">→</span>
+            <div class="flow-step fragment fade-in active">Mutación de estado<br><code style="font-size: 0.8em;">count = 1</code></div>
+            <span class="flow-arrow fragment fade-in">→</span>
+            <div class="flow-step fragment fade-in active">Mutación de DOM<br><code style="font-size: 0.8em;">span.textContent = 1</code></div>
+            <span class="flow-arrow fragment fade-in">→</span>
+            <div class="flow-step fragment fade-in">Render<br><span style="color: var(--text-muted); font-size: 0.85em;">"1" en pantalla</span></div>
+          </div>
+          <p class="fragment fade-in" style="margin-top: 24px; font-size: 0.78em; color: var(--accent); text-align: center; max-width: 36em; margin-left: auto; margin-right: auto;">
+            Los dos pasos centrales son los críticos: <strong>el estado y el DOM se mueven por separado</strong>. Si te olvidás de uno, la pantalla miente.
+          </p>
+          <aside class="notes">
+            <p><strong>Revelar paso a paso. En el cuarto y quinto paso, marcar que ahí es donde la IA suele equivocarse cuando no le nombrás "estado".</strong></p>
+            <p><u>El ciclo de 5 pasos. Los pasos centrales son la mutación de estado y la mutación del DOM, que son dos cosas distintas.</u></p>
+            <p><em>"Acá está el ciclo desarmado. Estado inicial, count en cero. El usuario hace click, eso es el evento. El listener se activa: la función que registramos para ese tipo de evento. Y ahí pasan las dos cosas críticas, en orden: primero se actualiza el estado, count pasa a uno. Después se actualiza el DOM, el span muestra uno. Y recién al final el navegador re-renderiza ese nodo. El estado y el DOM no son la misma cosa, aunque caminen en paralelo. Si tu listener actualiza solamente el estado y se olvida del DOM, la pantalla muestra cero pero el dato es uno. Si actualiza solamente el DOM, la pantalla muestra uno pero la próxima vez que rendericen el contador desde el estado, vuelve a cero."</em></p>
+          </aside>
+        </section>
+
+        <!-- §4.5: Estado es la verdad, DOM es el reflejo -->
+        <section>
+          <p class="big-question" style="font-size: 1.4em;">
+            <span class="accent">El estado es la verdad.</span><br>
+            El DOM es el reflejo.
+            <span class="muted-q">Si te olvidás de actualizar uno, la pantalla miente.</span>
+          </p>
+          <aside class="notes">
+            <p><u>La frase ancla de §4. Repetir despacio, sin apuro.</u></p>
+            <p><em>"Quedate con esta frase, porque es la que va a hacer que pidas bien las cosas. El estado es la verdad. El DOM es el reflejo. Si te olvidás de actualizar uno de los dos, la pantalla miente. Cuando le pidas a la IA cualquier cosa interactiva, esta es la palabra que tenés que poner en el prompt: estado. Si nombrás el estado, la IA lo separa del DOM. Si no lo nombrás, lo confunde con el DOM, y eso te explota la primera vez que querés mostrar el mismo dato en dos lugares."</em></p>
+          </aside>
+        </section>
+
+        <!-- §4.6: Live demo — demo.html §3 -->
+        <section>
+          <h2>El ciclo, tres veces en vivo</h2>
+          <div style="text-align: center; margin-top: 8px;">
+            <iframe src="../source_material/demo.html#estado" style="width: 92%; height: 56vh; border: 1px solid var(--text-muted); border-radius: 8px; background: var(--bg-secondary);"></iframe>
+          </div>
+          <p style="margin-top: 12px; font-size: 0.7em; text-align: center; color: var(--text-muted);">
+            Contador, todo list y event log. Mismo esqueleto: <em>evento → mutación de estado → mutación del DOM</em>.
+          </p>
+          <aside class="notes">
+            <p><strong>Tocar cada uno: contador (+1), todo (agregar/marcar), después mostrar el event log que registra cada paso del ciclo.</strong></p>
+            <p><u>Demo en vivo del §3 de demo.html. Tres aplicaciones del mismo ciclo.</u></p>
+            <p><em>"Vamos a verlo en demo.html. Tres demos. El contador clásico, el ciclo más simple posible. Una todo list, donde el estado es un array y cada acción muta tanto el array como el DOM. Y un event log que muestra el ciclo en directo: cada vez que toco algo, el log registra qué evento se disparó, qué cambió en el estado, y qué se mutó en el DOM. Es el mismo esqueleto las tres veces."</em></p>
+          </aside>
+        </section>
+
+        <!-- §4.7: Prompt vago vs específico -->
+        <section>
+          <h2>Cómo le pedís comportamiento a una IA</h2>
+          <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
+            <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+              <h3 style="color: var(--text-muted); margin-bottom: 12px;">Vago</h3>
+              <p style="font-style: italic; font-size: 0.85em;">"Hacé un botón que cuente."</p>
+              <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 16px;">
+                La IA tiene tres atajos posibles. Los tres son malos.
+              </p>
+            </div>
+            <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+              <h3 style="color: var(--accent); margin-bottom: 12px;">Específico</h3>
+              <p style="font-style: italic; font-size: 0.72em; line-height: 1.55;">
+                "Agregá un <strong>estado</strong> <code>count</code> (número, inicial 0). Mostralo en un <strong>&lt;span id="count"&gt;</strong>. Cuando se haga click en <strong>&lt;button id="inc"&gt;+1&lt;/button&gt;</strong>, registrá un <strong>listener</strong> que incremente <code>count</code> y actualice el span con el nuevo valor."
+              </p>
+              <p style="font-size: 0.7em; color: var(--accent); margin-top: 12px;">
+                Estado, listener, evento y mutación de DOM, todo nombrado.
+              </p>
+            </div>
+          </div>
+          <aside class="notes">
+            <p><u>Cierre de §4. La palabra "estado" en el prompt cambia el código que sale.</u></p>
+            <p><em>"Sin nombrar el estado, la IA tiene tres atajos disponibles, y los tres son malos. Puede guardar el contador en un atributo del DOM. Puede usar una variable global flotante. Puede mezclar el dato con su representación en una sola variable. Si en cambio nombrás estado en el prompt, le estás diciendo: esto es un dato, separalo del DOM, ponelo donde corresponde. La palabra estado hace ese trabajo sola. Próxima capa, la última de la anatomía: cómo metemos todo esto en un solo archivo."</em></p>
+          </aside>
+        </section>
+
+      </section>
 
       <!-- ============================================================
            §5 — Single-file platform
