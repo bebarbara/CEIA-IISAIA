@@ -214,6 +214,182 @@
       <!-- ============================================================
            §2 — Estructura HTML
            ============================================================ -->
+      <section>
+
+        <!-- §2.1: Apertura — roadmap activa "Estructura" -->
+        <section>
+          <h2>Capa 1 — Estructura</h2>
+          <div class="layer-roadmap active-1">
+            <div class="pipe-node" data-layer="1">
+              <div class="pipe-label">Estructura</div>
+              <div class="pipe-sub">HTML</div>
+            </div>
+            <span class="pipe-arrow">→</span>
+            <div class="pipe-node" data-layer="2">
+              <div class="pipe-label">Estilo</div>
+              <div class="pipe-sub">CSS</div>
+            </div>
+            <span class="pipe-arrow">→</span>
+            <div class="pipe-node" data-layer="3">
+              <div class="pipe-label">Comportamiento</div>
+              <div class="pipe-sub">JavaScript</div>
+            </div>
+            <span class="pipe-arrow">→</span>
+            <div class="pipe-node" data-layer="4">
+              <div class="pipe-label">Estado</div>
+              <div class="pipe-sub">datos</div>
+            </div>
+            <span class="pipe-arrow">→</span>
+            <div class="pipe-node" data-layer="5">
+              <div class="pipe-label">Empaque</div>
+              <div class="pipe-sub">single-file</div>
+            </div>
+          </div>
+          <p style="margin-top: 32px; font-size: 0.95em; text-align: center; max-width: 30em; margin-left: auto; margin-right: auto;">
+            El HTML no decide cómo se ve. El HTML <span style="color: var(--accent);">nombra</span> qué <em>es</em> cada parte.
+          </p>
+          <aside class="notes">
+            <p><u>Apertura de §2. La capa de estructura activa en el roadmap.</u></p>
+            <p><em>"Arrancamos con la primera capa: estructura. El HTML no se trata de hacer que algo se vea bien — eso es trabajo del CSS, lo vamos a ver después. El HTML se trata de nombrar las partes de tu página con la palabra correcta. Cada bloque es un sustantivo, y si el sustantivo es preciso, todo lo demás se vuelve más fácil."</em></p>
+          </aside>
+        </section>
+
+        <!-- §2.2: Hook — header vs div.header -->
+        <section>
+          <h2>¿Estas dos líneas son iguales?</h2>
+          <div class="comparison-2col" style="margin-top: 12px;">
+            <div class="bg-code-card">
+              <pre style="margin: 0; box-shadow: none;"><code class="language-html" data-trim>&lt;header&gt;Mi sitio&lt;/header&gt;</code></pre>
+            </div>
+            <div class="bg-code-card">
+              <pre style="margin: 0; box-shadow: none;"><code class="language-html" data-trim>&lt;div class="header"&gt;Mi sitio&lt;/div&gt;</code></pre>
+            </div>
+          </div>
+          <p class="fragment fade-in" style="margin-top: 24px; font-size: 0.85em; text-align: center;">
+            Visualmente: idénticas.
+          </p>
+          <p class="fragment fade-in" style="margin-top: 8px; font-size: 0.95em; text-align: center; color: var(--accent);">
+            Para el navegador, los lectores de pantalla, los buscadores y la IA: <strong>no lo son</strong>.
+          </p>
+          <p class="fragment fade-in" style="margin-top: 16px; font-size: 0.75em; text-align: center; color: var(--text-muted); max-width: 32em; margin-left: auto; margin-right: auto;">
+            La primera dice "esto es un encabezado". La segunda dice "esto es una caja, le puse de apodo header, podría ser cualquier cosa". El <em>outline del documento</em> solo se construye con etiquetas semánticas.
+          </p>
+          <aside class="notes">
+            <p><strong>Mostrar las dos líneas. Pausa. Revelar "idénticas". Pausa. Revelar "no lo son". Pausa. Revelar la explicación.</strong></p>
+            <p><u>Hook de §2. Construye la tensión: visualmente iguales, semánticamente distintas.</u></p>
+            <p><em>"Compará estas dos líneas. Visualmente son idénticas: las dos te van a renderizar el mismo texto en la misma posición. Pero para el navegador, para los lectores de pantalla, para los buscadores, y sobre todo para la IA que después tenga que tocar tu código, no son la misma cosa. La primera dice 'esto es un encabezado'. La segunda dice 'esto es una caja anónima'. El outline del documento, que es el árbol de qué contiene qué, solo se construye con la primera. Con la segunda, no existe."</em></p>
+          </aside>
+        </section>
+
+        <!-- §2.3: Los 7 contenedores estructurales -->
+        <section>
+          <h2>Siete sustantivos arman el esqueleto</h2>
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.7em; margin-top: 12px;">
+            <thead>
+              <tr>
+                <th style="text-align: left; padding: 6px 10px; border-bottom: 2px solid var(--text-muted); width: 14%;">Etiqueta</th>
+                <th style="text-align: left; padding: 6px 10px; border-bottom: 2px solid var(--text-muted);">Qué representa</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding: 6px 10px; color: var(--accent); font-family: var(--font-mono);">&lt;header&gt;</td><td style="padding: 6px 10px;">encabezado: logo, título, navegación principal</td></tr>
+              <tr><td style="padding: 6px 10px; color: var(--accent); font-family: var(--font-mono);">&lt;main&gt;</td><td style="padding: 6px 10px;">contenido principal de la página, único por documento</td></tr>
+              <tr><td style="padding: 6px 10px; color: var(--accent); font-family: var(--font-mono);">&lt;section&gt;</td><td style="padding: 6px 10px;">bloque temático con título propio</td></tr>
+              <tr><td style="padding: 6px 10px; color: var(--accent); font-family: var(--font-mono);">&lt;article&gt;</td><td style="padding: 6px 10px;">unidad autocontenida: post, tarjeta, comentario</td></tr>
+              <tr><td style="padding: 6px 10px; color: var(--accent); font-family: var(--font-mono);">&lt;nav&gt;</td><td style="padding: 6px 10px;">grupo de enlaces de navegación</td></tr>
+              <tr><td style="padding: 6px 10px; color: var(--accent); font-family: var(--font-mono);">&lt;footer&gt;</td><td style="padding: 6px 10px;">pie de página o sección: copyright, enlaces secundarios</td></tr>
+              <tr><td style="padding: 6px 10px; color: var(--accent); font-family: var(--font-mono);">&lt;aside&gt;</td><td style="padding: 6px 10px;">contenido lateral o tangencial al principal</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top: 16px; font-size: 0.7em; color: var(--text-muted); text-align: center;">
+            Si las usás bien, el resto se ordena solo. <span style="color: var(--text-primary);">No memorices: reconocé.</span>
+          </p>
+          <aside class="notes">
+            <p><u>Los siete contenedores estructurales. La tabla es de referencia, no se lee entera.</u></p>
+            <p><em>"Existen como cien etiquetas en HTML. Pero con estos siete sustantivos arma cualquier página razonable. Header arriba, main al medio, sections temáticas adentro, articles para piezas autocontenidas, nav para enlaces, footer abajo, aside para lo tangencial. No las memorices: reconocelas. Cuando la IA te devuelva HTML, querés ver estos nombres apareciendo. Si solamente ves divs, hay un problema."</em></p>
+          </aside>
+        </section>
+
+        <!-- §2.4: Contenido + interacción -->
+        <section>
+          <h2>Adentro de los contenedores</h2>
+          <div class="comparison-2col" style="margin-top: 12px;">
+            <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+              <h3 style="color: var(--accent); margin-bottom: 12px;">Contenido</h3>
+              <table style="width: 100%; font-size: 0.7em;">
+                <tr><td style="padding: 4px 0; color: var(--accent); font-family: var(--font-mono); width: 35%;">&lt;h1&gt;–&lt;h6&gt;</td><td>jerarquía de encabezados</td></tr>
+                <tr><td style="padding: 4px 0; color: var(--accent); font-family: var(--font-mono);">&lt;p&gt;</td><td>párrafo</td></tr>
+                <tr><td style="padding: 4px 0; color: var(--accent); font-family: var(--font-mono);">&lt;ul&gt;&lt;ol&gt;&lt;li&gt;</td><td>listas no ordenadas, ordenadas, ítems</td></tr>
+                <tr><td style="padding: 4px 0; color: var(--accent); font-family: var(--font-mono);">&lt;a&gt;</td><td>enlace</td></tr>
+                <tr><td style="padding: 4px 0; color: var(--accent); font-family: var(--font-mono);">&lt;img&gt;</td><td>imagen, siempre con <code>alt</code></td></tr>
+              </table>
+            </div>
+            <div class="bg-secondary-card" style="border-left: 4px solid var(--accent-secondary);">
+              <h3 style="color: var(--accent-secondary); margin-bottom: 12px;">Interacción</h3>
+              <table style="width: 100%; font-size: 0.7em;">
+                <tr><td style="padding: 4px 0; color: var(--accent-secondary); font-family: var(--font-mono); width: 35%;">&lt;button&gt;</td><td>botón clickeable</td></tr>
+                <tr><td style="padding: 4px 0; color: var(--accent-secondary); font-family: var(--font-mono);">&lt;input&gt;</td><td>campo de entrada (según <code>type</code>)</td></tr>
+                <tr><td style="padding: 4px 0; color: var(--accent-secondary); font-family: var(--font-mono);">&lt;form&gt;</td><td>formulario que agrupa inputs</td></tr>
+                <tr><td style="padding: 4px 0; color: var(--accent-secondary); font-family: var(--font-mono);">&lt;label&gt;</td><td>etiqueta visible asociada a un input</td></tr>
+              </table>
+            </div>
+          </div>
+          <p style="margin-top: 16px; font-size: 0.7em; color: var(--text-muted); text-align: center;">
+            Sin <code>&lt;label&gt;</code> no hay accesibilidad. Sin <code>alt</code> tampoco.
+          </p>
+          <aside class="notes">
+            <p><u>Las dos familias de elementos que viven adentro: contenido e interacción.</u></p>
+            <p><em>"Adentro de los contenedores va el contenido en sí. Encabezados con jerarquía, párrafos, listas, links, imágenes. Y cuando la página le pide algo al usuario, aparecen las cuatro de interacción: button, input, form, label. La nota al pie es importante: sin label el input no es accesible para un lector de pantalla, y sin alt la imagen no es accesible para nadie. Estos son los nombres con los que vas a pedir piezas concretas."</em></p>
+          </aside>
+        </section>
+
+        <!-- §2.5: Live demo — demo.html §1 -->
+        <section>
+          <h2>El mismo bloque, dos versiones</h2>
+          <div style="text-align: center; margin-top: 8px;">
+            <iframe src="../source_material/demo.html#estructura" style="width: 92%; height: 56vh; border: 1px solid var(--text-muted); border-radius: 8px; background: var(--bg-secondary);"></iframe>
+          </div>
+          <p style="margin-top: 12px; font-size: 0.7em; text-align: center; color: var(--text-muted);">
+            Toggle <strong>Semántico</strong> ↔ <strong>Sopa de divs</strong>. Mismo render. Distinto código.
+          </p>
+          <aside class="notes">
+            <p><strong>Tocar el toggle "Semántico" / "Sopa de divs" en vivo. Después abrir "Ver código" para mostrar la diferencia en la fuente.</strong></p>
+            <p><u>Demo en vivo del §1 de demo.html. Si el iframe va lento, abrir demo.html en otra pestaña.</u></p>
+            <p><em>"Vamos a verlo en demo.html. Tenemos un toggle directo: el mismo bloque visual, dos veces, una con etiquetas semánticas y otra como sopa de divs. Cambio acá, cambio acá. Visualmente idénticos. Ahora abro 'Ver código'. Mismo render. Distinto código. La página de la izquierda le habla al navegador. La de la derecha es muda."</em></p>
+          </aside>
+        </section>
+
+        <!-- §2.6: Prompt vago vs con vocabulario -->
+        <section>
+          <h2>Cómo le pedís estructura a una IA</h2>
+          <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
+            <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+              <h3 style="color: var(--text-muted); margin-bottom: 12px;">Prompt vago</h3>
+              <p style="font-style: italic; font-size: 0.8em;">"Hacé una página de contacto."</p>
+              <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 16px;">
+                El modelo inventa la estructura. Probablemente, sopa de divs.
+              </p>
+            </div>
+            <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+              <h3 style="color: var(--accent); margin-bottom: 12px;">Prompt con vocabulario</h3>
+              <p style="font-style: italic; font-size: 0.72em; line-height: 1.5;">
+                "Hacé una página de contacto. <strong>&lt;header&gt;</strong> con <strong>&lt;nav&gt;</strong> (Inicio, Sobre mí, Contacto); <strong>&lt;main&gt;</strong> con un <strong>&lt;section&gt;</strong> introductorio y un <strong>&lt;form&gt;</strong> con <strong>&lt;label&gt;</strong>+<strong>&lt;input&gt;</strong> para nombre y email, más un <strong>&lt;textarea&gt;</strong>; <strong>&lt;footer&gt;</strong> con copyright."
+              </p>
+              <p style="font-size: 0.7em; color: var(--accent); margin-top: 12px;">
+                Mismo objetivo, vocabulario explícito. La IA tiene el outline; solo rellena.
+              </p>
+            </div>
+          </div>
+          <p style="margin-top: 20px; font-size: 0.8em; text-align: center;">
+            No es más largo en intención. Es más <em>preciso</em>.
+          </p>
+          <aside class="notes">
+            <p><u>Cierre de §2. El payoff del vocabulario aplicado a un prompt real.</u></p>
+            <p><em>"Acá es donde el vocabulario te paga. Mirá la diferencia entre los dos prompts. La intención es la misma: una página de contacto. Pero el segundo nombra cada pieza estructural con el sustantivo correcto. Header, nav, main, section, form, label, input, footer. La IA no improvisa porque no tiene que improvisar: vos le diste el outline, ella solamente rellena. Y eso vale para cualquier prompt de UI que escribas en este curso. Próxima capa: cómo se ven estos sustantivos."</em></p>
+          </aside>
+        </section>
+
+      </section>
 
       <!-- ============================================================
            §3 — Estilo CSS
