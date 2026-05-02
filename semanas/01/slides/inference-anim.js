@@ -158,9 +158,9 @@ function initInferenceAnim(opts) {
         var barWidth = Math.round(c.prob * 300);
         var color = palette[(contextTokens.length + i) % palette.length];
         var highlight = '';
-        barsHtml += '<div style="display: flex; align-items: center; gap: 8px; margin: 4px 0;">' +
-          '<span style="min-width: 80px; text-align: right; color: var(--text-primary); font-size: 0.9em;">' + escHtml(c.token) + '</span>' +
-          '<div style="background: ' + color + '33; border-radius: 4px; height: 22px; width: ' + barWidth + 'px; transition: width 0.4s; position: relative;">' +
+        barsHtml += '<div style="display: flex; align-items: center; gap: 8px; margin: 2px 0;">' +
+          '<span style="min-width: 70px; text-align: right; color: var(--text-primary); font-size: 0.8em;">' + escHtml(c.token) + '</span>' +
+          '<div style="background: ' + color + '33; border-radius: 4px; height: 16px; width: ' + barWidth + 'px; transition: width 0.4s;">' +
           '<div style="background: ' + color + '; border-radius: 4px; height: 100%; width: 100%;"></div>' +
           '</div>' +
           '<span style="color: var(--text-muted); font-size: 0.8em;">' + Math.round(c.prob * 100) + '%</span>' +
@@ -173,9 +173,9 @@ function initInferenceAnim(opts) {
         var color = palette[(contextTokens.length - 1 + i) % palette.length];
         var isPicked = i === step.pick;
         var opacity = isPicked ? '1' : '0.3';
-        barsHtml += '<div style="display: flex; align-items: center; gap: 8px; margin: 4px 0; opacity: ' + opacity + ';">' +
-          '<span style="min-width: 80px; text-align: right; color: var(--text-primary); font-size: 0.9em;">' + (isPicked ? '>> ' : '') + escHtml(c.token) + '</span>' +
-          '<div style="background: ' + color + '33; border-radius: 4px; height: 22px; width: ' + barWidth + 'px;">' +
+        barsHtml += '<div style="display: flex; align-items: center; gap: 8px; margin: 2px 0; opacity: ' + opacity + ';">' +
+          '<span style="min-width: 70px; text-align: right; color: var(--text-primary); font-size: 0.8em;">' + (isPicked ? '>> ' : '') + escHtml(c.token) + '</span>' +
+          '<div style="background: ' + color + '33; border-radius: 4px; height: 16px; width: ' + barWidth + 'px;">' +
           '<div style="background: ' + color + '; border-radius: 4px; height: 100%; width: 100%;"></div>' +
           '</div>' +
           '<span style="color: var(--text-muted); font-size: 0.8em;">' + Math.round(c.prob * 100) + '%</span>' +
@@ -184,14 +184,14 @@ function initInferenceAnim(opts) {
     }
 
     // Network indicator
-    var networkHtml = '<div style="text-align: center; margin: 8px 0;">' +
-      '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2v8m0 4v8m0-12l-6 6m6-6l6 6" stroke="#8892b0" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>' +
-      '<div style="display: inline-block; background: var(--bg-secondary); border: 1px solid var(--accent); border-radius: 6px; padding: 4px 16px; color: var(--accent); font-size: 0.8em;">Red Neuronal</div>' +
-      '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2v20m0 0l-5-5m5 5l5-5" stroke="#8892b0" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>' +
+    var networkHtml = '<div style="text-align: center; margin: 2px 0; display: flex; flex-direction: column; align-items: center; gap: 0;">' +
+      '<svg width="20" height="10" viewBox="0 0 24 16"><path d="M12 0v12m0 0l-5-5m5 5l5-5" stroke="#8892b0" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>' +
+      '<div style="background: var(--bg-secondary); border: 1px solid var(--accent); border-radius: 6px; padding: 2px 14px; color: var(--accent); font-size: 0.7em;">Red Neuronal</div>' +
+      '<svg width="20" height="10" viewBox="0 0 24 16"><path d="M12 0v12m0 0l-5-5m5 5l5-5" stroke="#8892b0" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>' +
       '</div>';
 
     // Buttons
-    var btnHtml = '<div style="display: flex; justify-content: center; gap: 12px; margin-top: 10px;">';
+    var btnHtml = '<div style="display: flex; justify-content: center; gap: 12px; margin-top: 6px;">';
     if (!sampled) {
       btnHtml += '<button id="inf-sample-btn" style="background: var(--accent); color: var(--bg-primary); border: none; border-radius: 6px; padding: 6px 20px; font-family: var(--font-body); font-size: 0.8em; cursor: pointer; font-weight: bold;">Muestrear</button>';
     } else if (!isLastStep) {
@@ -204,18 +204,18 @@ function initInferenceAnim(opts) {
     btnHtml += '</div>';
 
     // Status
-    var statusHtml = '<div style="color: var(--text-muted); font-size: 0.7em; text-align: center; margin-top: 6px;">' +
+    var statusHtml = '<div style="color: var(--text-muted); font-size: 0.6em; text-align: center; margin-top: 3px;">' +
       run.label + ' &mdash; Token ' + (currentStep + 1) + '/' + run.steps.length +
       '</div>';
 
     container.innerHTML =
-      '<div style="margin-bottom: 8px;">' +
-      '<div style="color: var(--text-muted); font-size: 0.7em; margin-bottom: 4px;">Contexto (tokens generados hasta ahora):</div>' +
-      '<div style="font-family: var(--font-mono); font-size: 0.85em; line-height: 2;">' + contextHtml + '</div>' +
+      '<div style="margin-bottom: 4px;">' +
+      '<div style="color: var(--text-muted); font-size: 0.65em; margin-bottom: 2px;">Contexto (tokens generados hasta ahora):</div>' +
+      '<div style="font-family: var(--font-mono); font-size: 0.8em; line-height: 1.5;">' + contextHtml + '</div>' +
       '</div>' +
       networkHtml +
-      '<div style="margin-top: 4px;">' +
-      '<div style="color: var(--text-muted); font-size: 0.7em; margin-bottom: 4px;">Probabilidad de cada candidato:</div>' +
+      '<div style="margin-top: 2px;">' +
+      '<div style="color: var(--text-muted); font-size: 0.65em; margin-bottom: 2px;">Probabilidad de cada candidato:</div>' +
       barsHtml +
       '</div>' +
       btnHtml +

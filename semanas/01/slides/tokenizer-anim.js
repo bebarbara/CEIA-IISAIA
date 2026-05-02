@@ -84,7 +84,7 @@ function buildAnimation(text, containerId, titleId, conceptsId) {
 
         html += '<ul style="margin-top: 12px; font-size: 0.8em; color: var(--text-muted); list-style: disc; padding-left: 20px; line-height: 1.6;">';
         html += '<li>Secuencia unidimensional de caracteres</li>';
-        html += '<li><a href="https://huggingface.co/datasets/allenai/c4/viewer/af/validation?row=89" target="_blank" style="color: var(--link);">Ejemplo de dataset C4</a></li>';
+        html += '<li><a href="https://huggingface.co/datasets/allenai/c4/viewer/af/validation?p=19&row=1909" target="_blank" style="color: var(--link);">Ejemplo de dataset C4</a></li>';
         html += '</ul>';
         return html;
       }
@@ -117,12 +117,14 @@ function buildAnimation(text, containerId, titleId, conceptsId) {
         }
         html += '</div>';
         html += '<div style="color: var(--text-muted); font-size: 0.8em;">Cada caracter se mapea a un numero. Pero usar uno por caracter es ineficiente.</div>';
+        var uniqueCount = Object.keys(usedCodes).length;
+        html += '<div style="color: var(--accent); font-size: 0.8em; margin-top: 4px;">' + displayChars.length + ' caracteres, ' + uniqueCount + ' unicos (de 256 valores posibles en UTF-8)</div>';
         html += '</div>';
 
         // Right: mini ASCII table (relative sizing)
         html += '<div style="flex: 0 0 30%;">';
         html += '<div style="color: var(--text-muted); font-size: 0.6em; margin-bottom: 0.3em; text-align: center;">Tabla ASCII (fragmento)</div>';
-        html += '<div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 1px; font-size: 0.7em; background: var(--bg-secondary); border-radius: 0.4em; padding: 0.3em;">';
+        html += '<div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 1px; font-size: 0.65em; background: var(--bg-secondary); border-radius: 0.4em; padding: 0.3em;">';
         for (var code = 32; code < 128; code++) {
           var ch = code === 32 ? 'SP' : code === 127 ? 'DEL' : String.fromCharCode(code);
           var isUsed = usedCodes[code];
@@ -142,7 +144,7 @@ function buildAnimation(text, containerId, titleId, conceptsId) {
       }
     },
     {
-      label: 'Paso 2: Agrupar bytes en tokens (subpalabras frecuentes)',
+      label: 'Paso 2: Agrupar bytes en subpalabras frecuentes',
       render: function() {
         var html = '<div style="display: flex; gap: 4px; flex-wrap: wrap; align-items: center;">';
         tokens.forEach(function(t) {
@@ -152,7 +154,11 @@ function buildAnimation(text, containerId, titleId, conceptsId) {
             '</span>';
         });
         html += '</div>';
-        html += '<div style="margin-top: 10px; color: var(--text-primary); font-size: 0.8em;">Un algoritmo (BPE) aprende que secuencias de bytes aparecen juntas con frecuencia y las agrupa en "tokens".</div>';
+        html += '<div style="margin-top: 10px; color: var(--text-primary); font-size: 0.8em;">Un algoritmo (<a href="https://en.wikipedia.org/wiki/Byte-pair_encoding" target="_blank" style="color: var(--link);">BPE</a>) aprende que secuencias de bytes aparecen juntas con frecuencia y las agrupa en "tokens".</div>';
+        html += '<ul style="margin-top: 8px; font-size: 0.75em; color: var(--text-muted); line-height: 1.6;">';
+        html += '<li>' + displayChars.length + ' caracteres → <span style="color: var(--accent);">' + tokens.length + ' subpalabras</span> (secuencia mas corta, vocabulario mas grande)</li>';
+        html += '<li>GPT-4 usa un vocabulario de ~100.000 tokens</li>';
+        html += '</ul>';
         return html;
       }
     },
