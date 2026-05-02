@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Conceptos del Frontend — una página que se enseña a sí misma</title>
+  <style>
+    /* === Variables (theming) === */
+    :root {
+      --color-bg: #0f172a;
+      --color-surface: #1e293b;
+      --color-surface-2: #334155;
+      --color-text: #e2e8f0;
+      --color-muted: #94a3b8;
+      --color-accent: #6366f1;
+      --color-accent-soft: rgba(99, 102, 241, 0.15);
+      --color-success: #10b981;
+      --color-warn: #f59e0b;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 48px;
+      --radius: 12px;
+      --radius-sm: 6px;
+      --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+      --transition: 200ms ease;
+    }
+
+    /* === Reset + base === */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+    }
+    h1, h2, h3 { line-height: 1.2; margin-top: 0; }
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 1.75rem; color: var(--color-accent); }
+    h3 { font-size: 1.2rem; }
+    p { margin: 0 0 var(--space-md) 0; }
+    code {
+      font-family: var(--font-mono);
+      background: var(--color-surface);
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9em;
+    }
+    button {
+      font-family: inherit;
+      font-size: 0.95rem;
+      background: var(--color-accent);
+      color: white;
+      border: none;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    button:hover { background: #4f46e5; }
+    button.secondary {
+      background: var(--color-surface-2);
+      color: var(--color-text);
+    }
+    button.secondary:hover { background: #475569; }
+
+    /* === Layout === */
+    .hero {
+      padding: var(--space-xl) var(--space-lg);
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hero p {
+      color: var(--color-muted);
+      font-size: 1.15rem;
+      max-width: 600px;
+      margin: 0 auto var(--space-lg) auto;
+    }
+    .hero nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      justify-content: center;
+      margin-top: var(--space-lg);
+    }
+    .hero nav a {
+      color: var(--color-text);
+      background: var(--color-surface);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: background var(--transition);
+    }
+    .hero nav a:hover { background: var(--color-surface-2); }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 var(--space-lg) var(--space-xl);
+    }
+    section.demo-section {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-xl);
+    }
+    section.demo-section h2 {
+      margin-bottom: var(--space-md);
+    }
+    section.demo-section .lead {
+      color: var(--color-muted);
+      margin-bottom: var(--space-lg);
+    }
+    .demo-area {
+      background: var(--color-bg);
+      border-radius: var(--radius-sm);
+      padding: var(--space-md);
+      margin-top: var(--space-md);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--color-muted);
+      padding: var(--space-lg);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--color-surface);
+      margin-top: var(--space-xl);
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <h1>Conceptos del Frontend</h1>
+    <p>Explorá una página que se enseña a sí misma. Cada sección demuestra un concepto y al mismo tiempo está construida con ese concepto.</p>
+    <nav>
+      <a href="#estructura">Estructura</a>
+      <a href="#estilo">Estilo</a>
+      <a href="#estado">Estado</a>
+      <a href="#dom">DOM</a>
+      <a href="#single-file">Single-file</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="demo-section" id="estructura">
+      <h2>1. Estructura — HTML semántico</h2>
+      <p class="lead">Las etiquetas son sustantivos. La página entiende de qué trata por los nombres.</p>
+      <!-- Task 10 fills this section -->
+    </section>
+
+    <section class="demo-section" id="estilo">
+      <h2>2. Estilo — Layout y variables CSS</h2>
+      <p class="lead">El CSS responde a "cómo se ven". Layout y variables son las dos perillas que vale la pena nombrar.</p>
+      <!-- Task 11 fills this section -->
+    </section>
+
+    <section class="demo-section" id="estado">
+      <h2>3. Estado y comportamiento</h2>
+      <p class="lead">Estado es el dato detrás. DOM es lo que ves. Eventos son el puente.</p>
+      <!-- Task 12 fills this section -->
+    </section>
+
+    <section class="demo-section" id="dom">
+      <h2>4. El DOM — el árbol vivo</h2>
+      <p class="lead">El HTML es texto. El DOM es la representación viva en la memoria del navegador.</p>
+      <!-- Task 13 fills this section -->
+    </section>
+
+    <section class="demo-section" id="single-file">
+      <h2>5. Single-file: todo en un archivo</h2>
+      <p class="lead">Esta página entera vive en un solo .html. Vela.</p>
+      <!-- Task 14 fills this section -->
+    </section>
+  </main>
+
+  <footer>
+    Material de clase — Semana 2 · Introducción a la ingeniería de software asistida por IA
+  </footer>
+
+  <script>
+    // === App state ===
+    // (populated by section initializers)
+
+    // === Section initializers ===
+    // Task 10: initEstructura()
+    // Task 11: initEstilo()
+    // Task 12: initEstado()
+    // Task 13: initDOM()
+    // Task 14: initSingleFile()
+  </script>
+</body>
+</html>
