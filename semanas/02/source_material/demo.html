@@ -131,6 +131,51 @@
       border-top: 1px solid var(--color-surface);
       margin-top: var(--space-xl);
     }
+
+    /* === §1 Estructura === */
+    .estructura-controls {
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-md);
+    }
+    .estructura-controls button.active {
+      background: var(--color-accent);
+    }
+    #estructura-render article {
+      background: var(--color-surface-2);
+      padding: var(--space-md);
+      border-radius: var(--radius-sm);
+    }
+    #estructura-render header h3 { margin-top: 0; color: var(--color-accent); }
+    #estructura-render nav { margin: var(--space-sm) 0; }
+    #estructura-render nav a {
+      color: var(--color-accent);
+      margin-right: var(--space-md);
+      text-decoration: none;
+    }
+    #estructura-render nav a:hover { text-decoration: underline; }
+    #estructura-render section, #estructura-render .section-fake {
+      margin-top: var(--space-md);
+    }
+    #estructura-render footer, #estructura-render .footer-fake {
+      margin-top: var(--space-md);
+      color: var(--color-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--color-surface);
+      padding-top: var(--space-sm);
+    }
+    .estructura-source {
+      background: var(--color-bg);
+      border: 1px solid var(--color-surface-2);
+      border-radius: var(--radius-sm);
+      padding: var(--space-md);
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      margin-top: var(--space-md);
+    }
   </style>
 </head>
 <body>
@@ -150,7 +195,13 @@
     <section class="demo-section" id="estructura">
       <h2>1. Estructura — HTML semántico</h2>
       <p class="lead">Las etiquetas son sustantivos. La página entiende de qué trata por los nombres.</p>
-      <!-- Task 10 fills this section -->
+      <div class="estructura-controls">
+        <button id="btn-semantic" class="active">Semántico</button>
+        <button id="btn-divsoup" class="secondary">Sopa de divs</button>
+        <button id="btn-show-source" class="secondary">Ver código</button>
+      </div>
+      <div class="demo-area" id="estructura-render"></div>
+      <pre class="estructura-source" id="estructura-source" hidden></pre>
     </section>
 
     <section class="demo-section" id="estilo">
@@ -187,7 +238,65 @@
     // (populated by section initializers)
 
     // === Section initializers ===
-    // Task 10: initEstructura()
+    // === §1 Estructura ===
+    const estructuraVersions = {
+      semantic: `<article>
+  <header>
+    <h3>Recetas de la abuela</h3>
+    <nav>
+      <a href="#">Inicio</a>
+      <a href="#">Recetas</a>
+      <a href="#">Sobre mí</a>
+    </nav>
+  </header>
+  <section>
+    <p>Bienvenidos al recetario familiar. Hoy: tarta de manzana.</p>
+  </section>
+  <footer>Última actualización: marzo 2026</footer>
+</article>`,
+      divsoup: `<div class="article-fake">
+  <div class="header-fake">
+    <div class="title-fake">Recetas de la abuela</div>
+    <div class="nav-fake">
+      <span><a href="#">Inicio</a></span>
+      <span><a href="#">Recetas</a></span>
+      <span><a href="#">Sobre mí</a></span>
+    </div>
+  </div>
+  <div class="section-fake">
+    <div>Bienvenidos al recetario familiar. Hoy: tarta de manzana.</div>
+  </div>
+  <div class="footer-fake">Última actualización: marzo 2026</div>
+</div>`,
+    };
+
+    function initEstructura() {
+      const render = document.getElementById('estructura-render');
+      const source = document.getElementById('estructura-source');
+      const btnSem = document.getElementById('btn-semantic');
+      const btnDiv = document.getElementById('btn-divsoup');
+      const btnSrc = document.getElementById('btn-show-source');
+      let current = 'semantic';
+      let sourceVisible = false;
+
+      function paint() {
+        render.innerHTML = estructuraVersions[current];
+        source.textContent = estructuraVersions[current];
+        btnSem.classList.toggle('active', current === 'semantic');
+        btnSem.classList.toggle('secondary', current !== 'semantic');
+        btnDiv.classList.toggle('active', current === 'divsoup');
+        btnDiv.classList.toggle('secondary', current !== 'divsoup');
+        source.hidden = !sourceVisible;
+        btnSrc.textContent = sourceVisible ? 'Ocultar código' : 'Ver código';
+      }
+
+      btnSem.addEventListener('click', () => { current = 'semantic'; paint(); });
+      btnDiv.addEventListener('click', () => { current = 'divsoup'; paint(); });
+      btnSrc.addEventListener('click', () => { sourceVisible = !sourceVisible; paint(); });
+
+      paint();
+    }
+    initEstructura();
     // Task 11: initEstilo()
     // Task 12: initEstado()
     // Task 13: initDOM()
