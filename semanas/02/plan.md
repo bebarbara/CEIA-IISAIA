@@ -115,6 +115,8 @@ Branch: `feature/semana-02-slides` (create at task 0).
 
 **Spine entry:** §5. Through-line: un archivo cabe en contexto, deploya por copy-paste, sin toolchain.
 
+**Framing reminder:** "Empaque" is the general decision (how the previous four layers are distributed across files). "Single-file" is one specific empaque strategy — the one this course defaults to because of LLM context limits. Open the section by establishing this distinction so single-file lands as a deliberate choice, not a tautology.
+
 **Patterns likely:**
 - Roadmap re-highlight on "Empaque".
 - Hook (light): screenshot of `demo.html` source + filesize stat ("~600 líneas, un archivo, todo lo que viste").
