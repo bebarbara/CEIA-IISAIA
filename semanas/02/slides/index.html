@@ -301,7 +301,7 @@
             <div class="bg-secondary-card fragment fade-in" data-fragment-index="1" style="border-left: 4px solid var(--accent);">
               <h3 style="color: var(--accent); margin-bottom: 8px;">HTML semántico</h3>
               <p style="font-size: 0.7em; margin-bottom: 8px;">Cada bloque usa la etiqueta que describe <em>qué es</em>: <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;footer&gt;</code>.</p>
-              <pre style="margin: 0 0 10px; box-shadow: none;"><code class="language-html" data-trim style="font-size: 0.85em;">
+              <pre style="margin: 0; box-shadow: none;"><code class="language-html" data-trim style="font-size: 0.85em;">
 &lt;nav&gt;
   &lt;ul&gt;&lt;li&gt;Inicio&lt;/li&gt;&lt;/ul&gt;
 &lt;/nav&gt;
@@ -309,14 +309,12 @@
   &lt;h1&gt;Hola mundo&lt;/h1&gt;
 &lt;/main&gt;
               </code></pre>
-              <p style="font-size: 0.55em; color: var(--text-muted); margin: 0 0 4px;">Para abrir esta página:</p>
-              <code style="font-size: 0.55em; word-break: break-all; user-select: all;">file:///C:/Users/Enzo/Documents/intro_desarrollo_asistido_IA/semanas/02/slides/page-semantic.html</code>
             </div>
             <div class="bg-secondary-card fragment fade-in" data-fragment-index="2" style="border-left: 4px solid var(--text-muted);">
               <h3 style="color: var(--text-muted); margin-bottom: 8px;">Sopa de divs</h3>
-              <p style="font-size: 0.68em; margin-bottom: 6px;"><code>&lt;div&gt;</code> es el contenedor genérico de HTML: un bloque sin significado propio. Existe para agrupar contenido cuando ninguna etiqueta semántica encaja.</p>
-              <p style="font-size: 0.68em; margin-bottom: 8px;">La <strong>sopa de divs</strong> es cuando se lo usa para todo: el propósito vive en una clase, no en la etiqueta.</p>
-              <pre style="margin: 0 0 10px; box-shadow: none;"><code class="language-html" data-trim style="font-size: 0.85em;">
+              <p style="font-size: 0.66em; margin-bottom: 6px;"><code>&lt;div&gt;</code> es el contenedor genérico de HTML: un bloque sin significado propio. Existe para agrupar contenido cuando ninguna etiqueta semántica encaja.</p>
+              <p style="font-size: 0.66em; margin-bottom: 8px;">La <strong>sopa de divs</strong> es cuando se lo usa para todo. El rol vive en el atributo <code>class</code> — un nombre que vos inventás, que solo CSS y JavaScript leen. El navegador y los buscadores no lo entienden como rol estructural.</p>
+              <pre style="margin: 0; box-shadow: none;"><code class="language-html" data-trim style="font-size: 0.85em;">
 &lt;div class="top-bar"&gt;
   &lt;div class="link-item"&gt;Inicio&lt;/div&gt;
 &lt;/div&gt;
@@ -324,20 +322,21 @@
   &lt;div class="headline"&gt;Hola mundo&lt;/div&gt;
 &lt;/div&gt;
               </code></pre>
-              <p style="font-size: 0.55em; color: var(--text-muted); margin: 0 0 4px;">Para abrir esta página:</p>
-              <code style="font-size: 0.55em; word-break: break-all; user-select: all;">file:///C:/Users/Enzo/Documents/intro_desarrollo_asistido_IA/semanas/02/slides/page-divsoup.html</code>
             </div>
           </div>
-          <p class="fragment fade-in" data-fragment-index="3" style="margin-top: 16px; font-size: 0.78em; text-align: center; max-width: 38em; margin-left: auto; margin-right: auto;">
-            Las dos versiones <strong>se ven exactamente igual</strong> cuando el navegador las dibuja. Pero el código es muy distinto.
-          </p>
+          <div class="fragment fade-in" data-fragment-index="3" style="margin-top: 16px; text-align: center;">
+            <p style="font-size: 0.78em; max-width: 38em; margin: 0 auto 12px;">
+              Las dos versiones <strong>se ven exactamente igual</strong> cuando el navegador las dibuja. Pero el código es muy distinto.
+            </p>
+            <a href="../source_material/demo.html#estructura" target="_blank" rel="noopener" style="display: inline-block; padding: 8px 18px; background: var(--accent); color: var(--bg-primary); border-radius: 6px; font-size: 0.7em; text-decoration: none;">Ver las dos versiones renderizadas →</a>
+          </div>
           <aside class="notes">
-            <p><strong>Revelar HTML semántico (click 1). Revelar sopa de divs (click 2). Revelar la línea de cierre (click 3). Después abrir las dos páginas en pestañas (copiando los paths) y mostrar con DevTools (F12) que el árbol del DOM y el accessibility tree son distintos aunque la página se vea igual.</strong></p>
-            <p><u>Concepto + demo: dos estilos de escribir HTML que producen la misma página visualmente, con archivos reales para inspeccionar.</u></p>
-            <p><em>"Hay dos formas muy distintas de escribir HTML para producir la misma página. Vamos a verlas una por una, y después abrimos cada una en el navegador."</em></p>
+            <p><strong>Revelar HTML semántico (click 1). Revelar sopa de divs (click 2). Revelar el cierre + el botón (click 3). Abrir demo.html, alternar Semántico ↔ Sopa de divs (mismo render), después tocar "Ver código" para mostrar el HTML de cada versión. Si querés, abrir DevTools en demo.html y comparar el accessibility tree entre versiones.</strong></p>
+            <p><u>Concepto + demo: dos estilos de escribir HTML que producen la misma página visualmente. demo.html alterna entre los dos en vivo.</u></p>
+            <p><em>"Hay dos formas muy distintas de escribir HTML para producir la misma página. Vamos a verlas una por una."</em></p>
             <p><em>"La primera se llama HTML semántico. Cada bloque usa la etiqueta que describe qué es: nav para la navegación, main para el contenido principal, h1 para el título principal de la página, ul y li para una lista de enlaces. Las etiquetas hablan: alguien que lee este código, sin necesidad de ejecutarlo, ya sabe que arriba hay una barra de navegación con un enlace a Inicio, y abajo el contenido principal con el título 'Hola mundo'."</em></p>
-            <p><em>"La segunda versión está hecha enteramente con divs. Pausemos un segundo en qué es un div: es el contenedor genérico de HTML, un bloque sin significado propio. Existe a propósito en el lenguaje, para agrupar contenido cuando ninguna etiqueta semántica encaja. Es una herramienta válida, no un error. Pero la 'sopa de divs' es lo que pasa cuando se la usa para todo. Mirá: cuatro divs anidados, sin una sola pista en la etiqueta de qué hace cada uno. El propósito vive en las clases — top-bar, link-item, content-body — pero las clases son nombres elegidos por el desarrollador, el navegador no las entiende como roles estructurales."</em></p>
-            <p><em>"Y acá está el dato clave: las dos versiones, cuando el navegador las dibuja, se ven exactamente iguales. Mismo enlace, mismo título, misma posición. Pero el código es muy distinto. Vamos a abrir las dos páginas — pueden copiar el path desde el slide o ya las tengo en las pestañas — y abrimos DevTools en cada una. Acá, en la versión semántica, el árbol del DOM tiene nodos nav, main, h1. En la versión div soup, tiene divs con atributos class. Si abro el accessibility tree, la diferencia es todavía más obvia: la semántica tiene roles de navigation y main; la sopa de divs no tiene rol, son cajas anónimas. Lo mismo pasa con los buscadores y con la IA cuando lee el código. Por qué importa esto se lo voy a decir en la próxima slide."</em></p>
+            <p><em>"La segunda versión está hecha enteramente con divs. Pausemos un segundo en qué es un div: es el contenedor genérico de HTML, un bloque sin significado propio. Existe a propósito en el lenguaje, para agrupar contenido cuando ninguna etiqueta semántica encaja — es una herramienta válida. Pero la 'sopa de divs' es lo que pasa cuando se la usa para todo. Mirá los nombres: top-bar, link-item, content-body, headline. Esos no son etiquetas, son <em>clases</em>. El atributo class es un nombre que vos inventás y que solo el CSS y el JavaScript van a leer para encontrar el elemento. El navegador no lo entiende como un rol estructural; los buscadores tampoco; los lectores de pantalla tampoco. Para todos ellos, es solamente un div anónimo."</em></p>
+            <p><em>"Y acá está el dato clave: las dos versiones, cuando el navegador las dibuja, se ven exactamente iguales. Voy a abrirlo en demo.html. Acá tenemos un toggle entre Semántico y Sopa de divs — el mismo bloque visual, dos veces. Tocá uno, tocá el otro: idénticos. Ahora abro 'Ver código': mismo render, código completamente distinto. La próxima slide explica por qué importa."</em></p>
           </aside>
         </section>
 
@@ -452,23 +451,7 @@
           </aside>
         </section>
 
-        <!-- §2.5: Live demo — demo.html §1 -->
-        <section>
-          <h2>El mismo bloque, dos versiones</h2>
-          <div style="text-align: center; margin-top: 8px;">
-            <iframe src="../source_material/demo.html#estructura" style="width: 92%; height: 56vh; border: 1px solid var(--text-muted); border-radius: 8px; background: var(--bg-secondary);"></iframe>
-          </div>
-          <p style="margin-top: 12px; font-size: 0.7em; text-align: center; color: var(--text-muted);">
-            Toggle <strong>Semántico</strong> ↔ <strong>Sopa de divs</strong>. Mismo render. Distinto código.
-          </p>
-          <aside class="notes">
-            <p><strong>Tocar el toggle "Semántico" / "Sopa de divs" en vivo. Después abrir "Ver código" para mostrar la diferencia en la fuente.</strong></p>
-            <p><u>Demo en vivo del §1 de demo.html. Si el iframe va lento, abrir demo.html en otra pestaña.</u></p>
-            <p><em>"Vamos a verlo en demo.html. Tenemos un toggle directo: el mismo bloque visual, dos veces, una con etiquetas semánticas y otra como sopa de divs. Cambio acá, cambio acá. Visualmente idénticos. Ahora abro 'Ver código'. Mismo render. Distinto código. La página de la izquierda le habla al navegador. La de la derecha es muda."</em></p>
-          </aside>
-        </section>
-
-        <!-- §2.6: Prompt vago vs con vocabulario -->
+        <!-- §2.5: Prompt vago vs con vocabulario -->
         <section>
           <h2>Cómo le pedís estructura a una IA</h2>
           <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
