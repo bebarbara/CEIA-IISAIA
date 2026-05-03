@@ -10,6 +10,16 @@
   <link rel="stylesheet" href="../../../_config/theme/custom.css">
   <link rel="stylesheet" href="../../../_config/theme/components.css">
   <style>
+    /* Make all <pre> blocks respect their containing card.
+       Reveal.js defaults to width: 90% + non-wrapping, which causes
+       code blocks to bleed past narrow comparison columns. */
+    .reveal pre {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
     /* §3 box-model diagram (concentric layers). */
     .box-model { display: flex; flex-direction: column; align-items: center;
       font-family: var(--font-mono); font-size: 0.65em; }
