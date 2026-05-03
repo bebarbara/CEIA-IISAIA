@@ -464,7 +464,7 @@
                 "Necesito una página de contacto. Tiene un menú arriba, un formulario para nombre, email y mensaje, y un pie con mi copyright."
               </p>
               <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 16px;">
-                La intención está clara, pero la estructura la inventa la IA. Probablemente, sopa de divs.
+                La intención está clara, pero la estructura la decide la IA. A veces acierta, a veces no — y nunca sabés cuál vas a recibir.
               </p>
             </div>
             <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
@@ -473,17 +473,21 @@
                 "Necesito una página de contacto. Estructura: <strong>&lt;header&gt;</strong> con <strong>&lt;nav&gt;</strong>, <strong>&lt;main&gt;</strong> con un <strong>&lt;form&gt;</strong> para nombre, email y mensaje, y <strong>&lt;footer&gt;</strong> con copyright."
               </p>
               <p style="font-size: 0.7em; color: var(--accent); margin-top: 16px;">
-                Misma intención, cinco etiquetas nombradas. La IA tiene el outline; solo rellena.
+                Misma intención, cinco etiquetas nombradas. La IA no improvisa; vos podés iterar y auditar.
               </p>
             </div>
           </div>
           <p style="margin-top: 20px; font-size: 0.8em; text-align: center;">
-            No es más largo. Es más <em>preciso</em>.
+            <em>Vago = lotería.</em> &nbsp; <em>Específico = determinismo.</em>
           </p>
           <aside class="notes">
-            <p><u>Cierre de §2. La recompensa del vocabulario aplicada a un prompt real.</u></p>
-            <p><em>"Acá es donde el vocabulario te paga. Mirá los dos prompts. La intención es exactamente la misma: una página de contacto con menú, formulario y pie. Pero el primero le entrega esa intención a la IA con palabras de usuario y nada más. La IA tiene libertad para inventar la estructura, y como la mayoría de los modelos generan sopa de divs cuando no se les dice nada, eso es lo que vas a recibir."</em></p>
-            <p><em>"El segundo prompt no es más largo. Cinco palabras técnicas — header, nav, main, form, footer — convierten el mismo pedido en algo deterministico. No hace falta nombrar cada label, cada input, cada textarea: con el esqueleto alcanza. La IA rellena lo de adentro con sus propios defaults, pero la estructura la decidiste vos. Eso es dirigir. Próxima capa: cómo se ven estos elementos."</em></p>
+            <p><u>Cierre de §2. El vocabulario sigue siendo necesario aunque los LLMs modernos suelan acertar en casos textbook.</u></p>
+            <p><em>"Acá es donde el vocabulario te paga. Mirá los dos prompts: la intención es exactamente la misma. Una página de contacto con menú, formulario y pie."</em></p>
+            <p><em>"Quiero ser honesto con un detalle. Si vos hoy le pasás el prompt de la izquierda a Claude, a ChatGPT o a Gemini, lo más probable es que te devuelva HTML semántico, con header, nav, main y footer correctos. Las páginas de contacto son un caso textbook que los modelos vieron diez mil veces. Hace cuatro años un prompt así te tiraba sopa de divs; hoy ya no, en la mayoría de los casos. Entonces la pregunta legítima es: si la IA acierta sola, ¿para qué necesito el vocabulario?"</em></p>
+            <p><em>"Por tres razones que sobreviven a esa mejora. Primero, determinismo. La IA acertó esta vez con la página de contacto. Probá pedirle un dashboard, una tarjeta de perfil con estadísticas, un hero con tres columnas — algo menos común — y la respuesta empieza a variar entre semántico, sopa de divs, y mezclas raras. Con vocabulario, no varía."</em></p>
+            <p><em>"Segundo, iteración. Tu próximo prompt va a ser 'movele la nav a la derecha' o 'convertí el formulario en un grid de dos columnas'. Si no nombraste nav y form en el primer prompt, la IA tiene que adivinar a qué te referís y vos tenés que escribir más. El vocabulario hace barato cada paso siguiente de la conversación."</em></p>
+            <p><em>"Tercero, auditoría. El vocabulario no es solo para que la IA te entienda; es para que vos puedas leer y verificar lo que devolvió. Si te llega un header con cinco divs anidados de más, vas a notarlo solamente si tenés los nombres en la cabeza."</em></p>
+            <p><em>"Próxima capa: cómo se ven estos elementos."</em></p>
           </aside>
         </section>
 
