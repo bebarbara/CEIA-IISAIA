@@ -299,27 +299,29 @@
           <h2>¿Estas dos líneas son iguales?</h2>
           <div class="comparison-2col" style="margin-top: 12px;">
             <div class="bg-code-card">
-              <pre style="margin: 0; box-shadow: none;"><code class="language-html" data-trim>&lt;header&gt;Mi sitio&lt;/header&gt;</code></pre>
+              <pre style="margin: 0 0 12px; box-shadow: none;"><code class="language-html" data-trim>&lt;header&gt;Mi sitio&lt;/header&gt;</code></pre>
+              <a href="file:///C:/Users/Enzo/Documents/intro_desarrollo_asistido_IA/semanas/02/slides/header-semantic.html" target="_blank" rel="noopener" style="display: inline-block; padding: 6px 14px; background: var(--accent); color: var(--bg-primary); border-radius: 6px; font-size: 0.7em; text-decoration: none;">Abrir en el navegador →</a>
             </div>
             <div class="bg-code-card">
-              <pre style="margin: 0; box-shadow: none;"><code class="language-html" data-trim>&lt;div class="header"&gt;Mi sitio&lt;/div&gt;</code></pre>
+              <pre style="margin: 0 0 12px; box-shadow: none;"><code class="language-html" data-trim>&lt;div class="header"&gt;Mi sitio&lt;/div&gt;</code></pre>
+              <a href="file:///C:/Users/Enzo/Documents/intro_desarrollo_asistido_IA/semanas/02/slides/header-divsoup.html" target="_blank" rel="noopener" style="display: inline-block; padding: 6px 14px; background: var(--accent); color: var(--bg-primary); border-radius: 6px; font-size: 0.7em; text-decoration: none;">Abrir en el navegador →</a>
             </div>
           </div>
-          <p class="fragment fade-in" style="margin-top: 24px; font-size: 0.85em; text-align: center;">
-            Visualmente: idénticas.
+          <p class="fragment fade-in" style="margin-top: 20px; font-size: 0.85em; text-align: center;">
+            En pantalla: <strong>idénticas</strong>.
           </p>
           <p class="fragment fade-in" style="margin-top: 8px; font-size: 0.95em; text-align: center; color: var(--accent);">
-            Para el navegador, los lectores de pantalla, los buscadores y la IA: <strong>no lo son</strong>.
+            En el inspector del navegador: <strong>no lo son</strong>.
           </p>
-          <p class="fragment fade-in" style="margin-top: 16px; font-size: 0.75em; text-align: center; color: var(--text-muted); max-width: 32em; margin-left: auto; margin-right: auto;">
+          <p class="fragment fade-in" style="margin-top: 12px; font-size: 0.7em; text-align: center; color: var(--text-muted); max-width: 32em; margin-left: auto; margin-right: auto;">
             La primera dice "esto es un encabezado". La segunda dice "esto es una caja, le puse de apodo header, podría ser cualquier cosa". El <em>outline del documento</em> solo se construye con etiquetas semánticas.
           </p>
           <aside class="notes">
-            <p><strong>Mostrar las dos líneas. Pausa. Revelar "idénticas". Pausa. Revelar "no lo son". Pausa. Revelar la explicación.</strong></p>
-            <p><u>Hook de §2. Construye la tensión: visualmente iguales, semánticamente distintas.</u></p>
-            <p><em>"Compará estas dos líneas. La de la izquierda usa la etiqueta header. La de la derecha es un div con la palabra header como nombre. La pregunta: ¿son lo mismo?"</em></p>
-            <p><em>"Visualmente, sí. Las dos te van a renderizar el mismo texto en la misma posición."</em></p>
-            <p><em>"Pero para el navegador, los lectores de pantalla, los buscadores y la IA que después tenga que tocar tu código, no son la misma cosa."</em></p>
+            <p><strong>Abrir las dos páginas en pestañas nuevas. Mostrar que se ven igual. Después abrir DevTools (F12) en cada una y mostrar la diferencia en el árbol del DOM y en el accessibility tree.</strong></p>
+            <p><u>Hook de §2. Empírico: el alumno ve los dos archivos abiertos y la diferencia en el inspector.</u></p>
+            <p><em>"Compará estas dos líneas de código. La de la izquierda usa la etiqueta header. La de la derecha es un div al que le puse el nombre 'header' como una clase, una etiqueta interna. La pregunta: ¿son lo mismo?"</em></p>
+            <p><em>"Voy a abrir las dos en pestañas. Mirá: las dos páginas dibujan exactamente el mismo texto en la misma posición. En pantalla son idénticas."</em></p>
+            <p><em>"Pero ahora abro el inspector. Acá, en la versión semántica, el árbol del DOM tiene un nodo header. En la versión div soup, tiene un div con un atributo class. Si abro el accessibility tree, la diferencia es todavía más obvia: la primera tiene un rol de banner; la segunda no tiene rol, es una caja anónima."</em></p>
             <p><em>"La primera dice 'esto es un encabezado'. La segunda dice 'esto es una caja anónima'. El outline del documento, que es el árbol de qué contiene qué, solo se construye con la primera. Con la segunda, no existe."</em></p>
           </aside>
         </section>
