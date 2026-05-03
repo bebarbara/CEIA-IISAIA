@@ -10,15 +10,22 @@
   <link rel="stylesheet" href="../../../_config/theme/custom.css">
   <link rel="stylesheet" href="../../../_config/theme/components.css">
   <style>
-    /* Make all <pre> blocks respect their containing card.
-       Reveal.js defaults to width: 90% + non-wrapping, which causes
-       code blocks to bleed past narrow comparison columns. */
+    /* Make all <pre>/<code> blocks respect their containing card.
+       Reveal.js defaults: pre at width: 90%, and `pre code` with
+       overflow: auto + word-wrap: normal — that forces a horizontal
+       scrollbar instead of wrapping. We override both. */
     .reveal pre {
       width: 100%;
       max-width: 100%;
       box-sizing: border-box;
       white-space: pre-wrap;
       word-break: break-word;
+    }
+    .reveal pre code {
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow: visible;
+      max-height: none;
     }
     /* §3 box-model diagram (concentric layers). */
     .box-model { display: flex; flex-direction: column; align-items: center;
