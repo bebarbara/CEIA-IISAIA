@@ -560,6 +560,43 @@
           </aside>
         </section>
 
+        <!-- §3.1.5: Anatomía de una regla CSS -->
+        <section>
+          <h2>Anatomía de una regla CSS</h2>
+          <p style="font-size: 0.78em; color: var(--text-muted); text-align: center; margin-bottom: 12px;">
+            Antes de las primitivas, vocabulario básico. Esto es lo que vas a leer y escribir todo el curso.
+          </p>
+          <pre style="font-size: 1em; box-shadow: none; max-width: 24em; margin: 0 auto; text-align: left; background: var(--bg-secondary); padding: 16px; border-radius: 8px;"><span style="color: var(--accent); font-weight: 600;">.btn</span> {
+  <span style="color: #10b981; font-weight: 600;">color</span>: <span style="color: #f59e0b; font-weight: 600;">white</span>;
+  <span style="color: #10b981; font-weight: 600;">padding</span>: <span style="color: #f59e0b; font-weight: 600;">8px</span>;
+}</pre>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 20px; max-width: 44em; margin-left: auto; margin-right: auto;">
+            <div style="text-align: center;">
+              <div style="color: var(--accent); font-family: var(--font-mono); font-weight: 600; font-size: 0.85em;">selector</div>
+              <p style="font-size: 0.65em; color: var(--text-muted); margin: 4px 0 0;">a qué elemento apunta la regla</p>
+            </div>
+            <div style="text-align: center;">
+              <div style="color: #10b981; font-family: var(--font-mono); font-weight: 600; font-size: 0.85em;">propiedad</div>
+              <p style="font-size: 0.65em; color: var(--text-muted); margin: 4px 0 0;">qué aspecto se está cambiando</p>
+            </div>
+            <div style="text-align: center;">
+              <div style="color: #f59e0b; font-family: var(--font-mono); font-weight: 600; font-size: 0.85em;">valor</div>
+              <p style="font-size: 0.65em; color: var(--text-muted); margin: 4px 0 0;">qué valor se le asigna</p>
+            </div>
+          </div>
+          <p style="margin-top: 18px; font-size: 0.7em; text-align: center; color: var(--text-muted); max-width: 38em; margin-left: auto; margin-right: auto;">
+            Una <strong style="color: var(--text-primary);">declaración</strong> es <em>propiedad: valor;</em> — y un grupo de declaraciones entre llaves, junto a su selector, forma una <strong style="color: var(--text-primary);">regla</strong>.
+          </p>
+          <aside class="notes">
+            <p><u>Anatomía de una regla CSS. Vocabulario básico antes de meterse en las primitivas.</u></p>
+            <p><em>"Antes de hablar de las cuatro primitivas, démosle nombre a las partes del código CSS que vamos a ver durante todo el curso. Mirá la regla en pantalla."</em></p>
+            <p><em>"En azul-verdoso tenés el selector — punto-btn. El selector es lo que apunta a un elemento del HTML; en este caso, a cualquier elemento que tenga la clase btn. Si fuera un selector de etiqueta, sería simplemente button, sin punto."</em></p>
+            <p><em>"En verde tenés las propiedades — color y padding. Una propiedad es qué aspecto del elemento querés cambiar. Hay cientos en CSS, pero las que importan para este curso son las de las cuatro primitivas que vienen después."</em></p>
+            <p><em>"En ámbar tenés los valores — white y 8px. El valor es qué valor concreto le asignás a la propiedad. Cada propiedad acepta un tipo de valor distinto: color acepta nombres o hex, padding acepta píxeles, etcétera."</em></p>
+            <p><em>"Y dos términos más: una declaración es la combinación propiedad-dos-puntos-valor-punto-y-coma — color dos puntos white punto y coma es una declaración. Una regla es el selector más todas las declaraciones encerradas entre llaves. Selector, propiedad, valor, declaración, regla. Cinco palabras y ya entendés la sintaxis básica del CSS."</em></p>
+          </aside>
+        </section>
+
         <!-- §3.2: Box model -->
         <section>
           <h2>Primitiva 1 — El modelo de caja</h2>
