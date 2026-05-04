@@ -592,20 +592,20 @@
             <div class="bg-secondary-card fragment fade-in" data-fragment-index="1" style="border-left: 4px solid var(--accent); min-width: 0;">
               <h3 style="color: var(--accent); margin-bottom: 6px;">Flexbox — 1D</h3>
               <p style="font-size: 0.7em; margin-bottom: 8px;">Acomoda en una dirección.</p>
-              <pre style="margin: 0; font-size: 0.55em; box-shadow: none; width: 100%; max-width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word;"><code class="language-html" data-trim>&lt;div class="toolbar"&gt;
-  &lt;button&gt;A&lt;/button&gt;
-  &lt;button&gt;B&lt;/button&gt;
-  &lt;button&gt;C&lt;/button&gt;
-&lt;/div&gt;</code></pre>
+              <pre style="margin: 0; font-size: 0.55em; box-shadow: none; width: 100%; max-width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word;"><code class="language-html" data-trim>&lt;nav class="toolbar"&gt;
+  &lt;a href="#"&gt;Inicio&lt;/a&gt;
+  &lt;a href="#"&gt;Recetas&lt;/a&gt;
+  &lt;a href="#"&gt;Contacto&lt;/a&gt;
+&lt;/nav&gt;</code></pre>
               <pre style="margin: 6px 0 0; font-size: 0.55em; box-shadow: none; width: 100%; max-width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word;"><code class="language-css" data-trim>.toolbar {
   display: flex;
   gap: 16px;
 }</code></pre>
               <p style="font-size: 0.55em; color: var(--text-muted); margin: 6px 0 4px; text-align: center;">Resultado:</p>
               <div style="display: flex; gap: 16px; padding: 8px; background: var(--bg-primary); border-radius: 4px; justify-content: center;">
-                <div style="background: var(--accent); color: var(--bg-primary); padding: 4px 12px; border-radius: 4px; font-size: 0.7em; font-weight: 600;">A</div>
-                <div style="background: var(--accent); color: var(--bg-primary); padding: 4px 12px; border-radius: 4px; font-size: 0.7em; font-weight: 600;">B</div>
-                <div style="background: var(--accent); color: var(--bg-primary); padding: 4px 12px; border-radius: 4px; font-size: 0.7em; font-weight: 600;">C</div>
+                <span style="color: var(--accent); font-size: 0.7em; font-weight: 600;">Inicio</span>
+                <span style="color: var(--accent); font-size: 0.7em; font-weight: 600;">Recetas</span>
+                <span style="color: var(--accent); font-size: 0.7em; font-weight: 600;">Contacto</span>
               </div>
               <p style="font-size: 0.6em; color: var(--text-muted); margin-top: 8px;">Caso típico: nav-bar, toolbar.</p>
             </div>
@@ -613,11 +613,11 @@
             <div class="bg-secondary-card fragment fade-in" data-fragment-index="2" style="border-left: 4px solid var(--accent-secondary); min-width: 0;">
               <h3 style="color: var(--accent-secondary); margin-bottom: 6px;">Grid — 2D</h3>
               <p style="font-size: 0.7em; margin-bottom: 8px;">Tablero: filas y columnas a la vez.</p>
-              <pre style="margin: 0; font-size: 0.55em; box-shadow: none; width: 100%; max-width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word;"><code class="language-html" data-trim>&lt;div class="gallery"&gt;
-  &lt;div&gt;A&lt;/div&gt;&lt;div&gt;B&lt;/div&gt;
-  &lt;div&gt;C&lt;/div&gt;&lt;div&gt;D&lt;/div&gt;
-  &lt;div&gt;E&lt;/div&gt;&lt;div&gt;F&lt;/div&gt;
-&lt;/div&gt;</code></pre>
+              <pre style="margin: 0; font-size: 0.55em; box-shadow: none; width: 100%; max-width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word;"><code class="language-html" data-trim>&lt;section class="gallery"&gt;
+  &lt;article&gt;A&lt;/article&gt;&lt;article&gt;B&lt;/article&gt;
+  &lt;article&gt;C&lt;/article&gt;&lt;article&gt;D&lt;/article&gt;
+  &lt;article&gt;E&lt;/article&gt;&lt;article&gt;F&lt;/article&gt;
+&lt;/section&gt;</code></pre>
               <pre style="margin: 6px 0 0; font-size: 0.55em; box-shadow: none; width: 100%; max-width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word;"><code class="language-css" data-trim>.gallery {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -640,11 +640,11 @@
             La clase del HTML (<code>toolbar</code>, <code>gallery</code>) es lo que la regla CSS apunta. <em>display: flex</em> o <em>display: grid</em> hace el resto.
           </p>
           <aside class="notes">
-            <p><strong>Revelar Flexbox (click 1). Revelar Grid (click 2). Revelar la nota inferior (click 3). En cada uno, señalar la conexión HTML → CSS → resultado: la clase 'toolbar' / 'gallery' aparece en el div del HTML y es el target de la regla CSS.</strong></p>
+            <p><strong>Revelar Flexbox (click 1). Revelar Grid (click 2). Revelar la nota inferior (click 3). En cada uno, señalar la conexión HTML → CSS → resultado: la clase 'toolbar' / 'gallery' aparece en la etiqueta semántica del HTML y es el target de la regla CSS. Aprovechar para marcar que seguimos usando etiquetas semánticas, no divs — coherencia con §2.</strong></p>
             <p><u>Las dos respuestas dominantes a "cómo se acomodan las cajas". Cada card muestra HTML, CSS y el resultado renderizado para que la conexión sea visible.</u></p>
             <p><em>"La pregunta principal del CSS no es de qué color son las cosas. Es cómo se acomodan las cajas entre sí. Y en 2026 hay dos respuestas que tenés que saber nombrar."</em></p>
-            <p><em>"Flexbox sirve cuando querés elementos en una sola dirección: fila o columna. Mirá el flujo del card. En el HTML hay un div con la clase toolbar, que adentro tiene tres botones. La regla CSS abajo apunta a esa clase — punto-toolbar — y le pide display flex y un gap de 16 píxeles. El resultado, abajo, son los tres botones acomodados en una fila con espacio entre ellos. Caso típico: nav-bar, toolbar, grupo de botones."</em></p>
-            <p><em>"Grid sirve cuando el layout es un tablero: filas y columnas a la vez. Mismo flujo: en el HTML hay un div con la clase gallery con seis hijos adentro. La regla CSS apunta a punto-gallery, le pide display grid, define tres columnas iguales con grid-template-columns 1fr 1fr 1fr, y un gap. El resultado son los seis cuadrados en una grilla de tres por dos. Caso típico: galería, dashboard, cuadrícula de productos."</em></p>
+            <p><em>"Flexbox sirve cuando querés elementos en una sola dirección: fila o columna. Mirá el flujo del card. En el HTML hay un nav — etiqueta semántica para una barra de navegación, como vimos en la sección anterior — con la clase toolbar. Adentro, tres enlaces. La regla CSS apunta a esa clase — punto-toolbar — y le pide display flex y un gap de 16 píxeles. El resultado, abajo, son los tres enlaces acomodados en una fila con espacio entre ellos. Caso típico: nav-bar, toolbar, grupo de enlaces."</em></p>
+            <p><em>"Grid sirve cuando el layout es un tablero: filas y columnas a la vez. Mismo flujo: en el HTML hay un section con la clase gallery, y adentro seis articles, uno por cada elemento de la galería. Notá que también acá usamos etiquetas semánticas en vez de divs — section para un bloque temático, article para cada unidad autocontenida. La regla CSS apunta a punto-gallery, le pide display grid, define tres columnas iguales con grid-template-columns 1fr 1fr 1fr, y un gap. El resultado son los seis cuadrados en una grilla de tres por dos. Caso típico: galería, dashboard, cuadrícula de productos."</em></p>
             <p><em>"La nota de cierre es el patrón que se repite en todas las reglas CSS que vas a escribir: la clase del HTML es lo que la regla apunta, con un punto adelante. Si nombrás flex o grid en el prompt, la IA acomoda esto solo. Si decís 'quiero que estén una al lado de la otra' sin nombrar nada, la IA puede improvisar con técnicas viejas y vas a iterar tres veces."</em></p>
           </aside>
         </section>
