@@ -591,54 +591,47 @@
           <h2>Primitiva 2 — Layout: una o dos dimensiones</h2>
           <div class="comparison-2col" style="margin-top: 12px;">
 
-            <div class="bg-secondary-card fragment fade-in" data-fragment-index="1" style="border-left: 4px solid var(--accent); min-width: 0;">
-              <h3 style="color: var(--accent); margin-bottom: 6px;">Flexbox — 1D</h3>
-              <p style="font-size: 0.7em; margin-bottom: 8px;">Acomoda en una dirección.</p>
-              <pre style="margin: 0; font-size: 0.55em; box-shadow: none; width: 100%; max-width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word;"><code class="language-html" data-trim>&lt;nav class="toolbar"&gt;
-  &lt;a href="#"&gt;Inicio&lt;/a&gt;
-  &lt;a href="#"&gt;Recetas&lt;/a&gt;
-  &lt;a href="#"&gt;Contacto&lt;/a&gt;
+            <div class="bg-secondary-card fragment fade-in" data-fragment-index="1" style="border-left: 4px solid var(--accent); min-width: 0; padding: 10px;">
+              <h3 style="color: var(--accent); margin-bottom: 4px; font-size: 0.95em;">Flexbox — 1D</h3>
+              <p style="font-size: 0.62em; margin-bottom: 6px;">Acomoda en una dirección.</p>
+              <pre style="margin: 0; font-size: 0.5em; box-shadow: none; width: 100%; max-width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word;"><code class="language-html" data-trim>&lt;nav class="toolbar"&gt;
+  &lt;a&gt;Inicio&lt;/a&gt;&lt;a&gt;Recetas&lt;/a&gt;&lt;a&gt;Contacto&lt;/a&gt;
 &lt;/nav&gt;</code></pre>
-              <pre style="margin: 6px 0 0; font-size: 0.55em; box-shadow: none; width: 100%; max-width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word;"><code class="language-css" data-trim>.toolbar {
-  display: flex;
-  gap: 16px;
-}</code></pre>
-              <p style="font-size: 0.55em; color: var(--text-muted); margin: 6px 0 4px; text-align: center;">Resultado:</p>
-              <div style="display: flex; gap: 16px; padding: 8px; background: var(--bg-primary); border-radius: 4px; justify-content: center;">
-                <span style="color: var(--accent); font-size: 0.7em; font-weight: 600;">Inicio</span>
-                <span style="color: var(--accent); font-size: 0.7em; font-weight: 600;">Recetas</span>
-                <span style="color: var(--accent); font-size: 0.7em; font-weight: 600;">Contacto</span>
+              <pre style="margin: 4px 0 0; font-size: 0.5em; box-shadow: none; width: 100%; max-width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word;"><code class="language-css" data-trim>.toolbar { display: flex; gap: 16px; }</code></pre>
+              <p style="font-size: 0.5em; color: var(--text-muted); margin: 6px 0 3px; text-align: center;">Resultado:</p>
+              <div style="display: flex; gap: 12px; padding: 6px; background: var(--bg-primary); border-radius: 4px; justify-content: center;">
+                <span style="color: var(--accent); font-size: 0.6em; font-weight: 600;">Inicio</span>
+                <span style="color: var(--accent); font-size: 0.6em; font-weight: 600;">Recetas</span>
+                <span style="color: var(--accent); font-size: 0.6em; font-weight: 600;">Contacto</span>
               </div>
-              <p style="font-size: 0.6em; color: var(--text-muted); margin-top: 8px;">Caso típico: nav-bar, toolbar.</p>
+              <p style="font-size: 0.55em; color: var(--text-muted); margin-top: 6px;">Caso típico: nav-bar, toolbar.</p>
             </div>
 
-            <div class="bg-secondary-card fragment fade-in" data-fragment-index="2" style="border-left: 4px solid var(--accent-secondary); min-width: 0;">
-              <h3 style="color: var(--accent-secondary); margin-bottom: 6px;">Grid — 2D</h3>
-              <p style="font-size: 0.7em; margin-bottom: 8px;">Tablero: filas y columnas a la vez.</p>
-              <pre style="margin: 0; font-size: 0.55em; box-shadow: none; width: 100%; max-width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word;"><code class="language-html" data-trim>&lt;section class="gallery"&gt;
-  &lt;article&gt;A&lt;/article&gt;&lt;article&gt;B&lt;/article&gt;
-  &lt;article&gt;C&lt;/article&gt;&lt;article&gt;D&lt;/article&gt;
-  &lt;article&gt;E&lt;/article&gt;&lt;article&gt;F&lt;/article&gt;
+            <div class="bg-secondary-card fragment fade-in" data-fragment-index="2" style="border-left: 4px solid var(--accent-secondary); min-width: 0; padding: 10px;">
+              <h3 style="color: var(--accent-secondary); margin-bottom: 4px; font-size: 0.95em;">Grid — 2D</h3>
+              <p style="font-size: 0.62em; margin-bottom: 6px;">Filas y columnas a la vez.</p>
+              <pre style="margin: 0; font-size: 0.5em; box-shadow: none; width: 100%; max-width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word;"><code class="language-html" data-trim>&lt;section class="gallery"&gt;
+  &lt;article&gt;A&lt;/article&gt;...&lt;article&gt;F&lt;/article&gt;
 &lt;/section&gt;</code></pre>
-              <pre style="margin: 6px 0 0; font-size: 0.55em; box-shadow: none; width: 100%; max-width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word;"><code class="language-css" data-trim>.gallery {
+              <pre style="margin: 4px 0 0; font-size: 0.5em; box-shadow: none; width: 100%; max-width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word;"><code class="language-css" data-trim>.gallery {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 8px;
 }</code></pre>
-              <p style="font-size: 0.55em; color: var(--text-muted); margin: 6px 0 4px; text-align: center;">Resultado:</p>
-              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; padding: 8px; background: var(--bg-primary); border-radius: 4px;">
-                <div style="background: var(--accent-secondary); color: var(--bg-primary); padding: 4px 0; text-align: center; border-radius: 3px; font-size: 0.65em; font-weight: 600;">A</div>
-                <div style="background: var(--accent-secondary); color: var(--bg-primary); padding: 4px 0; text-align: center; border-radius: 3px; font-size: 0.65em; font-weight: 600;">B</div>
-                <div style="background: var(--accent-secondary); color: var(--bg-primary); padding: 4px 0; text-align: center; border-radius: 3px; font-size: 0.65em; font-weight: 600;">C</div>
-                <div style="background: var(--accent-secondary); color: var(--bg-primary); padding: 4px 0; text-align: center; border-radius: 3px; font-size: 0.65em; font-weight: 600;">D</div>
-                <div style="background: var(--accent-secondary); color: var(--bg-primary); padding: 4px 0; text-align: center; border-radius: 3px; font-size: 0.65em; font-weight: 600;">E</div>
-                <div style="background: var(--accent-secondary); color: var(--bg-primary); padding: 4px 0; text-align: center; border-radius: 3px; font-size: 0.65em; font-weight: 600;">F</div>
+              <p style="font-size: 0.5em; color: var(--text-muted); margin: 6px 0 3px; text-align: center;">Resultado:</p>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3px; padding: 6px; background: var(--bg-primary); border-radius: 4px;">
+                <div style="background: var(--accent-secondary); color: var(--bg-primary); padding: 3px 0; text-align: center; border-radius: 3px; font-size: 0.55em; font-weight: 600;">A</div>
+                <div style="background: var(--accent-secondary); color: var(--bg-primary); padding: 3px 0; text-align: center; border-radius: 3px; font-size: 0.55em; font-weight: 600;">B</div>
+                <div style="background: var(--accent-secondary); color: var(--bg-primary); padding: 3px 0; text-align: center; border-radius: 3px; font-size: 0.55em; font-weight: 600;">C</div>
+                <div style="background: var(--accent-secondary); color: var(--bg-primary); padding: 3px 0; text-align: center; border-radius: 3px; font-size: 0.55em; font-weight: 600;">D</div>
+                <div style="background: var(--accent-secondary); color: var(--bg-primary); padding: 3px 0; text-align: center; border-radius: 3px; font-size: 0.55em; font-weight: 600;">E</div>
+                <div style="background: var(--accent-secondary); color: var(--bg-primary); padding: 3px 0; text-align: center; border-radius: 3px; font-size: 0.55em; font-weight: 600;">F</div>
               </div>
-              <p style="font-size: 0.6em; color: var(--text-muted); margin-top: 8px;">Caso típico: galería, dashboard.</p>
+              <p style="font-size: 0.55em; color: var(--text-muted); margin-top: 6px;">Caso típico: galería, dashboard.</p>
             </div>
 
           </div>
-          <p class="fragment fade-in" data-fragment-index="3" style="margin-top: 14px; font-size: 0.7em; color: var(--text-muted); text-align: center;">
+          <p class="fragment fade-in" data-fragment-index="3" style="margin-top: 8px; font-size: 0.62em; color: var(--text-muted); text-align: center;">
             La clase del HTML (<code>toolbar</code>, <code>gallery</code>) es lo que la regla CSS apunta. <em>display: flex</em> o <em>display: grid</em> hace el resto.
           </p>
           <aside class="notes">
