@@ -716,11 +716,23 @@ p  { font-family: system-ui, sans-serif; }</code></pre>
                 <button style="background: #f59e0b; color: #0f172a; padding: 6px 14px; border: none; border-radius: 4px; font-size: 0.7em; font-weight: 600; cursor: default;">Aceptar</button>
               </div>
               <p style="font-size: 0.45em; color: var(--text-muted); margin: 6px 0 3px; text-align: center;">La paleta entera con 4 tonos:</p>
-              <div class="palette" style="margin: 0; gap: 6px; flex-wrap: wrap;">
-                <div class="swatch" style="background: #0f172a; width: 40px; height: 40px; font-size: 0.4em;">fondo</div>
-                <div class="swatch" style="background: #e2e8f0; color: #0f172a; width: 40px; height: 40px; font-size: 0.4em;">texto</div>
-                <div class="swatch" style="background: #f59e0b; width: 40px; height: 40px; font-size: 0.4em;">acento</div>
-                <div class="swatch" style="background: #94a3b8; color: #0f172a; width: 40px; height: 40px; font-size: 0.4em;">muted</div>
+              <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                  <div style="background: #0f172a; width: 36px; height: 36px; border-radius: 4px; border: 1px solid var(--text-muted);"></div>
+                  <span style="font-size: 0.45em; color: var(--text-muted);">fondo</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                  <div style="background: #e2e8f0; width: 36px; height: 36px; border-radius: 4px; border: 1px solid var(--text-muted);"></div>
+                  <span style="font-size: 0.45em; color: var(--text-muted);">texto</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                  <div style="background: #f59e0b; width: 36px; height: 36px; border-radius: 4px; border: 1px solid var(--text-muted);"></div>
+                  <span style="font-size: 0.45em; color: var(--text-muted);">acento</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                  <div style="background: #94a3b8; width: 36px; height: 36px; border-radius: 4px; border: 1px solid var(--text-muted);"></div>
+                  <span style="font-size: 0.45em; color: var(--text-muted);">muted</span>
+                </div>
               </div>
             </div>
 
