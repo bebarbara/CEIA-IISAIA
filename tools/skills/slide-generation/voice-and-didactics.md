@@ -35,6 +35,13 @@ CTAs and headings must be specific: "Ver tokenización en vivo", not "Empezar".
 
 7. **Live demo > prose explanation** when the concept is observable. If you can show inference happening, run inference. If you can show a tokenizer's output, embed the tokenizer animation.
 
+8. **Code-and-effect concepts: show HTML → CSS → rendered result on the same slide.** Whenever a slide teaches a CSS property, layout primitive, or any "this code produces this visual" concept, the slide must contain three pieces:
+   - **HTML markup** showing the target element (with its class).
+   - **CSS rule** that applies to that target.
+   - **Rendered visual result** built with real HTML/CSS so the student sees the actual output, not a description of it.
+   Multiple variants on the same slide (different values producing different results) make the property's effect obvious. Hide the rendered result behind a fragment so the speaker can introduce the concept before the demo lands. Closing line ties the pattern to the prompt-engineering takeaway when relevant.
+   Examples in semana 02: §3.2 box model (three buttons with different padding/border/margin), §3.3 flex/grid (HTML target + CSS + rendered layout), §3.4 typography/color (heading+body fonts; styled button), §3.5 CSS variables (one variable rendered with three values across three element trios).
+
 ## Speaker notes structure
 
 Speaker notes go in `<aside class="notes">` blocks. **Three visual formats** separate three kinds of content:
