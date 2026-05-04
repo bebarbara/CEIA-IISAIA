@@ -584,9 +584,16 @@
               <p style="font-size: 0.65em; color: var(--text-muted); margin: 4px 0 0;">qué valor se le asigna</p>
             </div>
           </div>
-          <p style="margin-top: 18px; font-size: 0.7em; text-align: center; color: var(--text-muted); max-width: 38em; margin-left: auto; margin-right: auto;">
-            Una <strong style="color: var(--text-primary);">declaración</strong> es <em>propiedad: valor;</em> — y un grupo de declaraciones entre llaves, junto a su selector, forma una <strong style="color: var(--text-primary);">regla</strong>.
-          </p>
+          <div style="margin-top: 18px; max-width: 44em; margin-left: auto; margin-right: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div style="background: var(--bg-secondary); padding: 10px 14px; border-radius: 6px; border-left: 3px solid var(--text-muted);">
+              <div style="color: var(--text-primary); font-weight: 600; font-size: 0.78em;">declaración</div>
+              <p style="font-size: 0.62em; color: var(--text-muted); margin: 4px 0 0;">una línea: <code>propiedad: valor;</code></p>
+            </div>
+            <div style="background: var(--bg-secondary); padding: 10px 14px; border-radius: 6px; border-left: 3px solid var(--text-muted);">
+              <div style="color: var(--text-primary); font-weight: 600; font-size: 0.78em;">regla</div>
+              <p style="font-size: 0.62em; color: var(--text-muted); margin: 4px 0 0;">selector + bloque entero: <code>{ ... }</code></p>
+            </div>
+          </div>
           <aside class="notes">
             <p><u>Anatomía de una regla CSS. Vocabulario básico antes de meterse en las primitivas.</u></p>
             <p><em>"Antes de hablar de las cuatro primitivas, démosle nombre a las partes del código CSS que vamos a ver durante todo el curso. Mirá la regla en pantalla."</em></p>
