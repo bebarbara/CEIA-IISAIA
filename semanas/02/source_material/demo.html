@@ -312,6 +312,95 @@
       line-height: 1.6;
     }
 
+    /* === Combo demo: las 4 primitivas juntas === */
+    .combo-stage {
+      /* Variables locales — un preset cambia todas a la vez */
+      --combo-bg: #0f172a;
+      --combo-text: #e2e8f0;
+      --combo-accent: #6366f1;
+      --combo-muted: #94a3b8;
+      --combo-cards-cols: 1fr 1fr 1fr;
+      --combo-card-padding: 16px;
+      --combo-card-border-width: 1px;
+      --combo-card-border-color: #334155;
+      --combo-card-radius: 6px;
+      --combo-heading-font: system-ui, -apple-system, sans-serif;
+      --combo-body-font: system-ui, -apple-system, sans-serif;
+
+      background: var(--combo-bg);
+      color: var(--combo-text);
+      padding: 24px;
+      border-radius: var(--radius-sm);
+      transition: background var(--transition), color var(--transition);
+    }
+    .combo-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--combo-card-border-color);
+    }
+    .combo-title {
+      margin: 0;
+      font-family: var(--combo-heading-font);
+      font-size: 1.4rem;
+      color: var(--combo-text);
+    }
+    .combo-nav {
+      display: flex;
+      gap: 14px;
+    }
+    .combo-nav a {
+      color: var(--combo-accent);
+      font-family: var(--combo-body-font);
+      font-size: 0.9rem;
+      text-decoration: none;
+      cursor: default;
+    }
+    .combo-cards {
+      display: grid;
+      grid-template-columns: var(--combo-cards-cols);
+      gap: 12px;
+    }
+    .combo-card {
+      padding: var(--combo-card-padding);
+      border: var(--combo-card-border-width) solid var(--combo-card-border-color);
+      border-radius: var(--combo-card-radius);
+      font-family: var(--combo-body-font);
+      transition: padding var(--transition), border-radius var(--transition), border-width var(--transition);
+    }
+    .combo-card h5 {
+      margin: 0 0 6px 0;
+      font-family: var(--combo-heading-font);
+      color: var(--combo-text);
+      font-size: 1rem;
+    }
+    .combo-card p {
+      margin: 0 0 10px 0;
+      color: var(--combo-muted);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+    .combo-cta {
+      background: var(--combo-accent);
+      color: var(--combo-bg);
+      font-family: var(--combo-body-font);
+      padding: 6px 14px;
+      border: none;
+      border-radius: var(--combo-card-radius);
+      font-weight: 600;
+      cursor: default;
+      font-size: 0.85rem;
+    }
+    .combo-presets {
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-md);
+    }
+
     /* === §3 Estado === */
     .estado-grid {
       display: grid;
@@ -599,6 +688,46 @@
           <button data-accent="#ef4444" class="theme-btn secondary" style="background:#ef4444">Rojo</button>
         </div>
         <p class="estilo-current"><code id="theme-current">--color-accent: #f59e0b</code></p>
+
+        <!-- Todo junto — las 4 primitivas combinadas -->
+        <h3 style="margin-top: var(--space-lg)">Todo junto — las 4 primitivas combinadas</h3>
+        <p style="color: var(--color-muted); margin-bottom: var(--space-md);">El mismo HTML, cambiando todas las primitivas a la vez. Tocá un preset y mirá cómo se transforma toda la identidad del sitio:</p>
+        <div class="combo-presets">
+          <button data-preset="tech" class="combo-btn active">Minimal tech</button>
+          <button data-preset="editorial" class="combo-btn secondary">Editorial cálida</button>
+          <button data-preset="pop" class="combo-btn secondary">Pop colorido</button>
+          <button data-preset="brutal" class="combo-btn secondary">Brutalismo monospace</button>
+        </div>
+        <div class="combo-stage" id="combo-stage">
+          <header class="combo-header">
+            <h4 class="combo-title">Recetas de la abuela</h4>
+            <nav class="combo-nav">
+              <a>Inicio</a>
+              <a>Recetas</a>
+              <a>Sobre mí</a>
+            </nav>
+          </header>
+          <div class="combo-cards">
+            <article class="combo-card">
+              <h5>Tarta de manzana</h5>
+              <p>Receta familiar, hace 30 años en mi casa.</p>
+              <button class="combo-cta">Leer</button>
+            </article>
+            <article class="combo-card">
+              <h5>Pan casero</h5>
+              <p>Masa madre, fermentación lenta.</p>
+              <button class="combo-cta">Leer</button>
+            </article>
+            <article class="combo-card">
+              <h5>Ñoquis del 29</h5>
+              <p>Tradición rioplatense con papa.</p>
+              <button class="combo-cta">Leer</button>
+            </article>
+          </div>
+        </div>
+        <p class="estilo-current" id="combo-current" style="font-family: var(--font-mono); font-size: 0.75rem; line-height: 1.5;">
+          tipografía: sans · grid: 3 col · accent: #6366f1 · padding: 16px · border: 1px · radius: 6px
+        </p>
       </div>
     </section>
 
@@ -777,6 +906,7 @@
       initGrid();
       initTipografia();
       initVariables();
+      initCombo();
     }
 
     function setActiveAmong(group, btn) {
@@ -890,6 +1020,86 @@
           setActiveAmong(themeButtons, btn);
         });
       });
+    }
+
+    function initCombo() {
+      const stage = document.getElementById('combo-stage');
+      const current = document.getElementById('combo-current');
+      const buttons = document.querySelectorAll('.combo-btn');
+      // Each preset is a complete swap of the 4 primitivas.
+      const presets = {
+        tech: {
+          'combo-bg': '#0f172a',
+          'combo-text': '#e2e8f0',
+          'combo-accent': '#6366f1',
+          'combo-muted': '#94a3b8',
+          'combo-cards-cols': '1fr 1fr 1fr',
+          'combo-card-padding': '14px',
+          'combo-card-border-width': '1px',
+          'combo-card-border-color': '#334155',
+          'combo-card-radius': '6px',
+          'combo-heading-font': 'system-ui, -apple-system, sans-serif',
+          'combo-body-font': 'system-ui, -apple-system, sans-serif',
+          label: 'tipografía: sans · grid: 3 col · accent: #6366f1 · padding: 14px · border: 1px · radius: 6px',
+        },
+        editorial: {
+          'combo-bg': '#fef9f0',
+          'combo-text': '#1f2937',
+          'combo-accent': '#b45309',
+          'combo-muted': '#6b7280',
+          'combo-cards-cols': '1fr',
+          'combo-card-padding': '28px',
+          'combo-card-border-width': '0px',
+          'combo-card-border-color': '#e5e7eb',
+          'combo-card-radius': '0px',
+          'combo-heading-font': 'Georgia, "Times New Roman", serif',
+          'combo-body-font': 'system-ui, -apple-system, sans-serif',
+          label: 'tipografía: serif heading + sans body · grid: 1 col · accent: #b45309 · padding: 28px · border: 0 · radius: 0',
+        },
+        pop: {
+          'combo-bg': '#581c87',
+          'combo-text': '#fef3c7',
+          'combo-accent': '#fde047',
+          'combo-muted': '#e9d5ff',
+          'combo-cards-cols': '1fr 1fr',
+          'combo-card-padding': '22px',
+          'combo-card-border-width': '4px',
+          'combo-card-border-color': '#fde047',
+          'combo-card-radius': '24px',
+          'combo-heading-font': 'system-ui, -apple-system, sans-serif',
+          'combo-body-font': 'system-ui, -apple-system, sans-serif',
+          label: 'tipografía: sans · grid: 2 col · accent: #fde047 · padding: 22px · border: 4px · radius: 24px',
+        },
+        brutal: {
+          'combo-bg': '#ffffff',
+          'combo-text': '#000000',
+          'combo-accent': '#ec4899',
+          'combo-muted': '#374151',
+          'combo-cards-cols': '1fr 1fr 1fr',
+          'combo-card-padding': '12px',
+          'combo-card-border-width': '3px',
+          'combo-card-border-color': '#000000',
+          'combo-card-radius': '0px',
+          'combo-heading-font': '"SF Mono", Monaco, "Cascadia Code", monospace',
+          'combo-body-font': '"SF Mono", Monaco, "Cascadia Code", monospace',
+          label: 'tipografía: monospace · grid: 3 col · accent: #ec4899 · padding: 12px · border: 3px · radius: 0',
+        },
+      };
+      function applyPreset(name) {
+        const p = presets[name];
+        Object.entries(p).forEach(([key, value]) => {
+          if (key === 'label') return;
+          stage.style.setProperty(`--${key}`, value);
+        });
+        current.textContent = p.label;
+      }
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          applyPreset(btn.dataset.preset);
+          setActiveAmong(buttons, btn);
+        });
+      });
+      applyPreset('tech');
     }
 
     initEstilo();
