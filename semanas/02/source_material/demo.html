@@ -430,6 +430,7 @@
     .estado-state { color: var(--color-muted); font-size: 0.85rem; }
     .estado-controls { display: flex; gap: var(--space-xs); flex-wrap: wrap; }
     .counter-display {
+      display: block;
       font-size: 3rem;
       font-weight: 700;
       text-align: center;
@@ -474,6 +475,12 @@
     }
     .todo-list button:hover { color: var(--color-warn); background: transparent; }
     .event-target {
+      /* override <button> defaults so it looks like the original "drop-zone" */
+      display: block;
+      width: 100%;
+      font-family: inherit;
+      font-size: 1rem;
+      color: var(--color-text);
       background: var(--color-accent-soft);
       border: 1px dashed var(--color-accent);
       border-radius: var(--radius-sm);
@@ -482,6 +489,9 @@
       cursor: pointer;
       user-select: none;
       margin-bottom: var(--space-sm);
+    }
+    .event-target:hover {
+      background: var(--color-accent-soft);
     }
     .event-log {
       list-style: none;
@@ -754,18 +764,18 @@
       <div class="section-body" id="estado-body" hidden>
       <p class="lead">Estado es el dato detrás. DOM es lo que ves. Eventos son el puente.</p>
       <div class="estado-grid">
-        <div class="estado-demo">
+        <article class="estado-demo">
           <h3>Contador</h3>
           <p class="estado-state">estado: <code id="counter-state">count = 0</code></p>
-          <div class="counter-display" id="counter-display">0</div>
+          <output class="counter-display" id="counter-display">0</output>
           <div class="estado-controls">
             <button id="counter-dec" class="secondary">−1</button>
             <button id="counter-inc">+1</button>
             <button id="counter-reset" class="secondary">reset</button>
           </div>
-        </div>
+        </article>
 
-        <div class="estado-demo">
+        <article class="estado-demo">
           <h3>Todo list</h3>
           <p class="estado-state">estado: <code id="todo-state">items = []</code></p>
           <form id="todo-form" class="todo-form">
@@ -773,14 +783,14 @@
             <button type="submit">+</button>
           </form>
           <ul class="todo-list" id="todo-list"></ul>
-        </div>
+        </article>
 
-        <div class="estado-demo">
+        <article class="estado-demo">
           <h3>Event log</h3>
           <p class="estado-state">cualquier click se registra abajo</p>
-          <div class="event-target" id="event-target">Hacé click acá</div>
+          <button type="button" class="event-target" id="event-target">Hacé click acá</button>
           <ol class="event-log" id="event-log"></ol>
-        </div>
+        </article>
       </div>
       </div>
     </section>
