@@ -1457,6 +1457,169 @@ Reemplazá todos los hardcodeados por estas variables.</code></pre>
       <!-- ============================================================
            §7 — Actividad grupal
            ============================================================ -->
+      <section>
+
+        <!-- §7.1: Section divider -->
+        <section class="section-divider">
+          <h2>Actividad grupal</h2>
+          <p style="color: var(--text-muted); font-size: 0.85em; margin-top: 8px;">60 minutos · grupos de 4 · ChatGPT Canvas · un solo archivo HTML.</p>
+          <aside class="notes">
+            <p><u>Section divider. Cierra la parte teórica + aplicada y arranca el briefing de la actividad práctica de la tarde.</u></p>
+            <p><em>"Llegamos al cierre teórico. Lo que viene es la actividad de la tarde. Sesenta minutos, grupos de cuatro, una sola conversación con ChatGPT Canvas, y un solo archivo HTML como resultado. Aplicando todo lo que vimos hoy."</em></p>
+          </aside>
+        </section>
+
+        <!-- §7.2: El ciclo -->
+        <section>
+          <h2>El ciclo de desarrollo asistido por IA</h2>
+          <p style="font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 40em; margin: 6px auto 14px;">
+            Cuatro tareas que tienen que pasar siempre. Una al inicio, tres en loop hasta terminar.
+          </p>
+          <div style="max-width: 38em; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+
+            <div class="bg-secondary-card" style="border-left: 4px solid var(--accent); padding: 14px 20px; min-width: 18em; text-align: center;">
+              <h3 style="color: var(--accent); margin: 0; font-size: 1em;">Architect</h3>
+              <p style="margin: 4px 0 0; font-size: 0.7em; color: var(--text-muted);">Una vez al inicio · descompone y escribe el primer prompt (P1).</p>
+            </div>
+
+            <span style="color: var(--text-muted); font-size: 1.2em;">↓</span>
+
+            <div style="border: 2px dashed var(--text-muted); border-radius: 10px; padding: 14px; max-width: 32em; width: 100%;">
+              <p style="margin: 0 0 10px; text-align: center; color: var(--text-muted); font-size: 0.65em; text-transform: uppercase; letter-spacing: 0.05em;">Loop hasta terminar</p>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                <div class="bg-secondary-card" style="border-left: 4px solid var(--accent-secondary); padding: 10px 12px; flex: 1; text-align: center;">
+                  <h4 style="color: var(--accent-secondary); margin: 0; font-size: 0.85em;">Prompter</h4>
+                  <p style="margin: 4px 0 0; font-size: 0.6em; color: var(--text-muted);">escribe el siguiente prompt</p>
+                </div>
+                <span style="color: var(--text-muted); font-size: 1em;">→</span>
+                <div class="bg-secondary-card" style="border-left: 4px solid #f59e0b; padding: 10px 12px; flex: 1; text-align: center;">
+                  <h4 style="color: #f59e0b; margin: 0; font-size: 0.85em;">Reviewer</h4>
+                  <p style="margin: 4px 0 0; font-size: 0.6em; color: var(--text-muted);">audita el output del LLM</p>
+                </div>
+                <span style="color: var(--text-muted); font-size: 1em;">→</span>
+                <div class="bg-secondary-card" style="border-left: 4px solid #10b981; padding: 10px 12px; flex: 1; text-align: center;">
+                  <h4 style="color: #10b981; margin: 0; font-size: 0.85em;">Tester</h4>
+                  <p style="margin: 4px 0 0; font-size: 0.6em; color: var(--text-muted);">corre, rompe, reporta</p>
+                </div>
+              </div>
+            </div>
+
+            <p style="margin: 8px 0 0; font-size: 0.65em; color: var(--text-muted); font-style: italic; text-align: center;">
+              Se vuelve al Architect solo si cambia el alcance grande.
+            </p>
+
+          </div>
+          <aside class="notes">
+            <p><u>Diagrama del ciclo. Arquitecto al inicio (uno solo), después loop Prompter → Reviewer → Tester hasta terminar.</u></p>
+            <p><em>"Cuando construís software con un LLM hay cuatro tareas que tienen que pasar siempre, sin importar el tamaño del proyecto. Una al inicio y tres en loop."</em></p>
+            <p><em>"El Architect entra una sola vez al principio: descompone qué se va a construir y escribe el primer prompt — el Patrón 1 que vimos. Después el grupo entra al loop Prompter, Reviewer, Tester. El Prompter escribe el siguiente prompt aplicando los Patrones 2, 3 y 4 según corresponda. El Reviewer audita lo que devuelve el LLM antes de pegarlo. El Tester corre el artefacto y reporta qué falla. Se cierra el loop volviendo al Prompter para la próxima iteración."</em></p>
+            <p><em>"Solo se vuelve al Architect si cambia el alcance grande — por ejemplo, si decidís a mitad de camino que el Pomodoro va a manejar varias tareas, no una. Eso requiere re-especificar."</em></p>
+          </aside>
+        </section>
+
+        <!-- §7.3: Las cuatro tareas -->
+        <section>
+          <h2>Las cuatro tareas, en detalle</h2>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 50em; margin: 14px auto 0;">
+
+            <div class="bg-secondary-card fragment fade-in" data-fragment-index="1" style="border-left: 4px solid var(--accent); padding: 12px;">
+              <h3 style="color: var(--accent); font-size: 0.95em; margin-bottom: 6px;">Architect</h3>
+              <p style="font-size: 0.66em; margin-bottom: 6px;">Descompone el artefacto en una spec que el LLM pueda implementar. Escribe el primer prompt usando <strong>Patrón 1</strong>: estructura, estilo, comportamiento, constraints.</p>
+              <p style="font-size: 0.6em; color: var(--text-muted);"><strong>Si falta:</strong> el grupo arranca sin norte y la IA inventa el alcance.</p>
+            </div>
+
+            <div class="bg-secondary-card fragment fade-in" data-fragment-index="2" style="border-left: 4px solid var(--accent-secondary); padding: 12px;">
+              <h3 style="color: var(--accent-secondary); font-size: 0.95em; margin-bottom: 6px;">Prompter</h3>
+              <p style="font-size: 0.66em; margin-bottom: 6px;">Maneja el chat. Aplica <strong>Patrones 2, 3 y 4</strong>. Un cambio por prompt; si el grupo le tira tres pedidos, los pone en cola.</p>
+              <p style="font-size: 0.6em; color: var(--text-muted);"><strong>Si falta:</strong> nadie filtra los pedidos del grupo y el chat se vuelve un caos.</p>
+            </div>
+
+            <div class="bg-secondary-card fragment fade-in" data-fragment-index="3" style="border-left: 4px solid #f59e0b; padding: 12px;">
+              <h3 style="color: #f59e0b; font-size: 0.95em; margin-bottom: 6px;">Reviewer</h3>
+              <p style="font-size: 0.66em; margin-bottom: 6px;">Lee cada respuesta del LLM antes de pegarla. Busca cuatro cosas: APIs alucinadas, lógica que no hace lo pedido, dependencias externas escondidas, regresiones en código que ya andaba.</p>
+              <p style="font-size: 0.6em; color: var(--text-muted);"><strong>Si falta:</strong> el archivo acumula código que la IA inventó y nadie verificó.</p>
+            </div>
+
+            <div class="bg-secondary-card fragment fade-in" data-fragment-index="4" style="border-left: 4px solid #10b981; padding: 12px;">
+              <h3 style="color: #10b981; font-size: 0.95em; margin-bottom: 6px;">Tester</h3>
+              <p style="font-size: 0.66em; margin-bottom: 6px;">Corre el artefacto en una pestaña aparte. Lo rompe a propósito: clicks rápidos, inputs vacíos, valores extremos. Reporta lo que falla con detalle suficiente para el siguiente prompt.</p>
+              <p style="font-size: 0.6em; color: var(--text-muted);"><strong>Si falta:</strong> el grupo presenta un artefacto que se rompe en la primera demo.</p>
+            </div>
+
+          </div>
+          <p class="fragment fade-in" data-fragment-index="5" style="margin-top: 14px; font-size: 0.7em; color: var(--text-muted); text-align: center; max-width: 40em; margin-left: auto; margin-right: auto;">
+            Reparto flexible: pueden rotar, compartir, ir cambiando. Lo que <em>no</em> puede pasar es que alguna de las cuatro <strong>no se cumpla</strong>.
+          </p>
+          <aside class="notes">
+            <p><strong>Revelar las cuatro tareas en orden, una por click. Quinto click revela la nota sobre reparto flexible.</strong></p>
+            <p><u>Las cuatro tareas explicadas. Cada una con su 'qué hace' + 'qué pasa si nadie la cumple'.</u></p>
+            <p><em>"Vamos a ver qué hace cada una y por qué importa que pase."</em></p>
+            <p><em>"Architect: descompone el artefacto en una spec que el LLM pueda implementar. Define qué se construye antes de pedir nada. Escribe el primer prompt usando el Patrón 1 que acabamos de ver. Si esta tarea no se cumple, el grupo arranca sin norte y la IA inventa el alcance."</em></p>
+            <p><em>"Prompter: maneja el chat. Escribe los prompts siguientes aplicando los Patrones 2, 3 y 4 según corresponda. Mantiene el foco — un cambio por prompt, no cuatro a la vez. Si el grupo le tira tres pedidos al mismo tiempo, los pone en cola y los manda en orden. Si esta tarea no se cumple, el chat se vuelve un caos sin foco."</em></p>
+            <p><em>"Reviewer: lee cada respuesta del LLM antes de pegarla en el archivo. Busca cuatro cosas concretas: APIs alucinadas — funciones que no existen — , lógica que no hace lo que pediste, dependencias externas escondidas que el constraint no permite, y regresiones en código que ya andaba. Aprueba o pide cambios. Si esta tarea no se cumple, el archivo acumula código sin verificar."</em></p>
+            <p><em>"Tester: corre el artefacto en una pestaña aparte. Lo rompe a propósito: clicks rápidos, inputs vacíos, valores extremos, edge cases que el LLM no consideró. No alcanza con probar el camino feliz. Reporta lo que falla al Prompter con detalle. Si esta tarea no se cumple, el grupo presenta algo que se rompe en la primera demo."</em></p>
+            <p><em>"Las cuatro tienen que pasar siempre. Cómo las reparten es decisión del grupo: un mismo integrante puede rotar entre dos roles, dos personas pueden compartir uno, pueden ir cambiando a lo largo de la hora. Lo que no puede pasar es que alguna de las cuatro tareas no se cumpla. Si nadie revisa, o nadie testea, el proyecto se desvía de manera predecible."</em></p>
+          </aside>
+        </section>
+
+        <!-- §7.4: Constraints y entregable -->
+        <section>
+          <h2>Constraints y entregable</h2>
+          <div class="comparison-2col" style="margin-top: 14px; align-items: stretch;">
+            <div class="bg-secondary-card" style="border-left: 4px solid var(--accent); padding: 14px;">
+              <h3 style="color: var(--accent); font-size: 0.95em; margin-bottom: 8px;">Constraints</h3>
+              <ul style="margin: 0; padding-left: 18px; font-size: 0.7em; line-height: 1.7;">
+                <li>Un solo archivo <code>index.html</code>.</li>
+                <li>Sin build tools, sin archivos CSS/JS separados, sin dependencias externas.</li>
+                <li>Una sola conversación de <strong>ChatGPT Canvas</strong> por grupo.</li>
+                <li>60 minutos de tiempo de construcción.</li>
+              </ul>
+            </div>
+            <div class="bg-secondary-card" style="border-left: 4px solid var(--accent-secondary); padding: 14px;">
+              <h3 style="color: var(--accent-secondary); font-size: 0.95em; margin-bottom: 8px;">Entregable</h3>
+              <p style="font-size: 0.7em; margin-bottom: 8px;">Repositorio público en GitHub con tres archivos:</p>
+              <ul style="margin: 0; padding-left: 18px; font-size: 0.7em; line-height: 1.7;">
+                <li><code>index.html</code> — el artefacto, listo para abrir con doble click.</li>
+                <li><code>prompts.md</code> — la secuencia de prompts en orden, con una anotación breve por prompt.</li>
+                <li><code>README.md</code> — qué es la página, quién la construyó, qué funcionó y qué no.</li>
+              </ul>
+              <p style="font-size: 0.65em; color: var(--text-muted); margin-top: 10px;">El link del repo va al chat de la sala antes de presentar.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <p><u>Constraints técnicos + qué hay que entregar. El prompts.md es el registro del proceso, no solo el producto.</u></p>
+            <p><em>"Constraints: un solo archivo index.html. Cero build tools, cero archivos separados, cero dependencias externas — single-file, como vimos. Una sola conversación de ChatGPT Canvas por grupo, así todos ven la misma historia. Sesenta minutos contados."</em></p>
+            <p><em>"Entregable: un repositorio público en GitHub con tres archivos. El index.html con el artefacto funcional. Un prompts punto md donde dejan la secuencia de prompts que usaron, en orden, con una anotación breve por cada uno explicando qué intentaba lograr — esto es el registro del proceso de Vibe Coding, tan importante como el producto. Y un README punto md con descripción corta: qué es, quién lo construyó, qué funcionó y qué no. Antes de presentar mandan el link del repo al chat."</em></p>
+          </aside>
+        </section>
+
+        <!-- §7.5: Cierre + presentación -->
+        <section>
+          <h2>Para arrancar</h2>
+          <div style="max-width: 42em; margin: 14px auto 0;">
+            <p style="font-size: 0.85em; margin-bottom: 14px;">Pueden inventar lo que quieran si entra en una página. Algunas chispas:</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; font-size: 0.7em; color: var(--text-muted); margin-bottom: 18px;">
+              <div>· Página de aterrizaje para un producto ficticio</div>
+              <div>· Herramienta de un solo uso (Pomodoro, paleta de colores, calculadora)</div>
+              <div>· Mini-juego (dice roller, memory match, idle clicker)</div>
+              <div>· Off-the-wall: cualquier artefacto raro que entre en un archivo</div>
+            </div>
+          </div>
+          <div style="max-width: 42em; margin: 0 auto; padding: 14px 18px; background: var(--bg-secondary); border-radius: 6px; border-left: 4px solid var(--accent);">
+            <p style="font-size: 0.78em; margin: 0;"><strong>Presentación:</strong> 5 minutos por grupo, cronometrados con el timer de Meet. Mostrar el artefacto andando y contar una decisión de prompt que les enseñó algo — un éxito o un fracaso. <em>Sin rúbrica obligatoria; el formato es suyo.</em></p>
+          </div>
+          <p style="margin-top: 22px; font-size: 0.85em; text-align: center; color: var(--accent);">
+            Suerte, y nos vemos en sesenta minutos.
+          </p>
+          <aside class="notes">
+            <p><u>Cierre. Galería de ideas + briefing de presentación.</u></p>
+            <p><em>"Pueden inventar lo que quieran si entra en una página. Algunas ideas para arrancar: una página de aterrizaje para un producto ficticio, una herramienta de un solo uso como un Pomodoro o una paleta de colores, un mini-juego como un dice roller o un memory match, o cualquier artefacto raro que se les ocurra. No es asignación, es chispa."</em></p>
+            <p><em>"Después de los sesenta minutos, cinco minutos por grupo para presentar. Cronometrados con el timer de Meet. El contenido es a elección del grupo — sugerencia: muestren el artefacto andando y cuenten una decisión de prompt que les enseñó algo. Un éxito o un fracaso, los dos sirven. No hay rúbrica obligatoria; el formato es suyo."</em></p>
+            <p><em>"Suerte. Nos vemos en sesenta minutos."</em></p>
+          </aside>
+        </section>
+
+      </section>
 
     </div>
   </div>
