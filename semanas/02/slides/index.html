@@ -943,9 +943,14 @@ p  { font-family: system-ui, sans-serif; }</code></pre>
           <p style="margin-top: 32px; font-size: 0.95em; text-align: center; max-width: 32em; margin-left: auto; margin-right: auto;">
             Cuando una página <em>hace algo</em>, hay un triángulo de tres conceptos en juego al mismo tiempo.
           </p>
+          <p class="fragment fade-in" style="margin-top: 16px; font-size: 0.85em; text-align: center; color: var(--text-muted); max-width: 30em; margin-left: auto; margin-right: auto;">
+            Empecemos por el caso más simple posible: un click. Un número que cambia.
+          </p>
           <aside class="notes">
+            <p><strong>Después de la frase principal, revelar la pregunta de transición con un click.</strong></p>
             <p><u>Apertura de §4. Capas 3 y 4 activas — comportamiento y estado son la misma sección porque van juntos.</u></p>
-            <p><em>"Una página estática se entiende sola: hay HTML, lo dibuja el navegador, listo. Pero en cuanto pasa cualquier otra cosa cuando el usuario interactúa, ya sea un click que suma uno, un input que filtra una lista, o un botón que cambia el tema, entran tres piezas en juego al mismo tiempo. Comportamiento y estado son la misma sección porque van pegados. Las tres tienen nombre, y saberlos es la diferencia entre pedirle a una IA hacé que funcione y pedirle algo que el modelo pueda traducir directo a código."</em></p>
+            <p><em>"Una página estática se entiende sola: hay HTML, lo dibuja el navegador, listo. Pero en cuanto pasa cualquier otra cosa cuando el usuario interactúa, ya sea un click que suma uno, un input que filtra una lista, o un botón que cambia el tema, entran tres piezas en juego al mismo tiempo. Comportamiento y estado van pegados — por eso son una sola sección."</em></p>
+            <p><em>"Antes de nombrar las tres piezas, vamos al caso más simple posible: un click, un número que cambia. Lo que cualquier app dinámica del mundo hace en su forma más reducida."</em></p>
           </aside>
         </section>
 
@@ -975,29 +980,38 @@ p  { font-family: system-ui, sans-serif; }</code></pre>
         <section>
           <h2>El triángulo dinámico</h2>
           <div class="consequence-row" style="margin-top: 12px;">
-            <div class="bg-secondary-card fragment fade-in" style="border-left: 4px solid var(--accent);">
-              <h3 style="color: var(--accent);">Estado</h3>
-              <p style="font-size: 0.78em;">El <em>dato</em> que la página recuerda. Vive en variables, no en pantalla.</p>
-              <p style="font-size: 0.65em; color: var(--text-muted); margin-top: 8px;">Ej.: <code>count = 0</code>, items de una todo list, modo dark/light.</p>
+            <div class="bg-secondary-card fragment fade-in" data-fragment-index="1" style="border-left: 4px solid var(--accent); min-width: 0; padding: 10px;">
+              <h3 style="color: var(--accent); font-size: 0.95em; margin-bottom: 6px;">Estado</h3>
+              <p style="font-size: 0.65em; margin-bottom: 8px;">El <em>dato</em> que la página recuerda. Vive en variables, no en pantalla.</p>
+              <pre style="margin: 0; font-size: 0.55em; box-shadow: none;"><code class="language-javascript" data-trim>// Una variable JS común
+let count = 0;</code></pre>
+              <p style="font-size: 0.55em; color: var(--text-muted); margin-top: 6px;">Es invisible hasta que alguien lo dibuja.</p>
             </div>
-            <div class="bg-secondary-card fragment fade-in" style="border-left: 4px solid var(--accent-secondary);">
-              <h3 style="color: var(--accent-secondary);">DOM</h3>
-              <p style="font-size: 0.78em;">El HTML, pero <em>vivo</em>. Un árbol en memoria que JavaScript puede mutar.</p>
-              <p style="font-size: 0.65em; color: var(--text-muted); margin-top: 8px;">Mutar el DOM cambia lo que el usuario ve sin recargar.</p>
+            <div class="bg-secondary-card fragment fade-in" data-fragment-index="2" style="border-left: 4px solid var(--accent-secondary); min-width: 0; padding: 10px;">
+              <h3 style="color: var(--accent-secondary); font-size: 0.95em; margin-bottom: 6px;">DOM</h3>
+              <p style="font-size: 0.65em; margin-bottom: 8px;">El HTML, pero <em>vivo</em>. Un árbol de nodos en memoria que JavaScript puede mutar.</p>
+              <pre style="margin: 0; font-size: 0.55em; box-shadow: none;"><code class="language-javascript" data-trim>// Buscar un nodo y cambiarlo
+const span = document.querySelector('#count');
+span.textContent = '1';</code></pre>
+              <p style="font-size: 0.55em; color: var(--text-muted); margin-top: 6px;">Mutarlo cambia la pantalla sin recargar.</p>
             </div>
-            <div class="bg-secondary-card fragment fade-in" style="border-left: 4px solid #f59e0b;">
-              <h3 style="color: #f59e0b;">Eventos</h3>
-              <p style="font-size: 0.78em;">La voz del usuario. Click, tecla, scroll, input.</p>
-              <p style="font-size: 0.65em; color: var(--text-muted); margin-top: 8px;">Un <code>listener</code> escucha; un <code>handler</code> responde.</p>
+            <div class="bg-secondary-card fragment fade-in" data-fragment-index="3" style="border-left: 4px solid #f59e0b; min-width: 0; padding: 10px;">
+              <h3 style="color: #f59e0b; font-size: 0.95em; margin-bottom: 6px;">Eventos</h3>
+              <p style="font-size: 0.65em; margin-bottom: 8px;">La voz del usuario. Click, tecla, scroll, input.</p>
+              <pre style="margin: 0; font-size: 0.55em; box-shadow: none;"><code class="language-javascript" data-trim>// Escuchar un click
+btn.addEventListener('click', () =&gt; {
+  count++;
+});</code></pre>
+              <p style="font-size: 0.55em; color: var(--text-muted); margin-top: 6px;">El <code>listener</code> escucha; el <em>handler</em> responde.</p>
             </div>
           </div>
           <aside class="notes">
             <p><strong>Revelar los tres conceptos en orden, uno por click.</strong></p>
-            <p><u>Las tres entidades del triángulo dinámico, una por columna.</u></p>
-            <p><em>"Tres conceptos."</em></p>
-            <p><em>"El estado es el dato que la página recuerda: vive en variables, no en pantalla. Es invisible hasta que alguien decide dibujarlo."</em></p>
-            <p><em>"El DOM es el HTML pero vivo: un árbol en memoria que JavaScript puede modificar. Cambiarlo cambia lo que el usuario ve sin recargar."</em></p>
-            <p><em>"Los eventos son la voz del usuario: cualquier cosa que el usuario hace genera uno. Para escuchar uno registrás un listener; la función que se ejecuta es el handler. Las tres palabras son las que la IA necesita para no inventar atajos malos."</em></p>
+            <p><u>Las tres entidades del triángulo dinámico, cada una con un fragmento de código que la materializa.</u></p>
+            <p><em>"Tres conceptos. Cada uno tiene una forma concreta en código JavaScript — los nombro y muestro."</em></p>
+            <p><em>"Estado. El dato que la página recuerda. En código es simplemente una variable de JavaScript: let count igual a cero. Vive en memoria, no en pantalla. Es invisible hasta que alguien decide dibujarlo. Cualquier app dinámica tiene estado: el contador, los items de una todo list, el modo dark o light, el usuario logueado, qué pestaña está activa."</em></p>
+            <p><em>"DOM, Document Object Model. El HTML, pero vivo. Cuando el navegador parsea el archivo HTML, construye un árbol de nodos en memoria — uno por etiqueta. JavaScript puede agarrar cualquiera de esos nodos y cambiarlo. Acá: querySelector busca el span con id count, y cambiamos su textContent a uno. Esa mutación cambia lo que el usuario ve sin necesidad de recargar la página."</em></p>
+            <p><em>"Eventos. La voz del usuario. Click, tecla, scroll, input — cualquier cosa que el usuario hace genera un evento. addEventListener registra una función que se va a ejecutar cuando ese evento ocurra. La suscripción se llama listener; la función que se ejecuta cuando llega el evento se llama handler. Las tres palabras juntas — estado, DOM, eventos — son las que la IA necesita escuchar para no inventar atajos malos."</em></p>
           </aside>
         </section>
 
@@ -1047,19 +1061,22 @@ p  { font-family: system-ui, sans-serif; }</code></pre>
           </aside>
         </section>
 
-        <!-- §4.6: Live demo — demo.html §3 -->
+        <!-- §4.6: Live demo — botón a demo.html#estado -->
         <section>
           <h2>El ciclo, tres veces en vivo</h2>
-          <div style="text-align: center; margin-top: 8px;">
-            <iframe src="../source_material/demo.html#estado" style="width: 92%; height: 56vh; border: 1px solid var(--text-muted); border-radius: 8px; background: var(--bg-secondary);"></iframe>
+          <div style="margin-top: 24px; text-align: center;">
+            <p style="font-size: 0.85em; max-width: 36em; margin: 0 auto 24px;">
+              Demo.html §3 tiene tres aplicaciones del mismo ciclo: un <strong>contador</strong>, una <strong>todo list</strong>, y un <strong>event log</strong> que registra cada paso (evento, mutación de estado, mutación de DOM) en tiempo real.
+            </p>
+            <a href="../source_material/demo.html#estado" target="_blank" rel="noopener" style="display: inline-block; padding: 10px 20px; background: var(--accent); color: var(--bg-primary); border-radius: 6px; font-size: 0.8em; text-decoration: none;">Abrir demo.html §3 — Estado →</a>
           </div>
-          <p style="margin-top: 12px; font-size: 0.7em; text-align: center; color: var(--text-muted);">
-            Contador, todo list y event log. Mismo esqueleto: <em>evento → mutación de estado → mutación del DOM</em>.
-          </p>
           <aside class="notes">
-            <p><strong>Tocar cada uno: contador (+1), todo (agregar/marcar), después mostrar el event log que registra cada paso del ciclo.</strong></p>
-            <p><u>Demo en vivo del §3 de demo.html. Tres aplicaciones del mismo ciclo.</u></p>
-            <p><em>"Vamos a verlo en demo.html. Tres demos. El contador clásico, el ciclo más simple posible. Una todo list, donde el estado es un array y cada acción muta tanto el array como el DOM. Y un event log que muestra el ciclo en directo: cada vez que toco algo, el log registra qué evento se disparó, qué cambió en el estado, y qué se mutó en el DOM. Es el mismo esqueleto las tres veces."</em></p>
+            <p><strong>Abrir demo.html#estado en una pestaña nueva. Tocar el contador (+1, −1, reset). Después agregar y marcar items en la todo list. Por último, mirar el event log mientras se toca cualquier cosa — registra evento, estado, y DOM en cada paso.</strong></p>
+            <p><u>Slide-puente al demo. Conecta el ciclo conceptual con tres aplicaciones reales.</u></p>
+            <p><em>"Vamos a verlo en directo. Abro demo.html en otra pestaña, sección Estado. Tres demos."</em></p>
+            <p><em>"El primero es el contador clásico, el ciclo más simple posible: un click, count incrementa, el span se actualiza. Tocá +1, −1, reset y mirá el dato cambiar."</em></p>
+            <p><em>"El segundo es una todo list, donde el estado es un array de tareas. Agregás un item, el array crece y la lista en pantalla crece. Marcás uno, el array lo marca y el DOM lo tacha. Es el mismo ciclo, escalado a una colección."</em></p>
+            <p><em>"Y el tercero es un event log que vuelve el ciclo explícito: cada vez que tocan cualquier cosa, el log registra qué evento se disparó, qué cambió en el estado, y qué nodo del DOM se mutó. Es la radiografía del ciclo en tiempo real. El mismo esqueleto las tres veces."</em></p>
           </aside>
         </section>
 
@@ -1068,25 +1085,33 @@ p  { font-family: system-ui, sans-serif; }</code></pre>
           <h2>Cómo le pedís comportamiento a una IA</h2>
           <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
             <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
-              <h3 style="color: var(--text-muted); margin-bottom: 12px;">Vago</h3>
-              <p style="font-style: italic; font-size: 0.85em;">"Hacé un botón que cuente."</p>
+              <h3 style="color: var(--text-muted); margin-bottom: 12px;">Prompt sin vocabulario</h3>
+              <p style="font-style: italic; font-size: 0.78em; line-height: 1.5;">"Hacé un botón que cuente clicks."</p>
               <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 16px;">
-                La IA tiene tres atajos posibles. Los tres son malos.
+                La IA elige cómo guardar el dato y cómo mostrarlo. La próxima vez puede elegir distinto.
               </p>
             </div>
             <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
-              <h3 style="color: var(--accent); margin-bottom: 12px;">Específico</h3>
-              <p style="font-style: italic; font-size: 0.72em; line-height: 1.55;">
-                "Agregá un <strong>estado</strong> <code>count</code> (número, inicial 0). Mostralo en un <strong>&lt;span id="count"&gt;</strong>. Cuando se haga click en <strong>&lt;button id="inc"&gt;+1&lt;/button&gt;</strong>, registrá un <strong>listener</strong> que incremente <code>count</code> y actualice el span con el nuevo valor."
+              <h3 style="color: var(--accent); margin-bottom: 12px;">Prompt con vocabulario</h3>
+              <p style="font-style: italic; font-size: 0.74em; line-height: 1.55;">
+                "Agregá un <strong>estado</strong> <code>count</code> (número, inicial 0). Mostralo en un <strong>&lt;span id="count"&gt;</strong>. En <strong>&lt;button id="inc"&gt;+1&lt;/button&gt;</strong>, registrá un <strong>listener</strong> de <strong>click</strong> que incremente <code>count</code> y actualice el span."
               </p>
               <p style="font-size: 0.7em; color: var(--accent); margin-top: 12px;">
-                Estado, listener, evento y mutación de DOM, todo nombrado.
+                Estado, evento, listener y mutación de DOM — los cuatro nombrados.
               </p>
             </div>
           </div>
+          <p style="margin-top: 18px; font-size: 0.8em; text-align: center;">
+            <em>Vago = lotería.</em> &nbsp; <em>Específico = determinismo.</em>
+          </p>
           <aside class="notes">
-            <p><u>Cierre de §4. La palabra "estado" en el prompt cambia el código que sale.</u></p>
-            <p><em>"Sin nombrar el estado, la IA tiene tres atajos disponibles, y los tres son malos. Puede guardar el contador en un atributo del DOM. Puede usar una variable global flotante. Puede mezclar el dato con su representación en una sola variable. Si en cambio nombrás estado en el prompt, le estás diciendo: esto es un dato, separalo del DOM, ponelo donde corresponde. La palabra estado hace ese trabajo sola. Próxima capa, la última de la anatomía: cómo metemos todo esto en un solo archivo."</em></p>
+            <p><u>Cierre de §4. Mismo reframing que §2.5 y §3.7: los LLMs modernos pueden acertar con prompts vagos, pero el vocabulario sigue importando por determinismo, iteración y auditoría.</u></p>
+            <p><em>"Mismo cierre que las dos secciones anteriores. Mirá los dos prompts: la intención es la misma — un botón que cuenta clicks."</em></p>
+            <p><em>"Y el mismo descargo de honestidad: si vos hoy le pedís a Claude o a ChatGPT 'hacé un botón que cuente', lo más probable es que te devuelva código razonable. Va a usar una variable, va a registrar un addEventListener, va a actualizar el textContent del span. El contador clásico es un caso textbook que los modelos vieron mil veces."</em></p>
+            <p><em>"Pero el vocabulario te paga por las mismas tres razones de siempre. Determinismo: el prompt vago es lotería. Esta vez la IA usó una variable; la próxima puede usar el atributo data-count del DOM, o una variable global, o pegar el número como contenido y leerlo desde ahí. Pedile algo más raro — 'un timer que se pausa', 'un toggle que recuerda su estado entre cargas' — y la variabilidad explota."</em></p>
+            <p><em>"Iteración: tu próximo prompt va a ser 'cuando llegue a 10, deshabilitá el botón'. Si la IA puso el contador en un atributo del DOM y vos no nombraste 'estado', tiene que adivinar dónde está el dato. Si nombraste estado count, no hay ambigüedad."</em></p>
+            <p><em>"Auditoría: leer el código que devuelve la IA es la mitad del trabajo del supervisor. Si tenés en la cabeza estado, evento, listener, y mutación del DOM, podés escanear el código y verificar las cuatro piezas en segundos. Sin esos nombres, leés un bloque opaco."</em></p>
+            <p><em>"Próxima capa, la última de la anatomía: cómo metemos todo esto en un solo archivo."</em></p>
           </aside>
         </section>
 
