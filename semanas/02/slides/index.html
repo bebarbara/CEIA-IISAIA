@@ -1171,31 +1171,32 @@ btn.addEventListener('click', () =&gt; {
             El contador de §4, completo, en un solo archivo. Las cuatro capas anteriores conviven dentro de un único <code>.html</code>:
           </p>
           <div style="display: flex; gap: 16px; align-items: flex-start; max-width: 56em; margin: 0 auto;">
-            <pre style="margin: 0; font-size: 0.5em; box-shadow: none; flex: 1 1 auto; min-width: 0;"><code class="language-html" data-trim>&lt;!DOCTYPE html&gt;
-&lt;html lang="es"&gt;
-&lt;head&gt;
-  &lt;meta charset="UTF-8"&gt;
-  &lt;title&gt;Contador&lt;/title&gt;
-  &lt;!-- Capa 2: Estilo --&gt;
+            <pre style="margin: 0; font-size: 0.5em; box-shadow: none; flex: 1 1 auto; min-width: 0;"><code class="language-html" data-trim>&lt;!DOCTYPE html&gt;                       &lt;!-- modo HTML5 estricto --&gt;
+&lt;html lang="es"&gt;                       &lt;!-- raíz del documento; lang ayuda a accesibilidad y SEO --&gt;
+&lt;head&gt;                                 &lt;!-- metadatos del documento, no se renderiza --&gt;
+  &lt;meta charset="UTF-8"&gt;               &lt;!-- soporta tildes, eñes y otros caracteres --&gt;
+  &lt;title&gt;Contador&lt;/title&gt;              &lt;!-- texto de la pestaña del navegador --&gt;
+
+  &lt;!-- Capa 2: Estilo (acá porque el CSS debe cargar antes del paint) --&gt;
   &lt;style&gt;
-    #count { font-size: 2rem; font-family: monospace; }
-    button { background: #f59e0b; color: #0f172a;
-             padding: 8px 14px; border: none; border-radius: 4px; }
+    #count  { font-size: 2rem; font-family: monospace; }    /* estilos del span del número */
+    button  { background: #f59e0b; color: #0f172a;          /* color del botón */
+              padding: 8px 14px; border: none; border-radius: 4px; }
   &lt;/style&gt;
 &lt;/head&gt;
-&lt;body&gt;
+&lt;body&gt;                                 &lt;!-- contenido visible de la página --&gt;
   &lt;!-- Capa 1: Estructura --&gt;
-  &lt;span id="count"&gt;0&lt;/span&gt;
-  &lt;button id="inc"&gt;+1&lt;/button&gt;
+  &lt;span id="count"&gt;0&lt;/span&gt;            &lt;!-- el JS va a escribir acá el valor de count --&gt;
+  &lt;button id="inc"&gt;+1&lt;/button&gt;         &lt;!-- el JS va a escuchar el click acá --&gt;
 
-  &lt;!-- Capas 3 y 4: Comportamiento + Estado --&gt;
+  &lt;!-- Capas 3 y 4: Comportamiento + Estado (al final del body para que el DOM ya exista) --&gt;
   &lt;script&gt;
-    let count = 0;
-    const span = document.querySelector('#count');
-    const btn  = document.querySelector('#inc');
-    btn.addEventListener('click', () =&gt; {
-      count++;
-      span.textContent = count;
+    let count = 0;                                          // estado: la verdad del contador
+    const span = document.querySelector('#count');          // referencia al span del DOM
+    const btn  = document.querySelector('#inc');            // referencia al botón del DOM
+    btn.addEventListener('click', () =&gt; {                   // listener: corre cada vez que hacen click
+      count++;                                              // mutar estado
+      span.textContent = count;                             // mutar DOM (refleja el estado)
     });
   &lt;/script&gt;
 &lt;/body&gt;
