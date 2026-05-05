@@ -1452,40 +1452,6 @@ Reemplazá todos los hardcodeados por estas variables.</code></pre>
           </aside>
         </section>
 
-        <!-- §6.7: Demo en vivo + bridge -->
-        <section>
-          <h2>Demo en vivo: dice roller en cuatro prompts</h2>
-          <p style="font-size: 0.78em; text-align: center; max-width: 38em; margin: 6px auto 16px;">
-            Vamos a aplicar los cuatro patrones, en orden, en una conversación con un LLM. El resultado: un dice roller funcional, tematizado, con historial.
-          </p>
-          <div style="max-width: 56em; margin: 0 auto; display: grid; grid-template-columns: auto 1fr; gap: 8px 14px; align-items: start; font-size: 0.72em;">
-            <div style="color: var(--accent); font-weight: 600;">Prompt 1 — P1</div>
-            <div style="color: var(--text-muted); font-style: italic;">"Construí un dice roller. Estructura: header con h1 'Dice Roller'; main con section que muestra el resultado en un cuadrado grande, debajo dos buttons (Tirar/Reset); footer con historial de últimas 5 tiradas. Estilo: dark, fondo #0f172a, acento #6366f1. Comportamiento: estado <code>result</code> (1–6, inicial 1). Tirar: random 1–6 y actualizar <code>result</code>. Constraints: un archivo, vanilla JS, sin deps."</div>
-
-            <div style="color: var(--accent); font-weight: 600;">Prompt 2 — P2</div>
-            <div style="color: var(--text-muted); font-style: italic;">"Agregale un estado <code>history</code> (array). En cada Tirar, además de actualizar <code>result</code>, agregalo al array. Mostrá las últimas 5 tiradas en el footer separadas por comas. En Reset, vaciá <code>history</code> también."</div>
-
-            <div style="color: var(--accent); font-weight: 600;">Prompt 3 — P3</div>
-            <div style="color: var(--text-muted); font-style: italic;">"El header está mal acomodado. Hacelo un flex container con <code>justify-content: space-between</code> y <code>align-items: center</code>. El main: flex column, align-items center, gap 24px."</div>
-
-            <div style="color: var(--accent); font-weight: 600;">Prompt 4 — P4</div>
-            <div style="color: var(--text-muted); font-style: italic;">"Convertí el styling para que use variables CSS. Definí en <code>:root</code>: <code>--color-bg #0f172a</code>, <code>--color-text #e2e8f0</code>, <code>--color-accent #6366f1</code>, <code>--space-md 16px</code>, <code>--radius 12px</code>. Reemplazá todos los valores hardcodeados."</div>
-          </div>
-          <p style="margin-top: 18px; font-size: 0.78em; text-align: center; color: var(--accent);">
-            Cuatro prompts, un artefacto funcional. Es lo que tu grupo va a hacer en una hora.
-          </p>
-          <aside class="notes">
-            <p><strong>Antes de mostrar la slide, abrir ChatGPT Canvas en otra pestaña. Pegar Prompt 1, ejecutar, mostrar el resultado funcionando. Pegar Prompt 2, mostrar la iteración. Pegar Prompt 3, mostrar el ajuste de layout. Pegar Prompt 4, mostrar el theming. Cada uno toma ~30 segundos en correr.</strong></p>
-            <p><u>Demo en vivo del flujo P1 → P2 → P3 → P4. Es el cierre de la anatomía aplicada: vocabulario aprendido se traduce en cuatro prompts cortos que producen un artefacto funcional.</u></p>
-            <p><em>"Vamos a hacerlo en vivo, ahora, con un LLM en otra pestaña. Voy a pegar los cuatro prompts en orden y vamos a ver cómo cada uno construye encima del anterior."</em></p>
-            <p><em>"Prompt uno, patrón uno: describir el artefacto. Construí un dice roller. Cinco líneas con estructura, estilo, comportamiento y constraints. La IA me devuelve un archivo HTML completo con un dado, dos botones, y un historial vacío. Ya funciona."</em></p>
-            <p><em>"Prompt dos, patrón dos: iterar sobre el estado. Agregale un history array, cada tirada se guarda, en reset se vacía. La IA mete el array, el push, y la lista de las últimas cinco tiradas en el footer. El artefacto crece."</em></p>
-            <p><em>"Prompt tres, patrón tres: arreglar el layout. El header estaba apretado, lo convierto en flex con justify space-between. El main centrado en column. El visual se ordena. Tres líneas y listo."</em></p>
-            <p><em>"Prompt cuatro, patrón cuatro: tematizar. Convertir todo a variables. Definir cinco tokens en :root. Reemplazar hardcodeados. Ahora cambiar el acento a verde es una sola línea — la primitiva del LLM en acción."</em></p>
-            <p><em>"Cuatro prompts, un artefacto funcional, tematizado, con historial. Eso es lo que tu grupo va a hacer en sesenta minutos. La próxima sección explica cómo se reparten el trabajo."</em></p>
-          </aside>
-        </section>
-
       </section>
 
       <!-- ============================================================
