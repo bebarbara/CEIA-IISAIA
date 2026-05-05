@@ -233,6 +233,85 @@
       font-size: 0.9rem;
     }
 
+    /* Box model demo */
+    .bm-controls {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .bm-control-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+    .bm-control-row > .bm-label {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      min-width: 80px;
+    }
+    .bm-control-row button {
+      font-size: 0.85rem;
+      padding: 4px 12px;
+    }
+    .bm-stage {
+      background: var(--color-surface-2);
+      padding: var(--space-md);
+      border-radius: var(--radius-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 120px;
+    }
+    .bm-button {
+      background: var(--color-accent);
+      color: white;
+      border-style: solid;
+      border-color: white;
+      font-weight: 600;
+      cursor: default;
+      transition: padding var(--transition), border-width var(--transition), margin var(--transition), border-radius var(--transition);
+    }
+
+    /* Grid demo */
+    .grid-playground {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: var(--space-sm);
+      background: var(--color-surface-2);
+      padding: var(--space-md);
+      border-radius: var(--radius-sm);
+      transition: grid-template-columns var(--transition);
+    }
+    .grid-item {
+      background: var(--color-accent);
+      color: white;
+      padding: var(--space-md);
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* Tipografía demo */
+    .typo-stage {
+      background: var(--color-surface-2);
+      padding: var(--space-lg);
+      border-radius: var(--radius-sm);
+    }
+    .typo-stage h4.typo-heading {
+      margin: 0 0 var(--space-sm) 0;
+      color: var(--color-text);
+      font-size: 1.5rem;
+    }
+    .typo-stage p.typo-body {
+      margin: 0;
+      color: var(--color-muted);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
     /* === §3 Estado === */
     .estado-grid {
       display: grid;
@@ -425,8 +504,44 @@
         <button class="toggle-section secondary" data-target="estilo-body">Mostrar</button>
       </div>
       <div class="section-body" id="estilo-body" hidden>
-        <p class="lead">El CSS responde a "cómo se ven". Layout y variables son las dos perillas que vale la pena nombrar.</p>
-        <h3>Flexbox: una dimensión</h3>
+        <p class="lead">El CSS responde a "cómo se ven". Cuatro primitivas alcanzan para dirigir a una IA: caja, layout, tipografía y variables.</p>
+
+        <!-- Primitiva 1 — Box model -->
+        <h3>Primitiva 1 — Box model (padding · border · margin)</h3>
+        <div class="bm-controls">
+          <div class="bm-control-row">
+            <span class="bm-label">padding</span>
+            <button data-bm="padding" data-value="2px 6px" class="secondary">chico</button>
+            <button data-bm="padding" data-value="10px 20px" class="active">medio</button>
+            <button data-bm="padding" data-value="18px 32px" class="secondary">grande</button>
+          </div>
+          <div class="bm-control-row">
+            <span class="bm-label">border</span>
+            <button data-bm="border-width" data-value="1px" class="secondary">fino</button>
+            <button data-bm="border-width" data-value="3px" class="active">medio</button>
+            <button data-bm="border-width" data-value="6px" class="secondary">grueso</button>
+          </div>
+          <div class="bm-control-row">
+            <span class="bm-label">margin</span>
+            <button data-bm="margin" data-value="0" class="secondary">cero</button>
+            <button data-bm="margin" data-value="8px 0" class="active">medio</button>
+            <button data-bm="margin" data-value="24px 0" class="secondary">grande</button>
+          </div>
+          <div class="bm-control-row">
+            <span class="bm-label">border-radius</span>
+            <button data-bm="border-radius" data-value="0" class="secondary">recto</button>
+            <button data-bm="border-radius" data-value="6px" class="active">medio</button>
+            <button data-bm="border-radius" data-value="20px" class="secondary">redondo</button>
+          </div>
+        </div>
+        <div class="bm-stage">
+          <button class="bm-button">Aceptar</button>
+          <button class="bm-button">Aceptar</button>
+        </div>
+        <p class="estilo-current"><code id="bm-current">padding: 10px 20px; border: 3px solid; margin: 8px 0; border-radius: 6px;</code></p>
+
+        <!-- Primitiva 2 — Layout (Flex + Grid) -->
+        <h3 style="margin-top: var(--space-lg)">Primitiva 2 — Layout: Flexbox</h3>
         <div class="estilo-controls">
           <button data-jc="flex-start" class="jc-btn active">flex-start</button>
           <button data-jc="center" class="jc-btn secondary">center</button>
@@ -443,7 +558,40 @@
           <p class="estilo-current"><code id="flex-current">justify-content: flex-start</code></p>
         </div>
 
-        <h3 style="margin-top: var(--space-lg)">Variables CSS: cambiá la perilla</h3>
+        <h3 style="margin-top: var(--space-lg)">Primitiva 2 — Layout: Grid</h3>
+        <div class="estilo-controls">
+          <button data-gtc="1fr" class="gtc-btn secondary">1 columna</button>
+          <button data-gtc="1fr 1fr" class="gtc-btn secondary">2 columnas</button>
+          <button data-gtc="1fr 1fr 1fr" class="gtc-btn active">3 columnas</button>
+          <button data-gtc="repeat(auto-fit, minmax(80px, 1fr))" class="gtc-btn secondary">auto-fit</button>
+        </div>
+        <div class="demo-area">
+          <div class="grid-playground" id="grid-playground">
+            <div class="grid-item">A</div>
+            <div class="grid-item">B</div>
+            <div class="grid-item">C</div>
+            <div class="grid-item">D</div>
+            <div class="grid-item">E</div>
+            <div class="grid-item">F</div>
+          </div>
+          <p class="estilo-current"><code id="grid-current">grid-template-columns: 1fr 1fr 1fr</code></p>
+        </div>
+
+        <!-- Primitiva 3 — Tipografía -->
+        <h3 style="margin-top: var(--space-lg)">Primitiva 3 — Tipografía</h3>
+        <div class="estilo-controls">
+          <button data-typo="sans" class="typo-btn active">Sans para todo</button>
+          <button data-typo="pair" class="typo-btn secondary">Serif heading + Sans body</button>
+          <button data-typo="mono" class="typo-btn secondary">Mono para todo</button>
+        </div>
+        <div class="typo-stage">
+          <h4 class="typo-heading" id="typo-heading">El frontend importa</h4>
+          <p class="typo-body" id="typo-body">Cuando la IA escribe el código, vos no escribís sintaxis: dirigís decisiones. Los nombres importan.</p>
+        </div>
+        <p class="estilo-current"><code id="typo-current">heading: sans-serif · body: sans-serif</code></p>
+
+        <!-- Primitiva 4 — Variables CSS -->
+        <h3 style="margin-top: var(--space-lg)">Primitiva 4 — Variables CSS (theme switcher)</h3>
         <div class="estilo-controls">
           <button data-accent="#6366f1" class="theme-btn secondary" style="background:#6366f1">Indigo</button>
           <button data-accent="#10b981" class="theme-btn secondary" style="background:#10b981">Esmeralda</button>
@@ -624,6 +772,53 @@
     initEstructura();
     // === §2 Estilo ===
     function initEstilo() {
+      initBoxModel();
+      initFlex();
+      initGrid();
+      initTipografia();
+      initVariables();
+    }
+
+    function setActiveAmong(group, btn) {
+      group.forEach(b => {
+        b.classList.toggle('active', b === btn);
+        b.classList.toggle('secondary', b !== btn);
+      });
+    }
+
+    function initBoxModel() {
+      const buttons = document.querySelectorAll('.bm-button');
+      const current = document.getElementById('bm-current');
+      const state = {
+        padding: '10px 20px',
+        'border-width': '3px',
+        margin: '8px 0',
+        'border-radius': '6px',
+      };
+      function paint() {
+        buttons.forEach(b => {
+          b.style.padding = state.padding;
+          b.style.borderWidth = state['border-width'];
+          b.style.margin = state.margin;
+          b.style.borderRadius = state['border-radius'];
+        });
+        current.textContent = `padding: ${state.padding}; border: ${state['border-width']} solid; margin: ${state.margin}; border-radius: ${state['border-radius']};`;
+      }
+      const props = ['padding', 'border-width', 'margin', 'border-radius'];
+      props.forEach(prop => {
+        const group = document.querySelectorAll(`button[data-bm="${prop}"]`);
+        group.forEach(btn => {
+          btn.addEventListener('click', () => {
+            state[prop] = btn.dataset.value;
+            setActiveAmong(group, btn);
+            paint();
+          });
+        });
+      });
+      paint();
+    }
+
+    function initFlex() {
       const playground = document.getElementById('flex-playground');
       const current = document.getElementById('flex-current');
       const jcButtons = document.querySelectorAll('.jc-btn');
@@ -632,13 +827,59 @@
           const jc = btn.dataset.jc;
           playground.style.justifyContent = jc;
           current.textContent = `justify-content: ${jc}`;
-          jcButtons.forEach(b => {
-            b.classList.toggle('active', b === btn);
-            b.classList.toggle('secondary', b !== btn);
-          });
+          setActiveAmong(jcButtons, btn);
         });
       });
+    }
 
+    function initGrid() {
+      const playground = document.getElementById('grid-playground');
+      const current = document.getElementById('grid-current');
+      const gtcButtons = document.querySelectorAll('.gtc-btn');
+      gtcButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const gtc = btn.dataset.gtc;
+          playground.style.gridTemplateColumns = gtc;
+          current.textContent = `grid-template-columns: ${gtc}`;
+          setActiveAmong(gtcButtons, btn);
+        });
+      });
+    }
+
+    function initTipografia() {
+      const heading = document.getElementById('typo-heading');
+      const body = document.getElementById('typo-body');
+      const current = document.getElementById('typo-current');
+      const schemes = {
+        sans: {
+          heading: 'system-ui, -apple-system, sans-serif',
+          body:    'system-ui, -apple-system, sans-serif',
+          label: 'heading: sans-serif · body: sans-serif',
+        },
+        pair: {
+          heading: 'Georgia, "Times New Roman", serif',
+          body:    'system-ui, -apple-system, sans-serif',
+          label: 'heading: serif · body: sans-serif',
+        },
+        mono: {
+          heading: '"SF Mono", Monaco, "Cascadia Code", monospace',
+          body:    '"SF Mono", Monaco, "Cascadia Code", monospace',
+          label: 'heading: monospace · body: monospace',
+        },
+      };
+      const buttons = document.querySelectorAll('.typo-btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const scheme = schemes[btn.dataset.typo];
+          heading.style.fontFamily = scheme.heading;
+          body.style.fontFamily    = scheme.body;
+          current.textContent = scheme.label;
+          setActiveAmong(buttons, btn);
+        });
+      });
+    }
+
+    function initVariables() {
       const themeCurrent = document.getElementById('theme-current');
       const themeButtons = document.querySelectorAll('.theme-btn');
       themeButtons.forEach(btn => {
@@ -646,13 +887,11 @@
           const accent = btn.dataset.accent;
           document.documentElement.style.setProperty('--color-accent', accent);
           themeCurrent.textContent = `--color-accent: ${accent}`;
-          themeButtons.forEach(b => {
-            b.classList.toggle('active', b === btn);
-            b.classList.toggle('secondary', b !== btn);
-          });
+          setActiveAmong(themeButtons, btn);
         });
       });
     }
+
     initEstilo();
     // === §3 Estado ===
     function initEstado() {
