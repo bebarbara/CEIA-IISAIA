@@ -32,7 +32,7 @@ function initClickableSteps(opts) {
     // other content down. The detail panel just overlays whatever's below
     // the steps row.
     var html = '<div style="position: relative;">';
-    html += '<div style="display: flex; gap: 8px; align-items: stretch; font-size: 0.65em;">';
+    html += '<div style="display: flex; gap: 12px; align-items: stretch; font-size: 0.85em;">';
 
     for (var i = 0; i < steps.length; i++) {
       var s = steps[i];
@@ -46,7 +46,7 @@ function initClickableSteps(opts) {
         : '';
 
       html += '<div class="cs-step" data-idx="' + i + '" '
-        + 'style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 12px; '
+        + 'style="flex: 1; background: var(--bg-secondary); border-radius: 8px; padding: 18px 16px; '
         + borderSpec + '; cursor: pointer; transition: box-shadow 0.18s, transform 0.18s; user-select: none; ' + activeStyle + '" '
         + 'role="button" tabindex="0">';
       html += '<div style="font-weight: bold; margin-bottom: 6px; font-size: 1.15em; color: ' + titleColor + ';">' + s.title + '</div>';
@@ -74,11 +74,11 @@ function initClickableSteps(opts) {
     if (activeIdx >= 0 && steps[activeIdx].example) {
       var s = steps[activeIdx];
       var detailColor = s.color || 'var(--accent)';
-      html += '<div style="position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 100; '
-        + 'background: var(--bg-code); border-radius: 6px; padding: 8px 12px; '
-        + 'font-size: 0.4em; line-height: 1.45; '
-        + 'border-left: 3px solid ' + detailColor + '; '
-        + 'max-height: 220px; overflow-y: auto; '
+      html += '<div style="position: absolute; top: calc(100% + 10px); left: 0; right: 0; z-index: 100; '
+        + 'background: var(--bg-code); border-radius: 8px; padding: 14px 18px; '
+        + 'font-size: 0.55em; line-height: 1.55; '
+        + 'border-left: 4px solid ' + detailColor + '; '
+        + 'max-height: 380px; overflow-y: auto; '
         + 'box-shadow: 0 6px 20px rgba(0,0,0,0.5);">';
       html += '<div style="color: var(--text-muted); margin-bottom: 6px; font-size: 0.95em;">Ejemplo concreto &mdash; ' + s.title + '</div>';
       html += s.example;
