@@ -820,11 +820,11 @@ p  { font-family: system-ui, sans-serif; }</code></pre>
           <div style="margin-top: 12px;">
             <pre style="margin: 0; font-size: 0.55em; box-shadow: none;"><code class="language-html" data-trim>&lt;button class="btn"&gt;Aceptar&lt;/button&gt;
 &lt;a class="link"&gt;Saber más&lt;/a&gt;
-&lt;span class="badge"&gt;Nuevo&lt;/span&gt;</code></pre>
+&lt;aside class="aviso"&gt;Importante&lt;/aside&gt;</code></pre>
             <pre style="margin: 6px 0 0; font-size: 0.55em; box-shadow: none;"><code class="language-css" data-trim>:root { --color-accent: ???; }
 .btn   { background: var(--color-accent); color: #fff; }
 .link  { color: var(--color-accent); }
-.badge { border: 1px solid var(--color-accent); color: var(--color-accent); }</code></pre>
+.aviso { border-left: 4px solid var(--color-accent); color: var(--color-accent); }</code></pre>
           </div>
 
           <p class="fragment fade-in" data-fragment-index="1" style="margin-top: 14px; font-size: 0.6em; color: var(--text-muted); text-align: center;">
@@ -835,19 +835,19 @@ p  { font-family: system-ui, sans-serif; }</code></pre>
               <code style="flex: 0 0 auto; font-size: 0.55em; min-width: 170px;">--color-accent: #6366f1</code>
               <button style="background: #6366f1; color: #fff; padding: 4px 12px; border: none; border-radius: 4px; font-size: 0.65em; cursor: default;">Aceptar</button>
               <a style="color: #6366f1; font-size: 0.7em; text-decoration: underline;">Saber más</a>
-              <span style="border: 1px solid #6366f1; color: #6366f1; padding: 2px 8px; border-radius: 10px; font-size: 0.6em;">Nuevo</span>
+              <span style="border-left: 4px solid #6366f1; color: #6366f1; padding: 2px 10px; font-size: 0.6em; font-style: italic;">Importante</span>
             </div>
             <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 8px;">
               <code style="flex: 0 0 auto; font-size: 0.55em; min-width: 170px;">--color-accent: #10b981</code>
               <button style="background: #10b981; color: #fff; padding: 4px 12px; border: none; border-radius: 4px; font-size: 0.65em; cursor: default;">Aceptar</button>
               <a style="color: #10b981; font-size: 0.7em; text-decoration: underline;">Saber más</a>
-              <span style="border: 1px solid #10b981; color: #10b981; padding: 2px 8px; border-radius: 10px; font-size: 0.6em;">Nuevo</span>
+              <span style="border-left: 4px solid #10b981; color: #10b981; padding: 2px 10px; font-size: 0.6em; font-style: italic;">Importante</span>
             </div>
             <div style="display: flex; align-items: center; gap: 14px;">
               <code style="flex: 0 0 auto; font-size: 0.55em; min-width: 170px;">--color-accent: #f59e0b</code>
               <button style="background: #f59e0b; color: #fff; padding: 4px 12px; border: none; border-radius: 4px; font-size: 0.65em; cursor: default;">Aceptar</button>
               <a style="color: #f59e0b; font-size: 0.7em; text-decoration: underline;">Saber más</a>
-              <span style="border: 1px solid #f59e0b; color: #f59e0b; padding: 2px 8px; border-radius: 10px; font-size: 0.6em;">Nuevo</span>
+              <span style="border-left: 4px solid #f59e0b; color: #f59e0b; padding: 2px 10px; font-size: 0.6em; font-style: italic;">Importante</span>
             </div>
           </div>
 
@@ -859,8 +859,8 @@ p  { font-family: system-ui, sans-serif; }</code></pre>
             <p><u>Variables CSS: la primitiva más importante para trabajar con IA. El demo de tres filas muestra el efecto cascada — cambiar UNA línea reviste todo.</u></p>
             <p><em>"La cuarta y última primitiva del CSS es la más importante para trabajar con IA. Se llaman variables CSS, también conocidas como custom properties. La idea es simple: en lugar de escribir el mismo color o el mismo número de píxeles en veinte lugares distintos, lo definís una sola vez con un nombre, y después lo usás por nombre en cada lugar que lo necesites."</em></p>
             <p><em>"El cómo es específico. Declarás la variable dentro de un selector especial llamado :root, que es la regla que aplica a todo el documento. El nombre de la variable empieza siempre con dos guiones medios — por ejemplo, --color-accent o --espaciado-base; el nombre que sigue lo elegís vos. Y para usarla, en lugar de escribir el valor concreto, escribís var(nombre-de-la-variable). Ese es todo el mecanismo."</em></p>
-            <p><em>"Mirá el ejemplo en pantalla. En el HTML, tres elementos: un button, un enlace, y un badge — eso es solamente un span chiquito que diría algo como 'Nuevo'. En el CSS, abajo, tenemos primero la declaración de la variable --color-accent en :root, con el valor en signos de pregunta porque enseguida lo voy a llenar con tres opciones distintas. Y debajo, tres reglas que la usan: el botón aplica var(--color-accent) en background, el enlace en color, y el badge tanto en border como en color del texto. Tres reglas, una sola variable referenciada en todas."</em></p>
-            <p><em>"Click. Acá tienen tres filas, una por cada valor que le doy a --color-accent. En la primera fila, la variable vale indigo, y los tres elementos — botón, enlace, badge — salen renderizados en indigo. En la segunda, la variable vale verde esmeralda, y los tres salen verdes. En la tercera, ámbar, y todo se reviste de ámbar. Lo único que cambia entre filas es la primera línea del CSS: el valor de --color-accent. Tres elementos, una variable, todo cambia junto."</em></p>
+            <p><em>"Mirá el ejemplo en pantalla. En el HTML, tres elementos: un button, un enlace, y un aviso — un aside que dice 'Importante', el típico recuadro de nota que ven en cualquier sitio de documentación. En el CSS, abajo, tenemos primero la declaración de la variable --color-accent en :root, con el valor en signos de pregunta porque enseguida lo voy a llenar con tres opciones distintas. Y debajo, tres reglas que la usan: el botón aplica var(--color-accent) en background, el enlace en color, y el aviso usa la variable tanto en su borde izquierdo como en el color del texto. Tres reglas, una sola variable referenciada en todas."</em></p>
+            <p><em>"Click. Acá tienen tres filas, una por cada valor que le doy a --color-accent. En la primera fila, la variable vale indigo, y los tres elementos — botón, enlace, aviso — salen renderizados en indigo. En la segunda, la variable vale verde esmeralda, y los tres salen verdes. En la tercera, ámbar, y todo se reviste de ámbar. Lo único que cambia entre filas es la primera línea del CSS: el valor de --color-accent. Tres elementos, una variable, todo cambia junto."</em></p>
             <p><em>"Ahí está la razón por la que llamo a las variables 'la primitiva del LLM'. Sin variables, cuando le pedís a la IA 'cambiá el acento a verde', el modelo tiene que buscar el hex viejo en cada regla del CSS y reemplazarlo a mano. Si tu sitio tiene veinte reglas usando ese color, son veinte reemplazos, y cada uno es un riesgo: ¿y si ese mismo hex también se usaba para algo que no querías cambiar? Con variables, le pedís lo mismo y solamente cambia una línea. Cero ambigüedad, cero riesgo. Por eso es la primitiva más importante para trabajar con IA."</em></p>
           </aside>
         </section>
