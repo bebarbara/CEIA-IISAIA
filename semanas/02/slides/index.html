@@ -1131,6 +1131,168 @@ btn.addEventListener('click', () =&gt; {
       <!-- ============================================================
            §5 — Single-file platform
            ============================================================ -->
+      <section>
+
+        <!-- §5.1: Apertura — roadmap activa "Empaque" -->
+        <section>
+          <h2>Capa 5 — Empaque</h2>
+          <div class="layer-roadmap active-5">
+            <div class="pipe-node" data-layer="1"><div class="pipe-label">Estructura</div><div class="pipe-sub">HTML</div></div>
+            <span class="pipe-arrow">→</span>
+            <div class="pipe-node" data-layer="2"><div class="pipe-label">Estilo</div><div class="pipe-sub">CSS</div></div>
+            <span class="pipe-arrow">→</span>
+            <div class="pipe-node" data-layer="3"><div class="pipe-label">Comportamiento</div><div class="pipe-sub">JavaScript</div></div>
+            <span class="pipe-arrow">→</span>
+            <div class="pipe-node" data-layer="4"><div class="pipe-label">Estado</div><div class="pipe-sub">datos</div></div>
+            <span class="pipe-arrow">→</span>
+            <div class="pipe-node" data-layer="5"><div class="pipe-label">Empaque</div><div class="pipe-sub">archivos</div></div>
+          </div>
+          <p style="margin-top: 32px; font-size: 0.95em; text-align: center; max-width: 36em; margin-left: auto; margin-right: auto;">
+            Cómo se reparten las cuatro capas anteriores <span style="color: var(--accent);">entre archivos</span>.
+          </p>
+          <p style="margin-top: 8px; font-size: 0.7em; text-align: center; color: var(--text-muted); max-width: 38em; margin-left: auto; margin-right: auto; font-style: italic;">
+            <strong>Empaque</strong> es la decisión. <strong>Single-file</strong> (todo en un solo <code>.html</code>) es una estrategia — la que usa este curso. Multi-archivo es otra. Bundlers, otra.
+          </p>
+          <p class="fragment fade-in" style="margin-top: 20px; font-size: 0.85em; text-align: center; color: var(--text-muted); max-width: 32em; margin-left: auto; margin-right: auto;">
+            ¿Por qué la versión más simple, todo en un solo archivo, es la que mejor funciona con una IA?
+          </p>
+          <aside class="notes">
+            <p><strong>Después de la frase principal y la definición, revelar la pregunta de transición con un click.</strong></p>
+            <p><u>Apertura de §5. Capa de empaque activa. Distinguir empaque (decisión general) de single-file (una estrategia particular) antes de defender la estrategia que usamos.</u></p>
+            <p><em>"Quinta y última capa: empaque. Es la decisión de cómo se distribuyen las cuatro capas anteriores — estructura, estilo, comportamiento y estado — entre archivos. Pueden ir todas en un solo archivo HTML, pueden ir cada una en su archivo separado, o pueden ir en una pila más compleja con bundlers, módulos y compiladores. Empaque es la decisión; cada una de esas formas es una estrategia."</em></p>
+            <p><em>"En esta clase usamos la estrategia más simple: todo en un solo .html. Se llama single-file. No es la única forma; en la industria, los proyectos grandes usan multi-archivo casi siempre. Pero para esta clase, single-file es lo que mejor funciona, y la próxima slide explica por qué."</em></p>
+          </aside>
+        </section>
+
+        <!-- §5.2: Tres ventajas del single-file -->
+        <section>
+          <h2>Por qué single-file con una IA</h2>
+          <div class="consequence-row" style="margin-top: 12px;">
+            <div class="bg-secondary-card fragment fade-in" data-fragment-index="1" style="border-left: 4px solid var(--accent); padding: 12px;">
+              <h3 style="color: var(--accent); margin-bottom: 8px; font-size: 1em;">1 — Cabe en el contexto</h3>
+              <p style="font-size: 0.78em;">Un LLM gratuito tiene una <strong>ventana de contexto</strong> limitada: la cantidad máxima de texto que puede leer al mismo tiempo.</p>
+              <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 8px;">Si el proyecto son 12 archivos en 4 carpetas, el modelo termina viendo retazos e inventando. Si es un archivo, lo tiene completo siempre.</p>
+            </div>
+            <div class="bg-secondary-card fragment fade-in" data-fragment-index="2" style="border-left: 4px solid var(--accent-secondary); padding: 12px;">
+              <h3 style="color: var(--accent-secondary); margin-bottom: 8px; font-size: 1em;">2 — Deploy por copy-paste</h3>
+              <p style="font-size: 0.78em;">Copiás el archivo, lo pegás en GitHub Pages, Netlify Drop, un Gist, y ya tenés URL pública.</p>
+              <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 8px;">Cero pipeline, cero CI, cero configuración. Ideal para prototipos, demos y piezas de portfolio.</p>
+            </div>
+            <div class="bg-secondary-card fragment fade-in" data-fragment-index="3" style="border-left: 4px solid #f59e0b; padding: 12px;">
+              <h3 style="color: #f59e0b; margin-bottom: 8px; font-size: 1em;">3 — Cero toolchain</h3>
+              <p style="font-size: 0.78em;">Sin <code>npm install</code>, sin <code>webpack</code>, sin Node de la versión correcta.</p>
+              <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 8px;">El alumno hace doble click, el navegador lo abre, funciona. La distancia entre "tengo una idea" y "tengo algo corriendo" es cero.</p>
+            </div>
+          </div>
+          <p class="fragment fade-in" data-fragment-index="4" style="margin-top: 14px; font-size: 0.7em; color: var(--text-muted); text-align: center; max-width: 38em; margin-left: auto; margin-right: auto;">
+            Las tres apuntan a lo mismo: <strong>menos fricción entre vos, la IA y el navegador</strong>.
+          </p>
+          <aside class="notes">
+            <p><strong>Revelar las tres ventajas en orden, una por click. Cuarto click revela la línea de cierre.</strong></p>
+            <p><u>Tres razones por las que el single-file domina cuando trabajás con una IA, especialmente con un free tier.</u></p>
+            <p><em>"Tres razones, una por una."</em></p>
+            <p><em>"Primera: cabe en el contexto del LLM. Un modelo gratuito tiene una ventana de contexto limitada — la cantidad máxima de texto que puede tener a la vista al mismo tiempo. Si tu proyecto son doce archivos repartidos en cuatro carpetas, no le entra. El modelo termina viendo solamente fragmentos, y cuando le falta información empieza a inventar: importa funciones que no existen, asume nombres de variables, contradice código de otro archivo que no leyó. Si todo es un archivo, lo tiene completo siempre. La calidad del output sube proporcional a cuánto del proyecto puede ver el modelo."</em></p>
+            <p><em>"Segunda: deploy por copy-paste. Deploy es la palabra que asusta al principiante: pipelines, builds, servidores, CI. Acá no hay nada de eso. Copiás el contenido del archivo, lo pegás en un Gist de GitHub, en GitHub Pages, en Netlify Drop, en cualquier servicio que sirva HTML estático, y ya tenés una URL pública. Cero configuración. Ideal para prototipos rápidos, demos en clase, piezas de portfolio que querés que vivan online en cinco minutos."</em></p>
+            <p><em>"Tercera: cero toolchain. Un toolchain moderno de frontend trae compiladores, bundlers que empaquetan muchos archivos en uno solo, gestores de paquetes, versiones específicas de Node, configuraciones de TypeScript. Todo eso desaparece. Doble click en el archivo, el navegador lo abre, funciona. La distancia entre 'tengo una idea' y 'tengo algo corriendo' se vuelve cero. Eso es enorme cuando estás aprendiendo: cualquier obstáculo de tooling mata el momentum."</em></p>
+            <p><em>"Las tres apuntan a lo mismo: menos fricción entre vos, la IA y el navegador. Pero el single-file no es universal — tiene límites concretos."</em></p>
+          </aside>
+        </section>
+
+        <!-- §5.3: Cuándo se rompe -->
+        <section>
+          <h2>Cuándo se rompe el single-file</h2>
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.75em; margin-top: 14px;">
+            <thead>
+              <tr>
+                <th style="text-align: left; padding: 8px 12px; border-bottom: 2px solid var(--text-muted); width: 28%;">Síntoma</th>
+                <th style="text-align: left; padding: 8px 12px; border-bottom: 2px solid var(--text-muted);">Solución</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="fragment fade-in" data-fragment-index="1">
+                <td style="padding: 8px 12px; font-weight: 600;">El archivo pasa las 1000 líneas</td>
+                <td style="padding: 8px 12px;">Leerlo se vuelve doloroso. Conviene partirlo en archivos por área (CSS afuera, JS afuera).</td>
+              </tr>
+              <tr class="fragment fade-in" data-fragment-index="2">
+                <td style="padding: 8px 12px; font-weight: 600;">Hay backend</td>
+                <td style="padding: 8px 12px;">El single-file solo cubre el cliente. Para servidor, semana 3 introduce el equivalente: <em>single-file server</em>.</td>
+              </tr>
+              <tr class="fragment fade-in" data-fragment-index="3">
+                <td style="padding: 8px 12px; font-weight: 600;">Necesitás dependencias pesadas</td>
+                <td style="padding: 8px 12px;">Editor de texto rico, motor 3D, librería gigante: traerlas vía CDN (una línea de <code>&lt;script&gt;</code>) o pasar a multi-archivo.</td>
+              </tr>
+              <tr class="fragment fade-in" data-fragment-index="4">
+                <td style="padding: 8px 12px; font-weight: 600;">Trabajás en equipo</td>
+                <td style="padding: 8px 12px;">Resolver conflictos de merge sobre un único archivo gigante es un infierno. Archivos separados ganan por arrastre.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="fragment fade-in" data-fragment-index="5" style="margin-top: 18px; font-size: 0.78em; text-align: center; color: var(--accent);">
+            El single-file es <em>default</em>, no <em>dogma</em>.
+          </p>
+          <aside class="notes">
+            <p><strong>Cinco clicks: una fila por click, después la línea de cierre.</strong></p>
+            <p><u>Los límites honestos del single-file. La regla práctica al final: usalo por defecto, no como religión.</u></p>
+            <p><em>"Hay que ser honesto: el single-file no es universal, y conviene saber sus límites para no usarlo donde estorba."</em></p>
+            <p><em>"Primer síntoma. Cuando el archivo pasa las mil líneas, leerlo se vuelve doloroso — para vos y para la IA. Acá conviene partirlo, separar el CSS en su archivo, el JS en otro. Volver a multi-archivo."</em></p>
+            <p><em>"Segundo. Hay backend. El single-file que vimos solo cubre el lado del cliente, lo que el navegador renderiza. Cuando tu app necesita un servidor con base de datos y autenticación, no entra todo en un .html. La próxima clase introduce el equivalente del lado servidor: single-file server, todo en un script de Python. Mismo principio, otro lado."</em></p>
+            <p><em>"Tercero. Necesitás una dependencia pesada — un editor de texto rico, un motor 3D, una librería con miles de líneas. Hay dos salidas: traerla vía CDN, una línea de script tag que apunta a un servidor público que sirve la librería; o aceptar que el proyecto creció y pasarlo a multi-archivo."</em></p>
+            <p><em>"Cuarto. Trabajás en equipo. Si dos personas tocan el mismo archivo gigante al mismo tiempo, el merge es un infierno. Archivos separados, donde cada persona toca su componente o su módulo, ganan por arrastre."</em></p>
+            <p><em>"Conclusión: el single-file es el default razonable para esta clase y para los TPs que dependan de un LLM gratuito. No es dogma. Cuando alguno de estos cuatro síntomas aparece, partís. Pero hasta entonces, no inventes carpetas."</em></p>
+          </aside>
+        </section>
+
+        <!-- §5.4: Demo single-file en demo.html -->
+        <section>
+          <h2>Single-file en vivo</h2>
+          <div style="margin-top: 24px; text-align: center;">
+            <p style="font-size: 0.85em; max-width: 36em; margin: 0 auto 24px;">
+              <code>demo.html</code> entero — los cinco demos, los toggles, el árbol del DOM, el theme switcher, todo lo que viste hoy — vive en <strong>un solo archivo</strong>. Su §5 abre el código fuente para que lo veas con tus propios ojos.
+            </p>
+            <a href="../source_material/demo.html#single-file" target="_blank" rel="noopener" style="display: inline-block; padding: 10px 20px; background: var(--accent); color: var(--bg-primary); border-radius: 6px; font-size: 0.8em; text-decoration: none;">Abrir demo.html §5 — Single-file →</a>
+          </div>
+          <aside class="notes">
+            <p><strong>Abrir demo.html#single-file en una pestaña nueva. Tocar el botón 'Ver el código fuente'. El modal se abre con el HTML completo del archivo. Pasar la rueda hacia abajo para mostrar la longitud.</strong></p>
+            <p><u>Demo concreto del paradigma: un solo archivo que contiene todo lo que vimos en clase, demostrable in situ.</u></p>
+            <p><em>"Y la prueba viva la tienen acá. Abro demo.html en otra pestaña. Esta página entera, todos los demos que vimos durante la clase — el toggle semántico vs sopa de divs, el flex playground, el theme switcher, los contadores con estado, el árbol del DOM, el preset combo de las cuatro primitivas — todo eso vive en un solo archivo HTML."</em></p>
+            <p><em>"Toco el botón 'Ver el código fuente' del §5 y se abre un modal con el archivo entero. Esa cantidad de funcionalidad cabe en un .html. Si una página educativa puede vivir entera en un archivo, lo mismo aplica al artefacto que cada grupo va a construir esta tarde."</em></p>
+          </aside>
+        </section>
+
+        <!-- §5.5: Cómo le pedís single-file a una IA -->
+        <section>
+          <h2>Cómo le pedís single-file a una IA</h2>
+          <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
+            <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+              <h3 style="color: var(--text-muted); margin-bottom: 12px;">Prompt sin vocabulario</h3>
+              <p style="font-style: italic; font-size: 0.78em; line-height: 1.5;">"Hacé una página web con un contador."</p>
+              <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 16px;">
+                La IA puede tirarte un proyecto multi-archivo con <code>package.json</code> y dependencias. Funciona, pero no entra en ChatGPT Canvas.
+              </p>
+            </div>
+            <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+              <h3 style="color: var(--accent); margin-bottom: 12px;">Prompt con vocabulario</h3>
+              <p style="font-style: italic; font-size: 0.78em; line-height: 1.55;">
+                "Hacé una página de un contador en <strong>un solo archivo HTML</strong>, con CSS y JS <strong>inline</strong>, <strong>vanilla JS</strong>, <strong>sin dependencias externas</strong>."
+              </p>
+              <p style="font-size: 0.7em; color: var(--accent); margin-top: 12px;">
+                Cuatro restricciones: un archivo, inline, vanilla, sin deps. La IA no improvisa.
+              </p>
+            </div>
+          </div>
+          <p style="margin-top: 18px; font-size: 0.8em; text-align: center;">
+            <em>Vago = lotería.</em> &nbsp; <em>Específico = determinismo.</em>
+          </p>
+          <aside class="notes">
+            <p><u>Cierre de §5. Mismo reframing que §2.5 / §3.7 / §4.7: vocabulario por determinismo, iteración y auditoría.</u></p>
+            <p><em>"Mismo cierre que las secciones anteriores. Mirá los dos prompts: la intención es la misma — una página con un contador."</em></p>
+            <p><em>"Y el mismo descargo de honestidad: si vos hoy le pedís a Claude o a ChatGPT 'hacé una página con un contador', lo más probable es que te devuelva código razonable. Pero acá hay una sutileza: 'razonable' depende del default del modelo. Algunos modelos asumen multi-archivo con build tools porque eso es lo que vieron en proyectos de producción. Otros tiran single-file. Es lotería."</em></p>
+            <p><em>"El prompt específico fija cuatro restricciones que importan especialmente cuando trabajás con ChatGPT Canvas o con cualquier free tier de IA: un solo archivo HTML, CSS y JS inline, vanilla JS sin frameworks, cero dependencias externas. Esas cuatro palabras hacen que el resultado quepa en el contexto del modelo, se ejecute al hacer doble click, y deploye con copy-paste."</em></p>
+            <p><em>"Y la moraleja general que ya conocen: vago es lotería, específico es determinismo. Cerramos la anatomía. Lo que viene son cuatro patrones de prompt que aplican todo el vocabulario de la clase a casos concretos."</em></p>
+          </aside>
+        </section>
+
+      </section>
 
       <!-- ============================================================
            §6 — Cuatro patrones de prompt
