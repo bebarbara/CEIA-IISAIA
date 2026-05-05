@@ -1306,6 +1306,90 @@ btn.addEventListener('click', () =&gt; {
       <!-- ============================================================
            §6 — Cuatro patrones de prompt
            ============================================================ -->
+      <section>
+
+        <!-- §6.1: Section divider -->
+        <section class="section-divider">
+          <h2>Patrones de prompt</h2>
+          <p style="color: var(--text-muted); font-size: 0.85em; margin-top: 8px;">De la anatomía a la aplicación.</p>
+          <aside class="notes">
+            <p><u>Section divider. Cierra la anatomía (capas 1–5) y abre la parte aplicada del curso: cómo se usa el vocabulario en prompts reales.</u></p>
+            <p><em>"Cerramos la anatomía. Vimos las cinco capas: estructura, estilo, comportamiento, estado y empaque. Nombramos cada una. Lo que viene ahora es donde ese vocabulario te paga: cuatro patrones de prompt que aplican lo aprendido a casos concretos."</em></p>
+          </aside>
+        </section>
+
+        <!-- §6.2: El cambio de mentalidad -->
+        <section>
+          <h2>No estás escribiendo código.</h2>
+          <p style="font-size: 1.4em; text-align: center; margin-top: 8px; color: var(--accent);">Estás <em>encargando</em> código.</p>
+          <p style="font-size: 0.78em; text-align: center; max-width: 38em; margin: 28px auto 0;">
+            Un <strong>patrón de prompt</strong> es una plantilla reusable con el vocabulario correcto ya incrustado. Lo completás con los detalles del caso y largás.
+          </p>
+          <p class="fragment fade-in" style="font-size: 0.78em; text-align: center; max-width: 38em; margin: 18px auto 0; color: var(--text-muted);">
+            Cuatro patrones cubren cerca del <strong>80% del trabajo UI con IA</strong>.
+          </p>
+          <aside class="notes">
+            <p><strong>Después de la frase principal y la descripción, revelar el cierre con un click.</strong></p>
+            <p><u>El cambio de mentalidad: la diferencia entre tipear código y dirigirlo. La metáfora del 'formulario de pedido' que la IA puede leer sin adivinar.</u></p>
+            <p><em>"Hay un cambio de mentalidad importante para esta segunda mitad de la clase. No estás escribiendo código. Estás encargando código. Eso es distinto a pedirle ayuda a un compañero: un compañero adivina, completa, te pregunta si quisiste decir otra cosa. La IA no. La IA hace exactamente lo que decís, y por eso la calidad de tu pedido es el techo de la calidad del resultado."</em></p>
+            <p><em>"Un patrón de prompt es una plantilla reusable que ya tiene el vocabulario correcto incrustado. Vos lo completás con los detalles del caso concreto y largás. Es como un formulario de pedido que la IA puede leer sin tener que adivinar."</em></p>
+            <p><em>"Con cuatro patrones, cubrís alrededor del ochenta por ciento del trabajo cuando construís UI con IA. Cubren los cuatro modos de trabajo más comunes: arrancar de cero, evolucionar el comportamiento, arreglar el visual, y polir la identidad final. Vamos a verlos."</em></p>
+          </aside>
+        </section>
+
+        <!-- §6.3: Los cuatro patrones (clickable-steps) -->
+        <section>
+          <h2>Los cuatro patrones</h2>
+          <p style="font-size: 0.7em; color: var(--text-muted); text-align: center; margin: 6px auto 14px; max-width: 38em;">
+            Tocá cada patrón para ver su plantilla y un ejemplo trabajado.
+          </p>
+          <div id="patrones-flow"></div>
+          <aside class="notes">
+            <p><strong>Tocar cada caja para abrir el detalle. Recorrer en orden P1 → P2 → P3 → P4. Cada panel muestra plantilla + ejemplo Pomodoro trabajado.</strong></p>
+            <p><u>Los cuatro patrones como mapa interactivo. Cada uno cubre un momento típico del ciclo de construir un artefacto.</u></p>
+            <p><em>"Los cuatro patrones cubren los momentos típicos. P1, describir el artefacto, es el primer prompt cuando arrancás de cero. P2, iterar sobre el estado, cuando ya tenés algo andando y querés agregarle un comportamiento nuevo. P3, arreglar el layout, cuando el visual está mal acomodado. P4, tematizar y pulir, cuando querés darle identidad visual cohesiva. En ese orden suele caer un proyecto chico."</em></p>
+            <p><em>"Tocá P1 para ver la plantilla. Estructura, estilo, comportamiento, constraints — cada uno corresponde a una capa de las que vimos. La plantilla nombra todo de una sola vez. El ejemplo trabajado, el Pomodoro, muestra cómo se llena con un caso concreto: header con título y botón de modo, main con círculo de tiempo, footer con contador. Cinco líneas y la IA tiene todo lo que necesita para acertar al primer intento."</em></p>
+            <p><em>"P2: agregar comportamiento. Plantilla con tres bloques: el estado nuevo, qué pasa al activarlo, qué pasa al desactivarlo. Ejemplo Pomodoro: agregar pausa. Estado isPaused. Cuando true, frenar el cronómetro y cambiar el botón a Reanudar. Cuando false, continuar. La idea clave: nombrar las dos direcciones de la transición."</em></p>
+            <p><em>"P3: arreglar layout. Plantilla más cortita: nombrás el contenedor, el modelo de layout que querés (flex o grid), y los parámetros concretos. Ejemplo: el header del Pomodoro está mal acomodado, convertilo en flex container con justify-content space-between y align-items center, padding 16 horizontal. Cero ambigüedad."</em></p>
+            <p><em>"P4: tematizar. Plantilla en tres pasos: convertir styling a variables CSS, definir tokens en root, reemplazar valores hardcodeados. Ejemplo: definir --color-bg, --color-text, --color-accent, --space-md, --radius. La IA hace el reemplazo automático y de paso te marca si algún contraste no llega a AA."</em></p>
+          </aside>
+        </section>
+
+        <!-- §6.4: Demo en vivo + bridge -->
+        <section>
+          <h2>Demo en vivo: dice roller en cuatro prompts</h2>
+          <p style="font-size: 0.78em; text-align: center; max-width: 38em; margin: 6px auto 16px;">
+            Vamos a aplicar los cuatro patrones, en orden, en una conversación con un LLM. El resultado: un dice roller funcional, tematizado, con historial.
+          </p>
+          <div style="max-width: 56em; margin: 0 auto; display: grid; grid-template-columns: auto 1fr; gap: 8px 14px; align-items: start; font-size: 0.72em;">
+            <div style="color: var(--accent); font-weight: 600;">Prompt 1 — P1</div>
+            <div style="color: var(--text-muted); font-style: italic;">"Construí un dice roller. Estructura: header con h1 'Dice Roller'; main con section que muestra el resultado en un cuadrado grande, debajo dos buttons (Tirar/Reset); footer con historial de últimas 5 tiradas. Estilo: dark, fondo #0f172a, acento #6366f1. Comportamiento: estado <code>result</code> (1–6, inicial 1). Tirar: random 1–6 y actualizar <code>result</code>. Constraints: un archivo, vanilla JS, sin deps."</div>
+
+            <div style="color: var(--accent); font-weight: 600;">Prompt 2 — P2</div>
+            <div style="color: var(--text-muted); font-style: italic;">"Agregale un estado <code>history</code> (array). En cada Tirar, además de actualizar <code>result</code>, agregalo al array. Mostrá las últimas 5 tiradas en el footer separadas por comas. En Reset, vaciá <code>history</code> también."</div>
+
+            <div style="color: var(--accent); font-weight: 600;">Prompt 3 — P3</div>
+            <div style="color: var(--text-muted); font-style: italic;">"El header está mal acomodado. Hacelo un flex container con <code>justify-content: space-between</code> y <code>align-items: center</code>. El main: flex column, align-items center, gap 24px."</div>
+
+            <div style="color: var(--accent); font-weight: 600;">Prompt 4 — P4</div>
+            <div style="color: var(--text-muted); font-style: italic;">"Convertí el styling para que use variables CSS. Definí en <code>:root</code>: <code>--color-bg #0f172a</code>, <code>--color-text #e2e8f0</code>, <code>--color-accent #6366f1</code>, <code>--space-md 16px</code>, <code>--radius 12px</code>. Reemplazá todos los valores hardcodeados."</div>
+          </div>
+          <p style="margin-top: 18px; font-size: 0.78em; text-align: center; color: var(--accent);">
+            Cuatro prompts, un artefacto funcional. Es lo que tu grupo va a hacer en una hora.
+          </p>
+          <aside class="notes">
+            <p><strong>Antes de mostrar la slide, abrir ChatGPT Canvas en otra pestaña. Pegar Prompt 1, ejecutar, mostrar el resultado funcionando. Pegar Prompt 2, mostrar la iteración. Pegar Prompt 3, mostrar el ajuste de layout. Pegar Prompt 4, mostrar el theming. Cada uno toma ~30 segundos en correr.</strong></p>
+            <p><u>Demo en vivo del flujo P1 → P2 → P3 → P4. Es el cierre de la anatomía aplicada: vocabulario aprendido se traduce en cuatro prompts cortos que producen un artefacto funcional.</u></p>
+            <p><em>"Vamos a hacerlo en vivo, ahora, con un LLM en otra pestaña. Voy a pegar los cuatro prompts en orden y vamos a ver cómo cada uno construye encima del anterior."</em></p>
+            <p><em>"Prompt uno, patrón uno: describir el artefacto. Construí un dice roller. Cinco líneas con estructura, estilo, comportamiento y constraints. La IA me devuelve un archivo HTML completo con un dado, dos botones, y un historial vacío. Ya funciona."</em></p>
+            <p><em>"Prompt dos, patrón dos: iterar sobre el estado. Agregale un history array, cada tirada se guarda, en reset se vacía. La IA mete el array, el push, y la lista de las últimas cinco tiradas en el footer. El artefacto crece."</em></p>
+            <p><em>"Prompt tres, patrón tres: arreglar el layout. El header estaba apretado, lo convierto en flex con justify space-between. El main centrado en column. El visual se ordena. Tres líneas y listo."</em></p>
+            <p><em>"Prompt cuatro, patrón cuatro: tematizar. Convertir todo a variables. Definir cinco tokens en :root. Reemplazar hardcodeados. Ahora cambiar el acento a verde es una sola línea — la primitiva del LLM en acción."</em></p>
+            <p><em>"Cuatro prompts, un artefacto funcional, tematizado, con historial. Eso es lo que tu grupo va a hacer en sesenta minutos. La próxima sección explica cómo se reparten el trabajo."</em></p>
+          </aside>
+        </section>
+
+      </section>
 
       <!-- ============================================================
            §7 — Actividad grupal
@@ -1317,6 +1401,7 @@ btn.addEventListener('click', () =&gt; {
   <script src="../../../node_modules/reveal.js/dist/reveal.js"></script>
   <script src="../../../node_modules/reveal.js/plugin/highlight/highlight.js"></script>
   <script src="../../../node_modules/reveal.js/plugin/notes/notes.js"></script>
+  <script src="clickable-steps.js"></script>
   <script>
     Reveal.initialize({
       hash: true,
@@ -1326,6 +1411,79 @@ btn.addEventListener('click', () =&gt; {
       height: 800,
       margin: 0.02,
       plugins: [RevealHighlight, RevealNotes]
+    });
+
+    // §6.3 — Cuatro patrones de prompt (clickable-steps)
+    initClickableSteps({
+      containerId: 'patrones-flow',
+      steps: [
+        {
+          title: '1. Describir el artefacto',
+          summary: 'El primer prompt. Nombrá todo de una.',
+          color: 'var(--accent)',
+          borderColor: 'var(--accent)',
+          example:
+            '<div style="font-size: 0.9em; line-height: 1.5;">' +
+            '<p style="margin: 0 0 6px; color: var(--text-muted);">Plantilla:</p>' +
+            '<pre style="margin: 0 0 10px; font-size: 0.9em; box-shadow: none;">Construí un [tipo de artefacto].\n' +
+            'Estructura: [secciones HTML, jerarquía].\n' +
+            'Estilo: [tono, paleta, tipografía].\n' +
+            'Comportamiento: [estados, eventos clave].\n' +
+            'Constraints: un solo archivo HTML, vanilla JS, sin deps.</pre>' +
+            '<p style="margin: 0 0 4px; color: var(--text-muted);">Ejemplo (Pomodoro):</p>' +
+            '<p style="margin: 0; font-style: italic; color: var(--text-muted);">' +
+            'header con título y botón de modo · main con círculo grande mostrando tiempo · botones Iniciar/Pausar/Reiniciar · footer con contador. Estilo dark, paleta indigo. Estado <code>mode</code>, <code>secondsLeft</code>, <code>isRunning</code>. Constraints single-file, vanilla JS.</p>' +
+            '</div>'
+        },
+        {
+          title: '2. Iterar sobre el estado',
+          summary: 'Ya tenés algo andando; agregale comportamiento.',
+          color: 'var(--accent-secondary)',
+          borderColor: 'var(--accent-secondary)',
+          example:
+            '<div style="font-size: 0.9em; line-height: 1.5;">' +
+            '<p style="margin: 0 0 6px; color: var(--text-muted);">Plantilla:</p>' +
+            '<pre style="margin: 0 0 10px; font-size: 0.9em; box-shadow: none;">Agregale al [artefacto] un estado [nombre].\n' +
+            'Cuando [condición]: [efecto en estado] y [efecto en DOM].\n' +
+            'Cuando [condición de retorno]: [restablecer].</pre>' +
+            '<p style="margin: 0 0 4px; color: var(--text-muted);">Ejemplo (Pomodoro pausa):</p>' +
+            '<p style="margin: 0; font-style: italic; color: var(--text-muted);">' +
+            'Estado <code>isPaused</code>. Al click en Pausar: <code>isPaused = true</code>, frenar el cronómetro, botón pasa a Reanudar, círculo se vuelve gris. Al click en Reanudar: <code>isPaused = false</code>, contador continúa, círculo vuelve al color normal.</p>' +
+            '</div>'
+        },
+        {
+          title: '3. Arreglar el layout',
+          summary: 'El visual está mal acomodado.',
+          color: '#f59e0b',
+          borderColor: '#f59e0b',
+          example:
+            '<div style="font-size: 0.9em; line-height: 1.5;">' +
+            '<p style="margin: 0 0 6px; color: var(--text-muted);">Plantilla:</p>' +
+            '<pre style="margin: 0 0 10px; font-size: 0.9em; box-shadow: none;">El [contenedor] está mal acomodado.\n' +
+            'Hacelo un [flex container | grid] con [parámetros].\n' +
+            '[Notas de espaciado y alineación].</pre>' +
+            '<p style="margin: 0 0 4px; color: var(--text-muted);">Ejemplo (header del Pomodoro):</p>' +
+            '<p style="margin: 0; font-style: italic; color: var(--text-muted);">' +
+            'El header está mal acomodado. Hacelo flex container con <code>justify-content: space-between</code> para que el título quede a la izquierda y el botón de modo a la derecha, ambos centrados verticalmente con <code>align-items: center</code>. Padding 16px horizontal.</p>' +
+            '</div>'
+        },
+        {
+          title: '4. Tematizar y pulir',
+          summary: 'Identidad visual cohesiva.',
+          color: '#10b981',
+          borderColor: '#10b981',
+          example:
+            '<div style="font-size: 0.9em; line-height: 1.5;">' +
+            '<p style="margin: 0 0 6px; color: var(--text-muted);">Plantilla:</p>' +
+            '<pre style="margin: 0 0 10px; font-size: 0.9em; box-shadow: none;">Convertí el styling para que use variables CSS.\n' +
+            'Definí en :root: --[token]: [valor]. (repetir)\n' +
+            'Reemplazá todos los valores hardcodeados.</pre>' +
+            '<p style="margin: 0 0 4px; color: var(--text-muted);">Ejemplo (Pomodoro tematizado):</p>' +
+            '<p style="margin: 0; font-style: italic; color: var(--text-muted);">' +
+            'Definí en <code>:root</code>: <code>--color-bg #0f172a</code>, <code>--color-text #e2e8f0</code>, <code>--color-accent #6366f1</code>, <code>--color-muted #94a3b8</code>, <code>--space-md 16px</code>, <code>--radius 12px</code>. Reemplazá todos los hardcodeados. Asegurate que el contraste fondo–texto sea AA-accesible.</p>' +
+            '</div>'
+        },
+      ]
     });
   </script>
 </body>
