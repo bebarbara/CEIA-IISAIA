@@ -1344,6 +1344,79 @@ btn.addEventListener('click', () =&gt; {
             Tocá cada patrón para ver su plantilla y un ejemplo trabajado.
           </p>
           <div id="patrones-flow"></div>
+          <script>
+            initClickableSteps({
+              containerId: 'patrones-flow',
+              steps: [
+                {
+                  title: '1. Describir el artefacto',
+                  summary: 'El primer prompt. Nombrá todo de una.',
+                  color: 'var(--accent)',
+                  borderColor: 'var(--accent)',
+                  example:
+                    '<div style="font-size: 0.9em; line-height: 1.5;">'
+                    + '<p style="margin: 0 0 6px; color: var(--text-muted);">Plantilla:</p>'
+                    + '<pre style="margin: 0 0 10px; font-size: 0.9em; box-shadow: none;">Construí un [tipo de artefacto].\n'
+                    + 'Estructura: [secciones HTML, jerarquía].\n'
+                    + 'Estilo: [tono, paleta, tipografía].\n'
+                    + 'Comportamiento: [estados, eventos clave].\n'
+                    + 'Constraints: un solo archivo HTML, vanilla JS, sin deps.</pre>'
+                    + '<p style="margin: 0 0 4px; color: var(--text-muted);">Ejemplo (Pomodoro):</p>'
+                    + '<p style="margin: 0; font-style: italic; color: var(--text-muted);">'
+                    + 'header con título y botón de modo · main con círculo grande mostrando tiempo · botones Iniciar/Pausar/Reiniciar · footer con contador. Estilo dark, paleta indigo. Estado <code>mode</code>, <code>secondsLeft</code>, <code>isRunning</code>. Constraints single-file, vanilla JS.</p>'
+                    + '</div>'
+                },
+                {
+                  title: '2. Iterar sobre el estado',
+                  summary: 'Ya tenés algo andando; agregale comportamiento.',
+                  color: 'var(--accent-secondary)',
+                  borderColor: 'var(--accent-secondary)',
+                  example:
+                    '<div style="font-size: 0.9em; line-height: 1.5;">'
+                    + '<p style="margin: 0 0 6px; color: var(--text-muted);">Plantilla:</p>'
+                    + '<pre style="margin: 0 0 10px; font-size: 0.9em; box-shadow: none;">Agregale al [artefacto] un estado [nombre].\n'
+                    + 'Cuando [condición]: [efecto en estado] y [efecto en DOM].\n'
+                    + 'Cuando [condición de retorno]: [restablecer].</pre>'
+                    + '<p style="margin: 0 0 4px; color: var(--text-muted);">Ejemplo (Pomodoro pausa):</p>'
+                    + '<p style="margin: 0; font-style: italic; color: var(--text-muted);">'
+                    + 'Estado <code>isPaused</code>. Al click en Pausar: <code>isPaused = true</code>, frenar el cronómetro, botón pasa a Reanudar, círculo se vuelve gris. Al click en Reanudar: <code>isPaused = false</code>, contador continúa, círculo vuelve al color normal.</p>'
+                    + '</div>'
+                },
+                {
+                  title: '3. Arreglar el layout',
+                  summary: 'El visual está mal acomodado.',
+                  color: '#f59e0b',
+                  borderColor: '#f59e0b',
+                  example:
+                    '<div style="font-size: 0.9em; line-height: 1.5;">'
+                    + '<p style="margin: 0 0 6px; color: var(--text-muted);">Plantilla:</p>'
+                    + '<pre style="margin: 0 0 10px; font-size: 0.9em; box-shadow: none;">El [contenedor] está mal acomodado.\n'
+                    + 'Hacelo un [flex container | grid] con [parámetros].\n'
+                    + '[Notas de espaciado y alineación].</pre>'
+                    + '<p style="margin: 0 0 4px; color: var(--text-muted);">Ejemplo (header del Pomodoro):</p>'
+                    + '<p style="margin: 0; font-style: italic; color: var(--text-muted);">'
+                    + 'El header está mal acomodado. Hacelo flex container con <code>justify-content: space-between</code> para que el título quede a la izquierda y el botón de modo a la derecha, ambos centrados verticalmente con <code>align-items: center</code>. Padding 16px horizontal.</p>'
+                    + '</div>'
+                },
+                {
+                  title: '4. Tematizar y pulir',
+                  summary: 'Identidad visual cohesiva.',
+                  color: '#10b981',
+                  borderColor: '#10b981',
+                  example:
+                    '<div style="font-size: 0.9em; line-height: 1.5;">'
+                    + '<p style="margin: 0 0 6px; color: var(--text-muted);">Plantilla:</p>'
+                    + '<pre style="margin: 0 0 10px; font-size: 0.9em; box-shadow: none;">Convertí el styling para que use variables CSS.\n'
+                    + 'Definí en :root: --[token]: [valor]. (repetir)\n'
+                    + 'Reemplazá todos los valores hardcodeados.</pre>'
+                    + '<p style="margin: 0 0 4px; color: var(--text-muted);">Ejemplo (Pomodoro tematizado):</p>'
+                    + '<p style="margin: 0; font-style: italic; color: var(--text-muted);">'
+                    + 'Definí en <code>:root</code>: <code>--color-bg #0f172a</code>, <code>--color-text #e2e8f0</code>, <code>--color-accent #6366f1</code>, <code>--color-muted #94a3b8</code>, <code>--space-md 16px</code>, <code>--radius 12px</code>. Reemplazá todos los hardcodeados. Asegurate que el contraste fondo–texto sea AA-accesible.</p>'
+                    + '</div>'
+                }
+              ]
+            });
+          </script>
           <aside class="notes">
             <p><strong>Tocar cada caja para abrir el detalle. Recorrer en orden P1 → P2 → P3 → P4. Cada panel muestra plantilla + ejemplo Pomodoro trabajado.</strong></p>
             <p><u>Los cuatro patrones como mapa interactivo. Cada uno cubre un momento típico del ciclo de construir un artefacto.</u></p>
@@ -1411,79 +1484,6 @@ btn.addEventListener('click', () =&gt; {
       height: 800,
       margin: 0.02,
       plugins: [RevealHighlight, RevealNotes]
-    });
-
-    // §6.3 — Cuatro patrones de prompt (clickable-steps)
-    initClickableSteps({
-      containerId: 'patrones-flow',
-      steps: [
-        {
-          title: '1. Describir el artefacto',
-          summary: 'El primer prompt. Nombrá todo de una.',
-          color: 'var(--accent)',
-          borderColor: 'var(--accent)',
-          example:
-            '<div style="font-size: 0.9em; line-height: 1.5;">' +
-            '<p style="margin: 0 0 6px; color: var(--text-muted);">Plantilla:</p>' +
-            '<pre style="margin: 0 0 10px; font-size: 0.9em; box-shadow: none;">Construí un [tipo de artefacto].\n' +
-            'Estructura: [secciones HTML, jerarquía].\n' +
-            'Estilo: [tono, paleta, tipografía].\n' +
-            'Comportamiento: [estados, eventos clave].\n' +
-            'Constraints: un solo archivo HTML, vanilla JS, sin deps.</pre>' +
-            '<p style="margin: 0 0 4px; color: var(--text-muted);">Ejemplo (Pomodoro):</p>' +
-            '<p style="margin: 0; font-style: italic; color: var(--text-muted);">' +
-            'header con título y botón de modo · main con círculo grande mostrando tiempo · botones Iniciar/Pausar/Reiniciar · footer con contador. Estilo dark, paleta indigo. Estado <code>mode</code>, <code>secondsLeft</code>, <code>isRunning</code>. Constraints single-file, vanilla JS.</p>' +
-            '</div>'
-        },
-        {
-          title: '2. Iterar sobre el estado',
-          summary: 'Ya tenés algo andando; agregale comportamiento.',
-          color: 'var(--accent-secondary)',
-          borderColor: 'var(--accent-secondary)',
-          example:
-            '<div style="font-size: 0.9em; line-height: 1.5;">' +
-            '<p style="margin: 0 0 6px; color: var(--text-muted);">Plantilla:</p>' +
-            '<pre style="margin: 0 0 10px; font-size: 0.9em; box-shadow: none;">Agregale al [artefacto] un estado [nombre].\n' +
-            'Cuando [condición]: [efecto en estado] y [efecto en DOM].\n' +
-            'Cuando [condición de retorno]: [restablecer].</pre>' +
-            '<p style="margin: 0 0 4px; color: var(--text-muted);">Ejemplo (Pomodoro pausa):</p>' +
-            '<p style="margin: 0; font-style: italic; color: var(--text-muted);">' +
-            'Estado <code>isPaused</code>. Al click en Pausar: <code>isPaused = true</code>, frenar el cronómetro, botón pasa a Reanudar, círculo se vuelve gris. Al click en Reanudar: <code>isPaused = false</code>, contador continúa, círculo vuelve al color normal.</p>' +
-            '</div>'
-        },
-        {
-          title: '3. Arreglar el layout',
-          summary: 'El visual está mal acomodado.',
-          color: '#f59e0b',
-          borderColor: '#f59e0b',
-          example:
-            '<div style="font-size: 0.9em; line-height: 1.5;">' +
-            '<p style="margin: 0 0 6px; color: var(--text-muted);">Plantilla:</p>' +
-            '<pre style="margin: 0 0 10px; font-size: 0.9em; box-shadow: none;">El [contenedor] está mal acomodado.\n' +
-            'Hacelo un [flex container | grid] con [parámetros].\n' +
-            '[Notas de espaciado y alineación].</pre>' +
-            '<p style="margin: 0 0 4px; color: var(--text-muted);">Ejemplo (header del Pomodoro):</p>' +
-            '<p style="margin: 0; font-style: italic; color: var(--text-muted);">' +
-            'El header está mal acomodado. Hacelo flex container con <code>justify-content: space-between</code> para que el título quede a la izquierda y el botón de modo a la derecha, ambos centrados verticalmente con <code>align-items: center</code>. Padding 16px horizontal.</p>' +
-            '</div>'
-        },
-        {
-          title: '4. Tematizar y pulir',
-          summary: 'Identidad visual cohesiva.',
-          color: '#10b981',
-          borderColor: '#10b981',
-          example:
-            '<div style="font-size: 0.9em; line-height: 1.5;">' +
-            '<p style="margin: 0 0 6px; color: var(--text-muted);">Plantilla:</p>' +
-            '<pre style="margin: 0 0 10px; font-size: 0.9em; box-shadow: none;">Convertí el styling para que use variables CSS.\n' +
-            'Definí en :root: --[token]: [valor]. (repetir)\n' +
-            'Reemplazá todos los valores hardcodeados.</pre>' +
-            '<p style="margin: 0 0 4px; color: var(--text-muted);">Ejemplo (Pomodoro tematizado):</p>' +
-            '<p style="margin: 0; font-style: italic; color: var(--text-muted);">' +
-            'Definí en <code>:root</code>: <code>--color-bg #0f172a</code>, <code>--color-text #e2e8f0</code>, <code>--color-accent #6366f1</code>, <code>--color-muted #94a3b8</code>, <code>--space-md 16px</code>, <code>--radius 12px</code>. Reemplazá todos los hardcodeados. Asegurate que el contraste fondo–texto sea AA-accesible.</p>' +
-            '</div>'
-        },
-      ]
     });
   </script>
 </body>
