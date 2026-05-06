@@ -1452,24 +1452,7 @@ Reemplazá todos los hardcodeados por estas variables.</code></pre>
           </aside>
         </section>
 
-      </section>
-
-      <!-- ============================================================
-           §7 — Actividad grupal
-           ============================================================ -->
-      <section>
-
-        <!-- §7.1: Section divider -->
-        <section class="section-divider">
-          <h2>Actividad práctica</h2>
-          <p style="color: var(--text-muted); font-size: 0.85em; margin-top: 8px;">Aplicar todo lo visto hoy. ChatGPT Canvas. Un solo archivo HTML.</p>
-          <aside class="notes">
-            <p><u>Section divider. Cierra la parte teórica + aplicada y arranca el briefing de la actividad.</u></p>
-            <p><em>"Llegamos al cierre teórico. Lo que viene es la actividad práctica: aplicar todo lo que vimos hoy a un artefacto chico. Una sola conversación con ChatGPT Canvas, un solo archivo HTML como resultado."</em></p>
-          </aside>
-        </section>
-
-        <!-- §7.2: El ciclo -->
+        <!-- §6.7: El ciclo de desarrollo asistido por IA -->
         <section>
           <h2>El ciclo de desarrollo asistido por IA</h2>
           <p style="font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 40em; margin: 6px auto 14px;">
@@ -1512,57 +1495,30 @@ Reemplazá todos los hardcodeados por estas variables.</code></pre>
           <aside class="notes">
             <p><u>Diagrama del ciclo. Architect al inicio (uno solo), después loop Prompt → Review → Test hasta terminar.</u></p>
             <p><em>"Cuando construís software con un LLM hay cuatro tareas que tienen que pasar siempre, sin importar el tamaño del proyecto. Una al inicio y tres en loop."</em></p>
-            <p><em>"Architect entra una sola vez al principio: descompone qué se va a construir y escribe el primer prompt — el Patrón 1 que vimos. Después arranca el loop: Prompt, Review, Test. Prompt escribe el siguiente pedido aplicando los Patrones 2, 3 y 4 según corresponda. Review audita lo que devuelve el LLM antes de pegarlo. Test corre el artefacto y reporta qué falla. Se cierra el loop volviendo a Prompt para la próxima iteración."</em></p>
+            <p><em>"Architect entra una sola vez al principio: descompone qué se va a construir y escribe el primer prompt — el Patrón 1 que acabamos de ver. Después arranca el loop: Prompt, Review, Test. Prompt escribe el siguiente pedido aplicando los Patrones 2, 3 y 4 según corresponda. Review audita lo que devuelve el LLM antes de pegarlo. Test corre el artefacto y reporta qué falla. Se cierra el loop volviendo a Prompt para la próxima iteración."</em></p>
             <p><em>"Solo se vuelve a Architect si cambia el alcance grande — por ejemplo, si decidís a mitad de camino que el Pomodoro va a manejar varias tareas, no una. Eso requiere re-especificar."</em></p>
+            <p><em>"Si trabajás solo, hacés las cuatro tareas en orden vos mismo. Si trabajás en grupo, las reparten como prefieran. Lo que no puede pasar es que alguna no se cumpla."</em></p>
           </aside>
         </section>
 
-        <!-- §7.3: Las cuatro tareas -->
-        <section>
-          <h2>Las cuatro tareas, en detalle</h2>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 50em; margin: 14px auto 0;">
+      </section>
 
-            <div class="bg-secondary-card fragment fade-in" data-fragment-index="1" style="border-left: 4px solid var(--accent); padding: 12px;">
-              <h3 style="color: var(--accent); font-size: 0.95em; margin-bottom: 6px;">Architect</h3>
-              <p style="font-size: 0.66em; margin-bottom: 6px;">Descompone el artefacto en una spec que el LLM pueda implementar. Escribe el primer prompt usando <strong>Patrón 1</strong>: estructura, estilo, comportamiento, constraints.</p>
-              <p style="font-size: 0.6em; color: var(--text-muted);"><strong>Si falta:</strong> arrancás sin norte y la IA inventa el alcance.</p>
-            </div>
+      <!-- ============================================================
+           §7 — Actividad práctica
+           ============================================================ -->
+      <section>
 
-            <div class="bg-secondary-card fragment fade-in" data-fragment-index="2" style="border-left: 4px solid var(--accent-secondary); padding: 12px;">
-              <h3 style="color: var(--accent-secondary); font-size: 0.95em; margin-bottom: 6px;">Prompt</h3>
-              <p style="font-size: 0.66em; margin-bottom: 6px;">Manejar el chat. Aplicar <strong>Patrones 2, 3 y 4</strong> según corresponda. Un cambio por prompt; pedidos múltiples van en cola.</p>
-              <p style="font-size: 0.6em; color: var(--text-muted);"><strong>Si falta:</strong> los prompts se mezclan y la IA hace cuatro cosas a la vez.</p>
-            </div>
-
-            <div class="bg-secondary-card fragment fade-in" data-fragment-index="3" style="border-left: 4px solid #f59e0b; padding: 12px;">
-              <h3 style="color: #f59e0b; font-size: 0.95em; margin-bottom: 6px;">Review</h3>
-              <p style="font-size: 0.66em; margin-bottom: 6px;">Leer cada respuesta del LLM antes de pegarla. Buscar cuatro cosas: APIs alucinadas, lógica que no hace lo pedido, dependencias externas escondidas, regresiones en código que ya andaba.</p>
-              <p style="font-size: 0.6em; color: var(--text-muted);"><strong>Si falta:</strong> el archivo acumula código que la IA inventó y nadie verificó.</p>
-            </div>
-
-            <div class="bg-secondary-card fragment fade-in" data-fragment-index="4" style="border-left: 4px solid #10b981; padding: 12px;">
-              <h3 style="color: #10b981; font-size: 0.95em; margin-bottom: 6px;">Test</h3>
-              <p style="font-size: 0.66em; margin-bottom: 6px;">Correr el artefacto en otra pestaña. Romperlo a propósito: clicks rápidos, inputs vacíos, valores extremos. Reportar lo que falla con detalle suficiente para el siguiente prompt.</p>
-              <p style="font-size: 0.6em; color: var(--text-muted);"><strong>Si falta:</strong> el artefacto se rompe la primera vez que alguien lo usa de verdad.</p>
-            </div>
-
-          </div>
-          <p class="fragment fade-in" data-fragment-index="5" style="margin-top: 14px; font-size: 0.7em; color: var(--text-muted); text-align: center; max-width: 40em; margin-left: auto; margin-right: auto;">
-            Las cuatro tienen que pasar siempre. Si trabajás solo, las hacés en orden vos mismo; si trabajás en grupo, las reparten como prefieran.
-          </p>
+        <!-- §7.1: Section divider -->
+        <section class="section-divider">
+          <h2>Actividad práctica</h2>
+          <p style="color: var(--text-muted); font-size: 0.85em; margin-top: 8px;">Aplicar todo lo visto hoy. ChatGPT Canvas. Un solo archivo HTML.</p>
           <aside class="notes">
-            <p><strong>Revelar las cuatro tareas en orden, una por click. Quinto click revela la nota sobre el reparto.</strong></p>
-            <p><u>Las cuatro tareas explicadas. Cada una con su 'qué hace' + 'qué pasa si nadie la cumple'. Funciona igual de bien hecho en solitario o repartido en un grupo.</u></p>
-            <p><em>"Vamos a ver qué hace cada una y por qué importa que pase."</em></p>
-            <p><em>"Architect: descompone el artefacto en una spec que el LLM pueda implementar. Define qué se construye antes de pedir nada. Escribe el primer prompt usando el Patrón 1 que acabamos de ver. Si esta tarea no se cumple, arrancás sin norte y la IA inventa el alcance."</em></p>
-            <p><em>"Prompt: manejar el chat. Escribir los prompts siguientes aplicando los Patrones 2, 3 y 4 según corresponda. Foco: un cambio por prompt, no cuatro a la vez. Si pedís tres cosas distintas en el mismo prompt, la IA hace una mezcla rara de las tres. Si esta tarea no se cumple, los prompts se mezclan y el código que vuelve es difícil de auditar."</em></p>
-            <p><em>"Review: leer cada respuesta del LLM antes de pegarla en el archivo. Buscar cuatro cosas concretas: APIs alucinadas — funciones que no existen — , lógica que no hace lo que pediste, dependencias externas escondidas que el constraint no permite, y regresiones en código que ya andaba. Aprobar o pedir cambios. Si esta tarea no se cumple, el archivo acumula código sin verificar y eventualmente algo se rompe sin saber por qué."</em></p>
-            <p><em>"Test: correr el artefacto en otra pestaña. Romperlo a propósito: clicks rápidos, inputs vacíos, valores extremos, edge cases que el LLM no consideró. No alcanza con probar el camino feliz. Reportar lo que falla con detalle suficiente para que el siguiente prompt sea preciso. Si esta tarea no se cumple, el artefacto se rompe la primera vez que alguien lo usa de verdad."</em></p>
-            <p><em>"Las cuatro tienen que pasar siempre. Si trabajás solo, las hacés en orden vos mismo — entrás en modo Prompt, después en modo Review, después en modo Test, y volvés. Si trabajás en grupo, las reparten como prefieran: una persona por rol, dos compartiendo uno, rotando. Lo que no puede pasar es que alguna de las cuatro no se cumpla."</em></p>
+            <p><u>Section divider. Cierra la parte teórica + aplicada y arranca el briefing de la actividad.</u></p>
+            <p><em>"Llegamos al cierre teórico. Lo que viene es la actividad práctica: aplicar todo lo que vimos hoy a un artefacto chico. Una sola conversación con ChatGPT Canvas, un solo archivo HTML como resultado."</em></p>
           </aside>
         </section>
 
-        <!-- §7.4: Constraints y entregable -->
+        <!-- §7.2: Constraints y entregable -->
         <section>
           <h2>Constraints y entregable</h2>
           <div class="comparison-2col" style="margin-top: 14px; align-items: stretch;">
@@ -1591,7 +1547,7 @@ Reemplazá todos los hardcodeados por estas variables.</code></pre>
           </aside>
         </section>
 
-        <!-- §7.5: Cierre + presentación -->
+        <!-- §7.3: Cierre + presentación -->
         <section>
           <h2>Para arrancar</h2>
           <div style="max-width: 42em; margin: 14px auto 0;">
