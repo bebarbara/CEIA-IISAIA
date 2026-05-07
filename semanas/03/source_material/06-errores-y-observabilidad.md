@@ -6,7 +6,7 @@ Las dos tardan parecido. La diferencia entre la que funciona y la que no es voca
 
 ## Los errores tienen dueño
 
-El código de error te dice de qué lado está el problema. Los códigos **4xx** significan "vos, cliente, te equivocaste": pediste un recurso que no existe (404), mandaste un body inválido (400 o 422), o no estás autorizado (401, 403, ya cubiertos en la nota de rutas). Los **5xx** significan "yo, servidor, me caí": el código tiene un bug, la base de datos no responde, la IA olvidó manejar un caso.
+El código de error te dice de qué lado está el problema. Los códigos **4xx** significan "vos, cliente, te equivocaste": pediste un recurso que no existe (404), mandaste un body inválido (400 o 422), o no estás autorizado (401, 403, diferidos a semana 7). Los **5xx** significan "yo, servidor, me caí": el código tiene un bug, la base de datos no responde, la IA olvidó manejar un caso.
 
 El movimiento diagnóstico es leer el primer dígito antes de tocar nada. Si es 4, mirá el request que mandaste. Si es 5, mirá el código del servidor. Empezar por el lado equivocado es la forma más rápida de perder media hora.
 
