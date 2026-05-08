@@ -1,0 +1,2723 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semana 03 — Arquitectura Backend y Datos</title>
+  <link rel="stylesheet" href="../../../node_modules/reveal.js/dist/reveal.css">
+  <link rel="stylesheet" href="../../../node_modules/reveal.js/dist/theme/black.css">
+  <link rel="stylesheet" href="../../../node_modules/reveal.js/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="../../../_config/theme/custom.css">
+  <link rel="stylesheet" href="../../../_config/theme/components.css">
+  <style>
+    /* Safety net for dense slides */
+    .reveal .slides > section,
+    .reveal .slides > section > section {
+      overflow-y: auto;
+      max-height: 100%;
+    }
+    .reveal pre {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+      white-space: pre-wrap !important;
+      word-break: break-word !important;
+      overflow-wrap: anywhere !important;
+    }
+    .reveal pre code {
+      white-space: pre-wrap !important;
+      word-break: break-word !important;
+      overflow-wrap: anywhere !important;
+      overflow: visible !important;
+      max-height: none !important;
+      display: block;
+    }
+
+    /* ============ Big-question hook (reused from semana 02 §1) ============ */
+    .big-question {
+      font-size: 1.6em;
+      line-height: 1.3;
+      color: var(--text-primary);
+      max-width: 18em;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .big-question .accent { color: var(--accent); }
+    .big-question .muted-q {
+      color: var(--text-muted);
+      font-size: 0.6em;
+      display: block;
+      margin-top: 1em;
+      font-style: italic;
+    }
+
+    /* ============ Three-consequence row (reused from semana 02 §1) ============ */
+    .consequence-row {
+      display: flex;
+      gap: 16px;
+      align-items: stretch;
+      margin-top: 16px;
+    }
+    .consequence-row .bg-secondary-card { flex: 1; }
+    .consequence-row h3 {
+      color: var(--accent);
+      margin-bottom: 8px;
+      font-size: 1em;
+    }
+    .consequence-row p {
+      font-size: 0.75em;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* ============ Piece roadmap — six pieces of the backend anatomy.
+       Re-highlights at every section opener. Mirror of layer-roadmap from
+       semana 02. ============ */
+    .piece-roadmap {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.5em;
+      margin: 12px 0 8px;
+      flex-wrap: nowrap;
+    }
+    .piece-roadmap .pipe-node {
+      min-width: 92px;
+      transition: opacity 0.4s, border-color 0.4s, box-shadow 0.4s;
+    }
+    .piece-roadmap .pipe-arrow { color: var(--text-muted); }
+    .piece-roadmap.active-1 .pipe-node:not([data-piece="1"]),
+    .piece-roadmap.active-2 .pipe-node:not([data-piece="2"]),
+    .piece-roadmap.active-3 .pipe-node:not([data-piece="3"]),
+    .piece-roadmap.active-4 .pipe-node:not([data-piece="4"]),
+    .piece-roadmap.active-5 .pipe-node:not([data-piece="5"]),
+    .piece-roadmap.active-6 .pipe-node:not([data-piece="6"]) {
+      opacity: 0.35;
+    }
+    .piece-roadmap.active-1 .pipe-node[data-piece="1"],
+    .piece-roadmap.active-2 .pipe-node[data-piece="2"],
+    .piece-roadmap.active-3 .pipe-node[data-piece="3"],
+    .piece-roadmap.active-4 .pipe-node[data-piece="4"],
+    .piece-roadmap.active-5 .pipe-node[data-piece="5"],
+    .piece-roadmap.active-6 .pipe-node[data-piece="6"] {
+      border-color: var(--accent);
+      box-shadow: 0 0 16px rgba(100, 255, 218, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- ============================================================
+           TITLE SLIDE
+           ============================================================ -->
+      <section class="title-slide">
+        <h1>Arquitectura Backend y Datos</h1>
+        <p class="subtitle">Vocabulario para dirigir a la IA del otro lado del cable</p>
+        <p class="muted">Introducción al desarrollo de software asistido por IA</p>
+        <aside class="notes">
+          <p><strong>Proyectar mientras se acomodan. Esperar 1–2 min.</strong></p>
+          <p><u>Apertura de la semana 03. La frontera ya no es la pestaña; es el servidor.</u></p>
+          <p><em>"Hoy hacemos el reflejo de lo que vimos la semana pasada. Ahí aprendimos a nombrar las piezas del frontend para dirigir a la IA. Hoy aprendemos las del backend — verbos, rutas, contratos, datos, errores — y al final cerramos con un demo en vivo: levantamos un servidor con Claude Code mientras lo leemos juntos."</em></p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           §1 — Backend y el supervisor arquitectónico
+           ============================================================ -->
+      <!-- ============================================================
+     §1 — Backend y el supervisor arquitectónico
+     ============================================================ -->
+<section>
+
+  <!-- §1.1: Hook — la pregunta incómoda -->
+  <section>
+    <p class="big-question">
+      Si una IA puede levantar un servidor en treinta segundos,<br>
+      <span class="accent">¿para qué seguís aprendiendo qué es un POST?</span>
+    </p>
+    <aside class="notes">
+      <p><strong>Dejar la pregunta en pantalla 5–10 segundos sin responder.</strong></p>
+      <p><u>Hook de la clase. Versión backend de la pregunta de la semana pasada.</u></p>
+      <p><em>"Empezamos otra vez con una pregunta tramposa, ahora del lado del servidor. Si Claude te genera una API con cinco rutas en un prompt, ¿qué sentido tiene aprender qué es un POST, una ruta, una respuesta? La pregunta incomoda porque parece honesta. La respuesta corta es la misma que la semana pasada: el cuello de botella nunca fue la sintaxis, es la decisión. Y ahora la decisión vive en un servidor, que es un terreno distinto. La diferencia es lo que vamos a desarmar hoy."</em></p>
+    </aside>
+  </section>
+
+  <!-- §1.2: Mismo rol, otro terreno — el espejo con semana 02 -->
+  <section>
+    <h2>Mismo rol, otro terreno</h2>
+    <div class="comparison-2col">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <h3 style="color: var(--text-muted);">Frontend (semana 02)</h3>
+        <p style="font-size: 0.78em; line-height: 1.6; margin: 0;">
+          Estructura<br>
+          Estilo<br>
+          Comportamiento<br>
+          Estado<br>
+          Empaque
+        </p>
+      </div>
+      <div class="bg-secondary-card fragment fade-in" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent);">Backend (esta clase)</h3>
+        <p style="font-size: 0.78em; line-height: 1.6; margin: 0;">
+          HTTP<br>
+          REST<br>
+          Rutas y contratos<br>
+          Datos<br>
+          Errores<br>
+          Bisagra a local
+        </p>
+      </div>
+    </div>
+    <p class="fragment fade-in" style="margin-top: 24px; font-size: 0.85em; color: var(--accent); text-align: center;">
+      Mismo rol — <strong>supervisor arquitectónico</strong>. Otro terreno.
+    </p>
+    <aside class="notes">
+      <p><strong>Arrancar con la columna izquierda visible. Click para revelar backend. Click para revelar la línea de cierre.</strong></p>
+      <p><u>Slide del espejo. Establece la simetría con semana 02 y nombra el rol que sobrevive.</u></p>
+      <p><em>"La semana pasada nombramos las cinco capas del frontend para dirigir lo que la IA escribe en el navegador: estructura, estilo, comportamiento, estado, empaque. Ese vocabulario te dejaba auditar lo que el modelo te tiraba en HTML, CSS y JavaScript."</em></p>
+      <p><em>"Esta clase hacemos lo mismo del otro lado. Seis piezas: HTTP, REST, rutas y contratos, datos, errores y la bisagra a local. Cada una es una palabra que vas a necesitar para especificarle a la IA qué construir, y para leer lo que devuelve sin tragártelo."</em></p>
+      <p><em>"Pero fijate en lo que no cambia: el rol. Sos supervisor arquitectónico también del lado del servidor. La IA implementa; vos decidís el contrato. Lo único que cambia es el terreno."</em></p>
+    </aside>
+  </section>
+
+  <!-- §1.3: Tres cosas que cambian al mudar al servidor -->
+  <section>
+    <h2>Qué cambia cuando el código deja el navegador</h2>
+    <div class="consequence-row">
+      <div class="bg-secondary-card fragment fade-in">
+        <h3>1 — Persistencia</h3>
+        <p>El bug ya no se evapora con un refresh. Queda escrito en la base, multiplicado por cada usuario que pasó por la ruta rota.</p>
+      </div>
+      <div class="bg-secondary-card fragment fade-in">
+        <h3>2 — Contratos cliente-servidor</h3>
+        <p>Son dos programas que se hablan por la red. Si vos no escribís el contrato, la IA lo improvisa y te enterás cuando algo se rompe.</p>
+      </div>
+      <div class="bg-secondary-card fragment fade-in">
+        <h3>3 — Leer la respuesta</h3>
+        <p>Códigos de estado, cuerpos JSON y logs son tan importantes como leer el código. Si no mirás la respuesta, le creés a la IA en lugar de a la máquina.</p>
+      </div>
+    </div>
+    <aside class="notes">
+      <p><strong>Revelar las tres tarjetas en orden, una por click.</strong></p>
+      <p><u>Las tres consecuencias concretas de mover el código al servidor. Ancla el "por qué" del vocabulario que viene.</u></p>
+      <p><em>"Mudar el código del navegador al servidor mueve tres cosas al mismo tiempo, y conviene verlas por separado."</em></p>
+      <p><em>"Primero, la persistencia. En el frontend un error es efímero: el usuario refresca la pestaña y el estado malo desaparece. En el backend no. Un bug que escribe datos incorrectos los deja escritos. Mañana, cuando vuelvas a leer la base, ese error sigue ahí."</em></p>
+      <p><em>"Segundo, los contratos se vuelven reales. Frontend y backend son dos programas distintos que se hablan por la red, y solamente se entienden si están de acuerdo en qué se pide y qué se devuelve. La IA puede inventarte un endpoint que el cliente no sabe consumir. Si vos no podés escribir el contrato, alguien lo improvisa por vos."</em></p>
+      <p><em>"Y tercero, leer la respuesta se vuelve tan importante como leer el código. Acá entran los códigos de estado, los cuerpos JSON y los logs del servidor. Si el modelo te dice que ya quedó funcionando pero la respuesta trae un error, y vos no sabés mirar la respuesta, le estás creyendo a la IA en lugar de a la máquina. Para hacer estas tres cosas bien, necesitás vocabulario."</em></p>
+    </aside>
+  </section>
+
+  <!-- §1.4: Roadmap — seis piezas -->
+  <section>
+    <h2>La anatomía del backend en seis piezas</h2>
+    <div class="piece-roadmap">
+      <div class="pipe-node fragment" data-piece="1">
+        <div class="pipe-label">HTTP</div>
+        <div class="pipe-sub">protocolo</div>
+      </div>
+      <span class="pipe-arrow fragment">→</span>
+      <div class="pipe-node fragment" data-piece="2">
+        <div class="pipe-label">REST</div>
+        <div class="pipe-sub">estilo</div>
+      </div>
+      <span class="pipe-arrow fragment">→</span>
+      <div class="pipe-node fragment" data-piece="3">
+        <div class="pipe-label">Rutas</div>
+        <div class="pipe-sub">contrato</div>
+      </div>
+      <span class="pipe-arrow fragment">→</span>
+      <div class="pipe-node fragment" data-piece="4">
+        <div class="pipe-label">Datos</div>
+        <div class="pipe-sub">memoria</div>
+      </div>
+      <span class="pipe-arrow fragment">→</span>
+      <div class="pipe-node fragment" data-piece="5">
+        <div class="pipe-label">Errores</div>
+        <div class="pipe-sub">leer fallas</div>
+      </div>
+      <span class="pipe-arrow fragment">→</span>
+      <div class="pipe-node fragment" data-piece="6">
+        <div class="pipe-label">Bisagra</div>
+        <div class="pipe-sub">a local</div>
+      </div>
+    </div>
+    <p class="fragment fade-in" style="font-size: 0.75em; color: var(--text-muted); text-align: center; margin-top: 16px;">
+      Cada archivo siguiente desarma una pieza. Vamos a volver a este mapa al inicio de cada sección.
+    </p>
+    <aside class="notes">
+      <p><strong>Construir el mapa pieza por pieza con clicks. Cada nodo + flecha aparece en orden. Último click revela la nota inferior.</strong></p>
+      <p><u>Roadmap de las seis piezas. Mapa al que se vuelve al inicio de §§2–7, ahí con .active-N para iluminar la sección activa.</u></p>
+      <p><em>"El resto de la clase la vamos a pasar desarmando seis piezas. Una frase por pieza, lo justo para anclarte."</em></p>
+      <p><em>"HTTP: el protocolo de pedido y respuesta entre cliente y servidor."</em></p>
+      <p><em>"REST: el estilo arquitectónico que organiza esos pedidos alrededor de recursos."</em></p>
+      <p><em>"Rutas y contratos: la unidad mínima dictable. Verbo, ruta, entrada, salida, códigos."</em></p>
+      <p><em>"Datos: la memoria del servidor — relacional o documental, qué se persiste y cómo."</em></p>
+      <p><em>"Errores: leer fallas como parte de supervisar, no como el momento de pánico."</em></p>
+      <p><em>"Y bisagra: por qué el navegador ya no alcanza, y qué herramienta abre la próxima clase."</em></p>
+      <p><em>"El orden no es arbitrario: primero el protocolo, encima el estilo, encima la unidad que vas a dictar, después los datos que esa unidad mueve, después cómo se ven las cosas cuando se rompen, y al final la bisagra a la próxima semana. Vamos a volver a este mapa cada vez."</em></p>
+    </aside>
+  </section>
+
+  <!-- §1.5: A qué prestamos atención hoy -->
+  <section>
+    <h2>A qué prestamos atención hoy</h2>
+    <div class="comparison-2col">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <h3 style="color: var(--text-muted);">Lo que NO es esta clase</h3>
+        <p style="font-size: 0.78em; line-height: 1.5;">
+          No te enseño FastAPI de producción.<br>
+          No te enseño SQL serio.<br>
+          No te enseño diseño de bases de datos.<br>
+          Para cada una hay materias enteras y no caben en noventa minutos.
+        </p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent);">Lo que SÍ es</h3>
+        <p style="font-size: 0.78em; line-height: 1.5;">
+          Nombrar las piezas.<br>
+          Reconocer un endpoint cuando la IA lo escribe.<br>
+          Distinguir un código de estado de un cuerpo de respuesta.<br>
+          Notar cuando un contrato no cierra.
+        </p>
+      </div>
+    </div>
+    <p style="font-size: 0.75em; color: var(--text-muted); text-align: center; margin-top: 24px;">
+      Sos supervisor arquitectónico también del lado del servidor. La IA implementa; <span style="color: var(--accent);">vos decidís el contrato</span>.
+    </p>
+    <aside class="notes">
+      <p><u>Disclaimer + cierre del rol. Transición a la sección 2 (HTTP).</u></p>
+      <p><em>"Quiero ser explícito con lo que esta clase no es, igual que la semana pasada. No te estoy enseñando FastAPI, ni Python de producción, ni SQL ni diseño serio de bases de datos. Para cada una de esas cosas hay materias enteras."</em></p>
+      <p><em>"Te estoy enseñando a nombrar las piezas. A reconocer una ruta cuando la IA la escribe, a distinguir un código de estado de un cuerpo de respuesta, a notar cuando un contrato no cierra. Cada concepto entra acá porque sirve directo al diálogo con un modelo: o te ayuda a especificar mejor lo que querés, o te ayuda a leer lo que la IA devuelve sin tragarte un error silencioso."</em></p>
+      <p><em>"Volvé al rol cuando dudes: sos supervisor arquitectónico también del lado del servidor. La IA implementa; vos decidís el contrato. Arrancamos con la primera pieza: HTTP."</em></p>
+    </aside>
+  </section>
+
+</section>
+
+
+      <!-- ============================================================
+           §2 — Cliente, servidor y HTTP
+           ============================================================ -->
+      <style>
+  /* Section-2 scoped helpers. All selectors prefixed with .s2- to avoid leakage. */
+  .s2-traveled-row {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+    margin-top: 18px;
+  }
+  .s2-traveled-row .bg-secondary-card {
+    flex: 1;
+    text-align: center;
+    padding: 18px 14px;
+  }
+  .s2-traveled-row .s2-evocation {
+    font-size: 0.78em;
+    line-height: 1.4;
+    margin: 0;
+    color: var(--text-primary);
+  }
+  .s2-traveled-row .s2-evocation .s2-tagline {
+    display: block;
+    margin-top: 8px;
+    color: var(--accent);
+    font-style: italic;
+    font-size: 0.85em;
+  }
+  .s2-closing-line {
+    margin-top: 22px;
+    text-align: center;
+    font-size: 0.85em;
+    max-width: 36em;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--text-primary);
+  }
+
+  /* Verbs grid — five compact cards in a row. */
+  .s2-verbs-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .s2-verb-card {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 12px 10px;
+    text-align: center;
+    border-top: 3px solid var(--accent);
+  }
+  .s2-verb-card .s2-verb-name {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.95em;
+    letter-spacing: 0.04em;
+  }
+  .s2-verb-card .s2-verb-gloss {
+    font-size: 0.62em;
+    color: var(--text-primary);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  /* Status code families — three cards horizontally. */
+  .s2-status-row {
+    display: flex;
+    gap: 14px;
+    align-items: stretch;
+    margin-top: 16px;
+  }
+  .s2-status-card {
+    flex: 1;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 14px 16px;
+    border-left: 4px solid var(--text-muted);
+  }
+  .s2-status-card.s2-ok    { border-left-color: #10b981; }
+  .s2-status-card.s2-cli   { border-left-color: #f59e0b; }
+  .s2-status-card.s2-srv   { border-left-color: #ef4444; }
+  .s2-status-card .s2-status-family {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.05em;
+    margin-bottom: 4px;
+  }
+  .s2-status-card.s2-ok  .s2-status-family { color: #10b981; }
+  .s2-status-card.s2-cli .s2-status-family { color: #f59e0b; }
+  .s2-status-card.s2-srv .s2-status-family { color: #ef4444; }
+  .s2-status-card .s2-status-tag {
+    font-size: 0.7em;
+    color: var(--text-primary);
+    margin: 0 0 10px;
+  }
+  .s2-status-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .s2-status-card li {
+    font-size: 0.62em;
+    line-height: 1.5;
+    color: var(--text-primary);
+    padding: 2px 0;
+  }
+  .s2-status-card li code {
+    color: var(--accent);
+    font-family: var(--font-mono);
+  }
+  .s2-status-card .s2-forward {
+    margin-top: 8px;
+    font-size: 0.6em;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* Mantra slide — big readable type. */
+  .s2-mantra {
+    text-align: center;
+    margin-top: 24px;
+  }
+  .s2-mantra-line {
+    font-size: 1.4em;
+    line-height: 1.45;
+    color: var(--text-primary);
+    max-width: 22em;
+    margin: 0 auto;
+  }
+  .s2-mantra-line .s2-cli-color { color: #f59e0b; font-weight: 700; }
+  .s2-mantra-line .s2-srv-color { color: #ef4444; font-weight: 700; }
+  .s2-mantra-sub {
+    margin-top: 28px;
+    font-size: 0.75em;
+    color: var(--text-muted);
+    font-style: italic;
+    max-width: 28em;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Tagline at the closing slide. */
+  .s2-vago-tagline {
+    margin-top: 22px;
+    text-align: center;
+    font-size: 0.85em;
+    color: var(--text-primary);
+  }
+  .s2-vago-tagline em { font-style: italic; }
+</style>
+
+<!-- ===========================================================
+     §2 — Cliente, servidor y HTTP
+     =========================================================== -->
+<section>
+
+  <!-- §2.1: Apertura — roadmap con HTTP iluminado -->
+  <section>
+    <h2>Pieza 1 — HTTP</h2>
+    <div class="piece-roadmap active-1">
+      <div class="pipe-node" data-piece="1"><div class="pipe-label">HTTP</div><div class="pipe-sub">protocolo</div></div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="2"><div class="pipe-label">REST</div><div class="pipe-sub">estilo</div></div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="3"><div class="pipe-label">Rutas</div><div class="pipe-sub">contrato</div></div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="4"><div class="pipe-label">Datos</div><div class="pipe-sub">memoria</div></div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="5"><div class="pipe-label">Errores</div><div class="pipe-sub">leer fallas</div></div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="6"><div class="pipe-label">Bisagra</div><div class="pipe-sub">a local</div></div>
+    </div>
+    <p style="margin-top: 36px; text-align: center; font-size: 0.95em; max-width: 32em; margin-left: auto; margin-right: auto;">
+      El idioma con el que <span style="color: var(--accent);">cliente y servidor</span> se hablan.
+    </p>
+    <p style="margin-top: 8px; text-align: center; font-size: 0.75em; color: var(--text-muted); max-width: 36em; margin-left: auto; margin-right: auto;">
+      Empezamos por la pieza más baja del stack — todo lo demás se apoya acá.
+    </p>
+    <aside class="notes">
+      <p><u>Apertura de §2. Roadmap con HTTP encendido; el resto en gris para fijar el orden de las seis piezas.</u></p>
+      <p><em>"Arrancamos por la primera de las seis piezas. HTTP. Es la pieza más baja del stack: el idioma con el que cliente y servidor se hablan. Todo lo que viene después — REST, rutas, datos, errores — se apoya en este idioma. Si no lo nombrás bien, lo demás se vuelve adivinanza. Lo bueno es que el vocabulario base es chiquito: dos roles, un par de partes en cada mensaje, cinco verbos y tres familias de números. Todo eso lo armamos en esta sección."</em></p>
+    </aside>
+  </section>
+
+  <!-- §2.2: Hook — algo viajó -->
+  <section>
+    <h2>Algo viajó</h2>
+    <div class="s2-traveled-row">
+      <div class="bg-secondary-card fragment fade-in" data-fragment-index="1">
+        <p class="s2-evocation">
+          Abrís Twitter y aparece el feed.
+          <span class="s2-tagline">algo viajó</span>
+        </p>
+      </div>
+      <div class="bg-secondary-card fragment fade-in" data-fragment-index="2">
+        <p class="s2-evocation">
+          Refrescás Gmail y aparecen correos nuevos.
+          <span class="s2-tagline">algo viajó</span>
+        </p>
+      </div>
+      <div class="bg-secondary-card fragment fade-in" data-fragment-index="3">
+        <p class="s2-evocation">
+          Apretás <em>enviar</em> en WhatsApp Web.
+          <span class="s2-tagline">algo viajó</span>
+        </p>
+      </div>
+    </div>
+    <p class="s2-closing-line fragment fade-in" data-fragment-index="4">
+      No es magia: es una conversación con <span style="color: var(--accent);">reglas y vocabulario fijo</span>. Acá se los ponemos.
+    </p>
+    <aside class="notes">
+      <p><strong>Cuatro clicks: una tarjeta por click, después la línea de cierre.</strong></p>
+      <p><u>Hook concreto: tres acciones cotidianas que disparan tráfico HTTP. La última frase introduce el contrato del bloque entero.</u></p>
+      <p><em>"Antes de meternos en partes y verbos, una pregunta cotidiana. Cuando abrís Twitter y aparece el feed: ¿qué pasó? Algo viajó."</em></p>
+      <p><em>"Cuando refrescás Gmail y aparecen correos nuevos: igual. Tu navegador le preguntó a un servidor 'che, ¿hay algo nuevo?', y un servidor contestó."</em></p>
+      <p><em>"Cuando apretás enviar en WhatsApp Web: lo mismo. Tu mensaje sale, cruza la red, y aterriza en una computadora de Meta que se encarga de hacérselo llegar al destinatario."</em></p>
+      <p><em>"Esto pasa decenas de veces por minuto en cualquier dispositivo que tengas abierto. No es magia, no es código mágico — es una conversación. Y como toda conversación, tiene reglas, partes con nombre, y un vocabulario chico que se repite. En esta sección se los ponemos: cómo se llaman las partes, cuáles son los verbos, y cómo leer los números cuando algo falla."</em></p>
+    </aside>
+  </section>
+
+  <!-- §2.3: Cliente y servidor son roles -->
+  <section>
+    <h2>Cliente y servidor son roles</h2>
+    <div class="comparison-2col" style="margin-top: 14px;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 10px;">Cliente</h3>
+        <p style="font-size: 0.78em; margin-bottom: 10px;">Quien <strong>pide</strong>. Habla primero.</p>
+        <p style="font-size: 0.7em; color: var(--text-muted); margin: 0;">Puede ser:</p>
+        <ul style="font-size: 0.72em; line-height: 1.7; margin: 6px 0 0; padding-left: 18px;">
+          <li>un navegador</li>
+          <li>una app de iPhone</li>
+          <li>otro servidor consumiendo una API ajena</li>
+          <li>un <code>curl</code> en la terminal</li>
+        </ul>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent-secondary);">
+        <h3 style="color: var(--accent-secondary); margin-bottom: 10px;">Servidor</h3>
+        <p style="font-size: 0.78em; margin-bottom: 10px;">Quien <strong>responde</strong>. Espera que le pregunten.</p>
+        <p style="font-size: 0.7em; color: var(--text-muted); margin: 0;">No manda cosas porque sí: habla solo cuando alguien le habla.</p>
+        <p style="font-size: 0.66em; color: var(--text-muted); margin: 12px 0 0; font-style: italic;">
+          La página que armaste en semana 02 ya era un cliente; solo que todavía no había con quién hablar.
+        </p>
+      </div>
+    </div>
+    <p style="margin-top: 22px; text-align: center; font-size: 0.78em; max-width: 38em; margin-left: auto; margin-right: auto;">
+      La palabra describe un <span style="color: var(--accent);">rol</span>, no un tipo de programa.
+    </p>
+    <aside class="notes">
+      <p><u>Cliente vs servidor como roles intercambiables. Lo importante es desarmar la idea de que cliente = navegador.</u></p>
+      <p><em>"Los dos protagonistas son simples. El cliente es quien pide. El servidor es quien responde. Esa es toda la asimetría: uno habla primero, el otro contesta. El servidor, importante, no manda cosas porque sí — espera que le pregunten."</em></p>
+      <p><em>"Y conviene desarmar una idea común: el cliente no es siempre un navegador. Cualquier cosa puede ser cliente. Una app de iPhone es un cliente. Un servidor que está consumiendo la API de otro servidor, en ese momento, es un cliente. Un curl en la terminal es un cliente. La palabra describe un rol, no un tipo de programa. Vas a ver durante el curso que la misma máquina puede ser cliente y servidor en momentos distintos, según con quién esté hablando."</em></p>
+      <p><em>"De hecho, la página que armaron en semana 02 ya era un cliente. No la nombramos así porque todavía no había con quién hablar — del otro lado no había nadie. Esta semana aparece la otra mitad. Y entre las dos hace falta un idioma común. Ese idioma es HTTP."</em></p>
+    </aside>
+  </section>
+
+  <!-- §2.4: Anatomía de un request/response -->
+  <section>
+    <h2>Anatomía de un par request / response</h2>
+    <p style="font-size: 0.75em; text-align: center; max-width: 40em; margin: 0 auto 12px; color: var(--text-muted);">
+      Cliente arma un <strong style="color: var(--accent);">request</strong>. Servidor arma una <strong style="color: var(--accent-secondary);">response</strong>. Entre los dos cabe casi todo lo que hace internet hoy.
+    </p>
+    <pre style="margin: 0 auto; max-width: 36em; box-shadow: none; font-size: 0.72em;"><code class="language-http" data-trim data-noescape>GET /projects/4 HTTP/1.1
+Host: api.example.com
+
+— — — respuesta — — —
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{ "id": 4, "name": "Tesis" }</code></pre>
+    <div class="comparison-2col" style="margin-top: 18px; font-size: 0.7em;">
+      <div>
+        <p style="margin: 0 0 4px; color: var(--accent); font-weight: 600;">Request — cuatro partes</p>
+        <p style="margin: 0; color: var(--text-muted);">método &middot; URL &middot; headers &middot; body opcional</p>
+      </div>
+      <div>
+        <p style="margin: 0 0 4px; color: var(--accent-secondary); font-weight: 600;">Response — tres partes</p>
+        <p style="margin: 0; color: var(--text-muted);">código de estado &middot; headers &middot; body</p>
+      </div>
+    </div>
+    <aside class="notes">
+      <p><u>Anatomía concreta. Se lee el bloque línea por línea mientras está en pantalla, sin fragments.</u></p>
+      <p><em>"Ese idioma común se llama HTTP, y es un protocolo de pedido y respuesta. El cliente arma un request, el servidor arma una response, y entre los dos cabe casi todo lo que hace internet hoy. Mirá un par concreto en pantalla."</em></p>
+      <p><em>"Arriba, el request, el pedido. Tiene cuatro partes. Primero el método: GET. Es el verbo, ya viene definido por el protocolo, no es una palabra que vos inventás. Después la URL: barra projects barra cuatro. Es a qué recurso le estás hablando — querés el proyecto número cuatro. Después HTTP barra uno punto uno, que es la versión del protocolo. Y abajo los headers: metadatos. Acá tenemos uno solo, Host, que dice a qué dominio le estoy pidiendo: api.example.com. Y este request en particular no lleva body — los GET típicamente no llevan, porque solo están pidiendo información, no mandando contenido."</em></p>
+      <p><em>"Abajo, la response. Tres partes. Primero el código de estado: doscientos OK. Eso quiere decir 'todo bien, acá tenés lo que pediste'. Después los headers: Content-Type application/json, que dice 'lo que te mando es JSON'. Y abajo el body: el contenido en sí, en este caso un objeto con id cuatro y nombre Tesis."</em></p>
+      <p><em>"Ese ida y vuelta, repetido millones de veces por segundo, es internet. Y el vocabulario para describirlo es exactamente lo que tenés en pantalla. Cuando le dictés un endpoint a la IA, vas a tener que nombrar estas piezas — el método, la ruta, qué headers esperás, qué viene en el body. Si no las nombrás, el modelo elige por vos."</em></p>
+    </aside>
+  </section>
+
+  <!-- §2.5: Los cinco verbos -->
+  <section>
+    <h2>Cinco verbos cubren el 95% del trabajo</h2>
+    <div class="s2-verbs-row">
+      <div class="s2-verb-card">
+        <div class="s2-verb-name">GET</div>
+        <p class="s2-verb-gloss">leer un recurso, sin efectos</p>
+      </div>
+      <div class="s2-verb-card">
+        <div class="s2-verb-name">POST</div>
+        <p class="s2-verb-gloss">crear un recurso nuevo</p>
+      </div>
+      <div class="s2-verb-card">
+        <div class="s2-verb-name">PUT</div>
+        <p class="s2-verb-gloss">reemplazar un recurso entero</p>
+      </div>
+      <div class="s2-verb-card">
+        <div class="s2-verb-name">PATCH</div>
+        <p class="s2-verb-gloss">modificar parte de un recurso</p>
+      </div>
+      <div class="s2-verb-card">
+        <div class="s2-verb-name">DELETE</div>
+        <p class="s2-verb-gloss">borrar un recurso</p>
+      </div>
+    </div>
+    <p style="margin-top: 22px; text-align: center; font-size: 0.78em; max-width: 36em; margin-left: auto; margin-right: auto; color: var(--text-muted);">
+      La palabra <em>verbo</em> engaña: no son acciones libres que componés vos. Son los pocos <span style="color: var(--accent);">sustantivos del trabajo</span> — operaciones que se repiten en toda API.
+    </p>
+    <p style="margin-top: 12px; text-align: center; font-size: 0.85em;">
+      Ese es todo el repertorio que vas a necesitar el <strong>95% del tiempo</strong>.
+    </p>
+    <aside class="notes">
+      <p><u>Cinco verbos como repertorio cerrado. La aclaración terminológica importa: no son acciones libres.</u></p>
+      <p><em>"HTTP define un puñado de métodos, llamados verbos. La palabra engaña un poco: no son acciones que vos componés libremente. Son los pocos sustantivos del trabajo que pedís — un repertorio cerrado de operaciones que aparecen en toda API."</em></p>
+      <p><em>"Cinco que importan. GET: leer un recurso, sin efectos. Pedís información y nada cambia del lado del servidor. POST: crear un recurso nuevo. Mandás contenido y aparece algo que antes no existía. PUT: reemplazar un recurso entero por la versión que mandás — la versión vieja desaparece. PATCH: modificar parte de un recurso, dejando el resto como estaba. Y DELETE: borrar un recurso."</em></p>
+      <p><em>"Eso es todo el repertorio que vas a necesitar el noventa y cinco por ciento del tiempo. Existen otros — OPTIONS, HEAD, TRACE — pero los vas a tocar muy de vez en cuando o nunca. Cuando le dictás un endpoint a la IA, el primer paso es elegir uno de estos cinco. Si no podés elegir cuál corresponde, el contrato no arranca."</em></p>
+    </aside>
+  </section>
+
+  <!-- §2.6: Códigos de estado -->
+  <section>
+    <h2>Códigos de estado: 2xx / 4xx / 5xx</h2>
+    <p style="font-size: 0.72em; text-align: center; max-width: 40em; margin: 0 auto 6px; color: var(--text-muted);">
+      Lo primero que dice el servidor es un número de tres dígitos. El primer dígito te dice <span style="color: var(--accent);">de qué tipo es la respuesta</span>.
+    </p>
+    <div class="s2-status-row">
+      <div class="s2-status-card s2-ok fragment fade-in" data-fragment-index="1">
+        <div class="s2-status-family">2xx</div>
+        <p class="s2-status-tag">todo bien</p>
+        <ul>
+          <li><code>200</code> OK — GET que devolvió lo pedido</li>
+          <li><code>201</code> creado — POST que creó algo</li>
+          <li><code>204</code> sin contenido — DELETE</li>
+        </ul>
+      </div>
+      <div class="s2-status-card s2-cli fragment fade-in" data-fragment-index="2">
+        <div class="s2-status-family">4xx</div>
+        <p class="s2-status-tag">vos, cliente, te equivocaste</p>
+        <ul>
+          <li><code>400</code> mal pedido — body sin la forma esperada</li>
+          <li><code>404</code> no existe — la ruta o el recurso no aparecen</li>
+        </ul>
+        <p class="s2-forward">401 y 403 (autenticación y permisos) → semana 7</p>
+      </div>
+      <div class="s2-status-card s2-srv fragment fade-in" data-fragment-index="3">
+        <div class="s2-status-family">5xx</div>
+        <p class="s2-status-tag">yo, servidor, me caí</p>
+        <ul>
+          <li><code>500</code> algo se rompió adentro</li>
+          <li><code>503</code> servicio no disponible</li>
+        </ul>
+      </div>
+    </div>
+    <aside class="notes">
+      <p><strong>Tres clicks: revelar 2xx, después 4xx, después 5xx.</strong></p>
+      <p><u>Las tres familias de códigos de estado, una por click. El forward a semana 7 evita teach-ahead de auth.</u></p>
+      <p><em>"Cuando el servidor te responde, lo primero que dice es un número de tres dígitos. Está agrupado por familias, y cada familia te cuenta de qué tipo es la respuesta. Tres familias importan."</em></p>
+      <p><em>"Familia dos-equis-equis: todo bien. Doscientos OK, la respuesta clásica de un GET que devolvió lo que pediste. Doscientos uno creado, lo típico de un POST que creó un recurso nuevo. Doscientos cuatro sin contenido, lo típico de un DELETE — el recurso se borró y no hay nada más para devolver."</em></p>
+      <p><em>"Familia cuatro-equis-equis: vos, cliente, te equivocaste. El pedido llegó al servidor pero algo del lado del cliente está mal. Cuatrocientos mal pedido — mandaste un body que no tiene la forma que el servidor esperaba. Cuatrocientos cuatro no existe — la ruta o el recurso al que apuntaste no están. Acá también viven 401 y 403, autenticación y permisos, pero esos los vemos en semana 7. Hoy no los tocamos."</em></p>
+      <p><em>"Familia cinco-equis-equis: yo, servidor, me caí. El pedido estaba bien armado pero el servidor no pudo cumplirlo. Quinientos: algo se rompió adentro, típicamente una excepción no manejada en el código. Quinientos tres: servicio no disponible, el servidor está caído o saturado."</em></p>
+    </aside>
+  </section>
+
+  <!-- §2.7: La regla diagnóstica (mantra) -->
+  <section>
+    <h2>La regla diagnóstica</h2>
+    <div class="s2-mantra">
+      <p class="s2-mantra-line">
+        Si arranca con <span class="s2-cli-color">4</span>, mirá <strong>tu pedido</strong>.<br>
+        Si arranca con <span class="s2-srv-color">5</span>, mirá <strong>los logs del servidor</strong>.
+      </p>
+      <p class="s2-mantra-sub">
+        Esa lectura te ahorra horas de buscar en el lugar equivocado.
+      </p>
+    </div>
+    <aside class="notes">
+      <p><u>Mantra. Slide minimal con la heurística diagnóstica que vamos a invocar toda la sección 6.</u></p>
+      <p><em>"Si memorizan una sola cosa de toda esta sección, que sea esta. Cuando leés un código de estado, estás leyendo de qué lado fue la falla."</em></p>
+      <p><em>"Si arranca con cuatro, mirá tu pedido. La pelota está en tu cancha. Cambiaste algo en el body, mandaste mal la URL, te olvidaste un campo. La revisión empieza en lo que vos escribiste."</em></p>
+      <p><em>"Si arranca con cinco, mirá los logs del servidor. Tu pedido estaba bien — algo se rompió del otro lado. La revisión empieza por la consola del servidor, no por tu código."</em></p>
+      <p><em>"Suena obvio dicho así, pero si no tenés esa regla en la cabeza, te vas a pasar horas buscando en el lugar equivocado. Y peor todavía: cuando le pasás un error a la IA, también vas a estar dirigiéndola al lugar equivocado. La vamos a invocar mucho cuando lleguemos a la sección de errores y observabilidad."</em></p>
+    </aside>
+  </section>
+
+  <!-- §2.8: Por qué importa para vos como supervisor -->
+  <section>
+    <h2>Por qué importa para vos como supervisor</h2>
+    <div class="comparison-2col" style="margin-top: 16px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 12px;">Tres cosas que deberías poder hacer</h3>
+        <ol style="font-size: 0.78em; line-height: 1.7; margin: 0; padding-left: 22px;">
+          <li>Especificar el <strong>verbo</strong> del endpoint.</li>
+          <li>Predecir el <strong>código de estado</strong> que va a devolver.</li>
+          <li>Leer la <strong>respuesta</strong> y confirmar que hizo lo que dijo.</li>
+        </ol>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <h3 style="color: var(--text-muted); margin-bottom: 12px;">Lo que perdés si no podés</h3>
+        <p style="font-size: 0.78em; line-height: 1.6; margin: 0;">
+          Estás aceptando <span style="color: var(--accent);">decisiones que no sabías que estabas tomando</span>.
+        </p>
+        <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 14px;">
+          Te enterás cuando algo se rompe — y el código del que tenés que sospechar lo escribió la IA, no vos.
+        </p>
+      </div>
+    </div>
+    <aside class="notes">
+      <p><u>Cierre conceptual: las tres tareas mínimas del supervisor sobre HTTP. La columna derecha hace explícito el costo de no tenerlas.</u></p>
+      <p><em>"¿Para qué te sirve a vos toda esta anatomía? Para tres cosas concretas, ninguna negociable."</em></p>
+      <p><em>"Una: cuando le pedís a la IA que te arme un endpoint, deberías poder especificar el verbo. No 'hacé que se cree una tarea' — POST barra tasks. Dos: deberías poder predecir el código de estado que va a devolver — doscientos uno si la cosa se creó bien, cuatrocientos si el body venía mal. Tres: cuando ya está hecho, deberías poder leer la respuesta y confirmar que el endpoint hizo lo que dijo que iba a hacer."</em></p>
+      <p><em>"Si no podés hacer esas tres cosas, mirá lo que pasa del otro lado. Estás aceptando decisiones que no sabías que estabas tomando. La IA eligió por vos: el verbo, el código de éxito, el formato de la respuesta. Y vos te enterás de esas elecciones cuando algo se rompe — y a esa altura el código del que tenés que sospechar lo escribió la IA, no vos. Es como pedir un contrato y no poder leerlo."</em></p>
+    </aside>
+  </section>
+
+  <!-- §2.9: Vago vs específico (closing) -->
+  <section>
+    <h2>Cómo le pedís un endpoint a una IA</h2>
+    <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <h3 style="color: var(--text-muted); margin-bottom: 12px;">Prompt vago</h3>
+        <p style="font-style: italic; font-size: 0.78em; line-height: 1.5;">
+          "hace una API para guardar tareas"
+        </p>
+        <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 16px;">
+          La intención está clara. La IA elige verbo, ruta, forma del body, código de éxito y código de falla — y vos no lo sabés hasta leer línea por línea.
+        </p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 12px;">Prompt específico</h3>
+        <p style="font-style: italic; font-size: 0.78em; line-height: 1.5;">
+          "definí un endpoint <strong>POST /tasks</strong> que reciba en el body
+          <strong>{ title: string (requerido), due_date: string ISO (opcional) }</strong>,
+          devuelva <strong>201</strong> con el objeto creado o <strong>400</strong> si falta <code>title</code>.
+          Servir respuesta como JSON."
+        </p>
+        <p style="font-size: 0.7em; color: var(--accent); margin-top: 16px;">
+          Misma intención, contrato fijado: verbo, ruta, body, código de éxito, código de falla.
+        </p>
+      </div>
+    </div>
+    <p class="s2-vago-tagline">
+      <em>Vago = lotería.</em> &nbsp; <em>Específico = determinismo.</em>
+    </p>
+    <aside class="notes">
+      <p><u>Cierre de §2. Mismo patrón que las clases anteriores: misma intención, dos prompts. Disclosure honesto sobre LLMs modernos y los tres ejes — determinismo, iteración, auditoría.</u></p>
+      <p><em>"Cierre de la sección. Comparemos dos prompts para la misma tarea: una API para guardar tareas. Mirá las dos versiones — la intención es exactamente la misma."</em></p>
+      <p><em>"Quiero ser honesto antes de seguir. Si vos hoy le pasás el prompt de la izquierda a Claude, a ChatGPT o a Gemini, lo más probable es que te devuelva algo que compila y que más o menos hace lo que pediste. Las APIs de tareas son un caso textbook que los modelos vieron diez mil veces. Probablemente elija POST barra tasks, probablemente devuelva doscientos uno. La pregunta legítima es: si la IA acierta sola, ¿para qué necesito el vocabulario?"</em></p>
+      <p><em>"Por tres razones. Primero, determinismo. La IA acertó esta vez con tareas, un caso super común. Probá pedirle algo menos textbook — un endpoint que reciba un archivo CSV, un endpoint que coordine dos recursos, un endpoint con paginación particular — y la respuesta empieza a variar entre corridas: a veces POST, a veces PUT, a veces el código de error es 400, a veces 422. Con LLMs nunca eliminás la variación, pero la achicás mucho cuando el contrato está fijado."</em></p>
+      <p><em>"Segundo, iteración. Tu próximo prompt va a ser 'agregale un campo priority' o 'que devuelva 409 si ya existe una tarea con ese título'. Si en el primer prompt no nombraste verbo, ruta, ni body, la IA tiene que adivinar a qué te referís y vos tenés que escribir más. El vocabulario hace barato cada paso siguiente."</em></p>
+      <p><em>"Tercero, auditoría. El prompt específico te deja verificar el código punto por punto contra el contrato que escribiste, no contra una idea vaga en tu cabeza. Te llega el código, abrís el archivo, mirás si el verbo es POST, si la ruta es slash tasks, si valida que title está, si devuelve 201 cuando crea y 400 cuando falta título. Cinco cheques mecánicos. Sin el contrato, ni siquiera tenés la lista de cheques."</em></p>
+      <p><em>"Mirá el prompt específico de cerca. Nombra exactamente las primitivas de esta sección: el verbo POST, la ruta tasks, la forma del body con JSON, el código de éxito 201 y el código de falla 400. Eso es un contrato — y un contrato es la unidad mínima que vamos a usar de acá hasta el final de la clase. Vago es lotería. Específico es determinismo."</em></p>
+    </aside>
+  </section>
+
+</section>
+
+
+      <!-- ============================================================
+           §3 — REST como estilo
+           ============================================================ -->
+      <!-- ============================================================
+     §3 — REST como estilo
+     ============================================================ -->
+<section>
+
+  <!-- §3.1: Section opener — roadmap activa "REST" -->
+  <section>
+    <h2>Pieza 2 — REST</h2>
+    <div class="piece-roadmap active-2">
+      <div class="pipe-node" data-piece="1">
+        <div class="pipe-label">HTTP</div>
+        <div class="pipe-sub">protocolo</div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="2">
+        <div class="pipe-label">REST</div>
+        <div class="pipe-sub">estilo</div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="3">
+        <div class="pipe-label">Rutas</div>
+        <div class="pipe-sub">contrato</div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="4">
+        <div class="pipe-label">Datos</div>
+        <div class="pipe-sub">memoria</div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="5">
+        <div class="pipe-label">Errores</div>
+        <div class="pipe-sub">leer fallas</div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="6">
+        <div class="pipe-label">Bisagra</div>
+        <div class="pipe-sub">a local</div>
+      </div>
+    </div>
+    <p style="margin-top: 32px; font-size: 0.95em; text-align: center; max-width: 36em; margin-left: auto; margin-right: auto;">
+      El repertorio de HTTP por sí solo no te dice cómo armar una API. Te dice qué piezas hay. <span style="color: var(--accent);">REST te dice cómo combinarlas.</span>
+    </p>
+    <aside class="notes">
+      <p><u>Apertura de §3. Roadmap iluminando "REST" como segunda pieza. Bridge desde §2 (HTTP) hacia el estilo arquitectónico que ordena el uso del protocolo.</u></p>
+      <p><em>"Volvemos al mapa. Recién recorrimos la primera pieza: HTTP. Sabés qué es un verbo, qué es un código de estado, cómo viaja un par de pedido y respuesta. Pero ese repertorio, por sí solo, no te dice cómo armar una API. Te dice qué piezas existen, no cómo combinarlas."</em></p>
+      <p><em>"REST es el primer intento serio de poner orden. Es la pieza que sigue, y es la que casi cualquier API moderna que vas a dirigir va a usar. Vamos a ver qué dice y por qué importa nombrarlo."</em></p>
+    </aside>
+  </section>
+
+  <!-- §3.2: Hook — la decisión -->
+  <section>
+    <h2>Querés borrar la tarea 17 del proyecto 4</h2>
+    <div class="comparison-2col" style="margin-top: 16px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 12px; font-size: 1em;">Opción A</h3>
+        <pre style="margin: 0; box-shadow: none; font-size: 0.85em;"><code class="language-http" data-trim>DELETE /projects/4/tasks/17</code></pre>
+        <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 14px;">
+          Verbo HTTP <code>DELETE</code> sobre una URL que nombra al recurso.
+        </p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <h3 style="color: var(--text-muted); margin-bottom: 12px; font-size: 1em;">Opción B</h3>
+        <pre style="margin: 0; box-shadow: none; font-size: 0.85em;"><code class="language-http" data-trim>POST /borrar-tarea?id=17&amp;proyecto=4</code></pre>
+        <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 14px;">
+          Verbo <code>POST</code>, la acción metida en la URL como si fuera una función.
+        </p>
+      </div>
+    </div>
+    <p class="fragment fade-in" style="margin-top: 22px; font-size: 0.85em; text-align: center; max-width: 38em; margin-left: auto; margin-right: auto;">
+      Las dos son <strong>HTTP válido</strong>. <span style="color: var(--accent);">Una sola es REST.</span> Y es la que casi cualquier API que vas a dirigir va a usar.
+    </p>
+    <aside class="notes">
+      <p><strong>Mostrar las dos opciones en pantalla. Pausa de unos segundos para que comparen. Después click para revelar la línea de cierre.</strong></p>
+      <p><u>Hook de §3. Dos formas de pedirle al servidor lo mismo. Las dos funcionan a nivel HTTP; el corte está en otra capa.</u></p>
+      <p><em>"Caso concreto. Querés borrar la tarea diecisiete del proyecto cuatro. Mirá las dos opciones que te muestro acá: la primera, DELETE barra projects barra cuatro barra tasks barra diecisiete. La segunda, POST barra borrar-tarea con id y proyecto en la query. Las dos le mandan datos al servidor, las dos llegan, las dos en principio podrían funcionar."</em></p>
+      <p><em>"La pregunta no es si funciona. La pregunta es bajo qué convención está escrita."</em></p>
+      <p><em>"Las dos son HTTP válido. Una sola es REST. Y es la que casi cualquier API moderna que vas a dirigir va a usar — pública, interna, generada con IA, no importa. Por eso vale la pena saber por qué la primera califica y la segunda no."</em></p>
+    </aside>
+  </section>
+
+  <!-- §3.3: HTTP es el cómo; REST es el qué -->
+  <section>
+    <h2>HTTP es el cómo. REST es el qué.</h2>
+    <div class="comparison-2col" style="margin-top: 18px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <h3 style="color: var(--text-muted); margin-bottom: 8px; font-size: 1em;">HTTP</h3>
+        <p style="font-size: 0.78em; line-height: 1.5; margin: 0;">
+          El <strong>transporte</strong>. Define cómo viaja un pedido y cómo viene la respuesta.
+        </p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 8px; font-size: 1em;">REST</h3>
+        <p style="font-size: 0.78em; line-height: 1.5; margin: 0;">
+          Una <strong>convención</strong> sobre qué se transporta y cómo se nombra.
+        </p>
+      </div>
+    </div>
+    <p class="fragment fade-in" style="margin-top: 22px; font-size: 0.7em; color: var(--text-muted); text-align: center; max-width: 42em; margin-left: auto; margin-right: auto;">
+      No es la única. Existen <strong>GraphQL</strong> — una sola ruta donde el cliente declara qué campos quiere — y <strong>RPC</strong> — funciones con nombre en lugar de recursos. La mayoría de las APIs públicas y de los proyectos que vas a dictar hablan REST. El resto de la clase lo asume.
+    </p>
+    <aside class="notes">
+      <p><strong>Mostrar la separación HTTP/REST. Click para revelar la nota sobre alternativas (GraphQL, RPC).</strong></p>
+      <p><u>El mantra que separa transporte de convención. Importante para que después no confundan "no sigue REST" con "no funciona".</u></p>
+      <p><em>"Acá está la frase que conviene grabar. HTTP es el cómo: el transporte. Define los verbos, los códigos, los headers, cómo se manda un body, cómo viene la respuesta. Es maquinaria. REST es el qué: una convención sobre qué se transporta encima de HTTP y cómo se nombra. Es estilo arquitectónico, no es protocolo."</em></p>
+      <p><em>"Por eso la opción B del hook anterior no estaba rota; estaba escrita en otro estilo. Funcionaba como HTTP. No calificaba como REST."</em></p>
+      <p><em>"Una aclaración honesta antes de seguir: REST no es la única convención. Existe GraphQL, donde toda la API vive en una sola ruta y el cliente declara qué campos quiere recibir. Existe RPC, que en lugar de modelar recursos expone funciones con nombre, como llamar métodos remotos. Las dos son legítimas. Pero la mayoría de las APIs públicas y de los proyectos en los que vas a dictar contrato hablan REST, así que el resto de esta clase lo asume."</em></p>
+    </aside>
+  </section>
+
+  <!-- §3.4: Todo es recurso -->
+  <section>
+    <h2>Todo es un recurso</h2>
+    <p style="font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 38em; margin: 6px auto 18px;">
+      Todo lo que la API expone es un sustantivo. Las URLs nombran sustantivos, no acciones.
+    </p>
+    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 38em; margin: 0 auto;">
+      <div class="bg-secondary-card" style="display: flex; align-items: center; gap: 18px; padding: 12px 18px;">
+        <code style="font-size: 0.95em; color: var(--accent); flex: 0 0 auto; min-width: 11em;">/projects</code>
+        <span style="font-size: 0.75em; color: var(--text-muted);">colección — todos los proyectos</span>
+      </div>
+      <div class="bg-secondary-card" style="display: flex; align-items: center; gap: 18px; padding: 12px 18px;">
+        <code style="font-size: 0.95em; color: var(--accent); flex: 0 0 auto; min-width: 11em;">/projects/4</code>
+        <span style="font-size: 0.75em; color: var(--text-muted);">item — el proyecto cuatro</span>
+      </div>
+      <div class="bg-secondary-card" style="display: flex; align-items: center; gap: 18px; padding: 12px 18px;">
+        <code style="font-size: 0.95em; color: var(--accent); flex: 0 0 auto; min-width: 11em;">/projects/4/tasks/17</code>
+        <span style="font-size: 0.75em; color: var(--text-muted);">recurso anidado — la tarea 17 de ese proyecto</span>
+      </div>
+    </div>
+    <p class="fragment fade-in" style="margin-top: 22px; font-size: 0.85em; text-align: center; max-width: 40em; margin-left: auto; margin-right: auto;">
+      El verbo dice <span style="color: var(--accent);">qué hacer</span>. La URL dice <span style="color: var(--accent);">sobre qué</span>. La acción viaja en el verbo, no en la URL.
+    </p>
+    <aside class="notes">
+      <p><strong>Leer las tres formas de URL en pantalla. Click para revelar el mantra de cierre.</strong></p>
+      <p><u>La idea central de REST. Tres formas de URL — colección, item, recurso anidado — y el mantra que separa verbo de URL.</u></p>
+      <p><em>"La idea central de REST se puede decir en una frase: todo lo que la API expone es un recurso, un sustantivo. Un proyecto, una tarea, un usuario, un mensaje. Las URLs nombran sustantivos, no acciones. Eso es lo que descarta barra borrar-tarea y deja barra tasks barra diecisiete."</em></p>
+      <p><em>"Los recursos vienen en dos formas, más una variante. Una colección es el conjunto entero: barra projects significa 'todos los proyectos'. Un item es uno solo: barra projects barra cuatro es 'el proyecto cuatro'. Y si un recurso solamente tiene sentido dentro de otro, anidás: barra projects barra cuatro barra tasks barra diecisiete es 'la tarea diecisiete del proyecto cuatro'. Tres formas, mismo principio: la URL es un camino que nombra cosas."</em></p>
+      <p><em>"Y acá está la regla que conviene memorizar. El verbo dice qué hacer; la URL dice sobre qué. GET barra projects barra cuatro lee el proyecto cuatro. DELETE barra projects barra cuatro lo borra. PUT barra projects barra cuatro lo reemplaza. La URL no cambia según la acción. La acción viaja siempre en el verbo. Si te encontrás escribiendo una URL con un verbo adentro — borrar, crear, actualizar — algo está mal."</em></p>
+    </aside>
+  </section>
+
+  <!-- §3.5: Regla 1 — Plural -->
+  <section>
+    <h2>Regla 1 — Recursos en plural</h2>
+    <div class="comparison-2col" style="margin-top: 16px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 10px; font-size: 1em;">Correcto</h3>
+        <pre style="margin: 0; box-shadow: none; font-size: 0.85em;"><code class="language-http" data-trim>GET  /users
+GET  /users/42
+GET  /projects
+GET  /projects/4</code></pre>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <h3 style="color: var(--text-muted); margin-bottom: 10px; font-size: 1em;">Inconsistente</h3>
+        <pre style="margin: 0; box-shadow: none; font-size: 0.85em;"><code class="language-http" data-trim>GET  /user
+GET  /users/42
+GET  /project
+GET  /projects/4</code></pre>
+      </div>
+    </div>
+    <p style="margin-top: 22px; font-size: 0.78em; text-align: center; max-width: 42em; margin-left: auto; margin-right: auto;">
+      Una colección está en plural. Cuando querés uno, el item aparece como <code>/users/42</code> — no como un sustantivo distinto. Una API mezclada es impredecible para quien la consume, incluida <span style="color: var(--accent);">la IA que le genera el cliente</span>.
+    </p>
+    <aside class="notes">
+      <p><u>Primera regla operativa. Convención de naming: plural para colecciones, item dentro del plural.</u></p>
+      <p><em>"La primera de las cuatro reglas que importan es la más chica, pero te ahorra muchas idas y vueltas. Recursos en plural. Barra users, no barra user. Barra projects, no barra project. La URL nombra una colección, y una colección está en plural. Cuando querés uno solo, el item aparece adentro del mismo plural: barra users barra cuarenta-y-dos."</em></p>
+      <p><em>"En la columna de la izquierda están las cuatro rutas siguiendo la regla. En la derecha la inconsistencia clásica: barra user para 'mi usuario', barra users barra cuarenta-y-dos para uno específico. Mezclás singular y plural y quien consume la API ya no puede inferir cómo se llama el siguiente endpoint."</em></p>
+      <p><em>"Y acá está la consecuencia que les interesa: la IA que le genera el cliente a esa API también necesita predecir. Si tu naming es consistente, el modelo escribe el cliente en una pasada. Si es mixto, te pone barra user en un lado, barra users en otro, y vos terminás corrigiendo a mano. Convención chica, costo de iteración grande."</em></p>
+    </aside>
+  </section>
+
+  <!-- §3.6: Regla 2 — Jerarquía -->
+  <section>
+    <h2>Regla 2 — Jerarquía cuando hay relación</h2>
+    <div class="comparison-2col" style="margin-top: 16px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 8px; font-size: 1em;">Anidado</h3>
+        <pre style="margin: 0; box-shadow: none; font-size: 0.8em;"><code class="language-http" data-trim>/projects/4/tasks</code></pre>
+        <p style="font-size: 0.7em; margin-top: 12px; line-height: 1.5;">
+          La tarea <strong>pertenece al proyecto</strong>. Sin proyecto no existe.
+        </p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent-secondary);">
+        <h3 style="color: var(--accent-secondary); margin-bottom: 8px; font-size: 1em;">Plano con filtro</h3>
+        <pre style="margin: 0; box-shadow: none; font-size: 0.8em;"><code class="language-http" data-trim>/tasks?project=4</code></pre>
+        <p style="font-size: 0.7em; margin-top: 12px; line-height: 1.5;">
+          La tarea <strong>vive sola</strong>. El proyecto la modifica como filtro.
+        </p>
+      </div>
+    </div>
+    <p style="margin-top: 22px; font-size: 0.85em; text-align: center; max-width: 40em; margin-left: auto; margin-right: auto;">
+      Anidás cuando la pertenencia es <span style="color: var(--accent);">estructural</span>, no cuando es opcional.
+    </p>
+    <aside class="notes">
+      <p><u>Regla 2: cómo decidir entre URL anidada y URL plana con query param. La distinción es semántica, no estética.</u></p>
+      <p><em>"Segunda regla. Cuando hay una relación entre recursos, usás jerarquía. Pero no siempre — depende de cómo es la relación. Las dos opciones de la pantalla son las dos formas legítimas, y se eligen por significado."</em></p>
+      <p><em>"Izquierda: barra projects barra cuatro barra tasks. Anidado. Esta forma dice 'las tareas del proyecto cuatro' como una afirmación estructural. La tarea pertenece al proyecto: si borrás el proyecto, las tareas no tienen sentido. La URL refleja esa dependencia."</em></p>
+      <p><em>"Derecha: barra tasks con un query param project igual a cuatro. Plano. Esta forma dice 'todas las tareas, filtradas por proyecto'. La tarea es un recurso de primera clase que existe sola; el proyecto es una propiedad que se usa para filtrar. Una tarea puede no pertenecer a ningún proyecto y seguir siendo tarea."</em></p>
+      <p><em>"La regla mental que te lleva la decisión: anidás cuando la pertenencia es estructural, no cuando es opcional. Si una tarea no flota suelta, anidás. Si una tarea puede vivir por sí misma, mantenés plano y filtrás. Es la primera decisión arquitectónica que vas a tener que dictarle a la IA cuando le pidas un endpoint nuevo."</em></p>
+    </aside>
+  </section>
+
+  <!-- §3.7: Regla 3 — Idempotencia -->
+  <section>
+    <h2>Regla 3 — Idempotencia</h2>
+    <p style="font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 40em; margin: 6px auto 14px;">
+      Una operación es <strong>idempotente</strong> si llamarla dos veces deja el sistema igual que llamarla una.
+    </p>
+    <div style="max-width: 28em; margin: 0 auto;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.85em;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--accent);">
+            <th style="text-align: left; padding: 10px 14px; color: var(--accent);">Verbo</th>
+            <th style="text-align: left; padding: 10px 14px; color: var(--accent);">Idempotente</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--text-muted);">
+            <td style="padding: 8px 14px;"><code>GET</code></td>
+            <td style="padding: 8px 14px;">Sí</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--text-muted);">
+            <td style="padding: 8px 14px;"><code>DELETE</code></td>
+            <td style="padding: 8px 14px;">Sí</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--text-muted);">
+            <td style="padding: 8px 14px;"><code>PUT</code></td>
+            <td style="padding: 8px 14px;">Sí</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--text-muted);">
+            <td style="padding: 8px 14px;"><code>PATCH</code></td>
+            <td style="padding: 8px 14px; color: var(--text-muted);">Depende</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 14px;"><code>POST</code></td>
+            <td style="padding: 8px 14px; color: var(--text-muted);">No</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="fragment fade-in" style="margin-top: 20px; font-size: 0.82em; text-align: center; max-width: 40em; margin-left: auto; margin-right: auto;">
+      Si era idempotente, <span style="color: var(--accent);">retentás sin miedo</span>. Si era <code>POST</code>, <span style="color: var(--text-muted);">retentar duplica</span>.
+    </p>
+    <aside class="notes">
+      <p><strong>Mostrar la tabla. Click para revelar la consecuencia práctica de retentar.</strong></p>
+      <p><u>Tabla de idempotencia. La consecuencia de retentar es lo que les importa cuando dirigen a la IA en un cliente.</u></p>
+      <p><em>"Tercera regla. Una operación es idempotente si llamarla dos veces deja el sistema igual que llamarla una. La definición suena abstracta, pero la consecuencia es muy concreta y aparece todo el tiempo."</em></p>
+      <p><em>"Recorré la tabla. GET es idempotente: leer dos veces no cambia nada. DELETE también: borrar algo borrado lo deja borrado. PUT igual: reemplazar el recurso por la misma versión dos veces da el mismo estado final. PATCH depende: si tu PATCH suma uno a un contador, dos llamadas suman dos; si tu PATCH fija un campo a un valor, dos llamadas dan el mismo resultado. Y POST no: dos POST a barra projects crean dos proyectos distintos."</em></p>
+      <p><em>"Click. Acá está la consecuencia. Imaginá que mandás un request, la red se cae y no sabés si el servidor lo recibió. ¿Lo mandás de nuevo? Si era idempotente, sí, sin miedo: en el peor caso pasó dos veces y el estado sigue siendo el mismo. Si era POST, no: retentar te crea un proyecto duplicado, una transferencia duplicada, una notificación duplicada. La idempotencia es lo que te dice si tu cliente puede tener un botón 'reintentar' o si necesita lógica más cuidadosa. Cuando le pidas a la IA un cliente que tolere fallos de red, el primer dato que tiene que conocer es qué de tu API es idempotente."</em></p>
+    </aside>
+  </section>
+
+  <!-- §3.8: Regla 4 — Stateless -->
+  <section>
+    <h2>Regla 4 — Stateless</h2>
+    <p style="margin-top: 24px; font-size: 1.4em; text-align: center; max-width: 18em; margin-left: auto; margin-right: auto; line-height: 1.35;">
+      Cada request lleva <span style="color: var(--accent);">todo</span> lo que el servidor necesita.
+    </p>
+    <p style="margin-top: 24px; font-size: 0.82em; text-align: center; max-width: 36em; margin-left: auto; margin-right: auto;">
+      El servidor no recuerda quién llamó hace un segundo. No guarda contexto entre pedidos.
+    </p>
+    <p class="fragment fade-in" style="margin-top: 28px; font-size: 0.7em; color: var(--text-muted); text-align: center; max-width: 42em; margin-left: auto; margin-right: auto;">
+      Esa propiedad es lo que permite que un servidor REST escale: cualquier máquina del cluster atiende cualquier request porque ninguna tiene historia. Por eso los <strong>tokens de autenticación</strong> viajan en cada pedido — eso lo trabajamos en <span style="color: var(--accent);">semana 7</span>.
+    </p>
+    <aside class="notes">
+      <p><strong>Mostrar la frase grande. Pausa. Click para revelar la nota sobre escalabilidad y la referencia a semana 7.</strong></p>
+      <p><u>Cuarta regla. Stateless es por qué REST escala y por qué van a aparecer tokens más adelante.</u></p>
+      <p><em>"Cuarta y última regla. REST es stateless. La frase que conviene anclar: cada request lleva todo lo que el servidor necesita para atenderlo. El servidor no recuerda quién llamó hace un segundo, no guarda contexto entre pedidos, no tiene memoria propia entre uno y el siguiente. Si necesita saber quién sos, eso viaja en el request mismo."</em></p>
+      <p><em>"Suena raro al principio porque uno tiende a pensar en el servidor como una conversación con memoria. No es así. Cada pedido es una conversación nueva."</em></p>
+      <p><em>"Click. Y acá está por qué importa. Esa propiedad es lo que permite que un servidor REST escale: si el servidor no tiene historia propia, podés tener veinte máquinas detrás de un balanceador, y cualquiera atiende cualquier request, porque ninguna tiene contexto exclusivo. Es la forma de servir millones de usuarios sin que cada uno necesite su propio servidor dedicado."</em></p>
+      <p><em>"Y es también la razón por la que más adelante aparece el tema de los tokens de autenticación. Si el servidor no recuerda quién sos, lo tenés que mandar cada vez. Por eso un cliente moderno suele mandar un token en cada pedido. No nos metemos hoy en cómo se firman, cómo se validan, cómo se guardan: eso lo trabajamos en semana siete."</em></p>
+    </aside>
+  </section>
+
+  <!-- §3.9: Vago vs específico — closing pattern -->
+  <section>
+    <h2>Cómo le pedís una API a una IA</h2>
+    <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <h3 style="color: var(--text-muted); margin-bottom: 12px;">Prompt vago</h3>
+        <p style="font-style: italic; font-size: 0.78em; line-height: 1.5;">"Hacé una API para gestionar proyectos y sus tareas."</p>
+        <p style="font-size: 0.65em; color: var(--text-muted); margin-top: 16px;">
+          La IA elige por vos: rutas, verbos, anidamiento, formato. Cada vez que iteres puede elegir distinto.
+        </p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 12px;">Prompt específico</h3>
+        <p style="font-style: italic; font-size: 0.7em; line-height: 1.55;">
+          "Diseñá una API <strong>REST</strong> con dos <strong>recursos anidados</strong>:<br>
+          <code>/projects</code> con <strong>GET</strong> (lista) y <strong>POST</strong> (crear).<br>
+          <code>/projects/{id}/tasks</code> con <strong>GET</strong> (lista por proyecto), <strong>POST</strong> (crear) y <strong>DELETE</strong> <code>/projects/{id}/tasks/{taskId}</code> (borrar).<br>
+          Todas las respuestas en <strong>JSON</strong>. Las idempotentes (<strong>GET</strong>, <strong>DELETE</strong>) deben poder llamarse dos veces sin efectos diferentes."
+        </p>
+        <p style="font-size: 0.65em; color: var(--accent); margin-top: 12px;">
+          Las cuatro primitivas nombradas: recursos, jerarquía, verbos, idempotencia.
+        </p>
+      </div>
+    </div>
+    <p style="margin-top: 18px; font-size: 0.85em; text-align: center;">
+      <em>Vago = lotería.</em> &nbsp; <em>Específico = determinismo.</em>
+    </p>
+    <aside class="notes">
+      <p><u>Cierre de §3. Mismo patrón que los cierres de cada bloque conceptual de semana 02: misma intención, dos prompts, descargo honesto, tres razones.</u></p>
+      <p><em>"Cierre de la sección, mismo formato que vieron toda la semana pasada. Mirá los dos prompts: la intención es la misma, levantar una API que maneje proyectos con sus tareas. Lo único que cambia es cuánto vocabulario REST trae cada uno."</em></p>
+      <p><em>"El descargo honesto antes de meterme en la moraleja: si vos hoy le pedís a Claude o a ChatGPT 'hacé una API para gestionar proyectos y sus tareas', lo más probable es que te devuelva código que arranca. Va a usar rutas en plural, va a hacer recursos anidados, va a devolver JSON. Los modelos vieron millones de proyectos REST; tienen un default decente para los casos comunes. No te voy a vender que el prompt vago no compila."</em></p>
+      <p><em>"Pero el vocabulario sigue importando por las mismas tres razones que vimos toda la semana pasada. Determinismo: el específico fija recursos, jerarquía y verbos, así que dos generaciones caen en estructuras casi idénticas. Nunca es total — un LLM puede variar nombres entre corridas — pero el espacio de variación se achica mucho. Iteración: si mañana querés agregar PATCH a tasks, podés decir 'sumá PATCH al recurso barra projects barra id barra tasks barra taskId' sin tocar el resto. Sin nombrar las piezas, la próxima iteración te regenera todo. Y auditoría: leés el código contra el contrato que escribiste — si falta DELETE en barra projects barra id barra tasks barra taskId, lo ves de una mirando la ruta."</em></p>
+      <p><em>"Y notá una cosa concreta del prompt específico: nombra las cuatro primitivas que vimos en esta sección. Recursos en plural — barra projects, barra tasks. Jerarquía estructural — tasks anidado en projects porque pertenece. Verbos asignados a cada ruta — GET, POST, DELETE. Idempotencia — explícita, las que se pueden llamar dos veces. Cuatro reglas, un solo prompt, cero ambigüedad. Próxima sección: cómo se ve un endpoint completo, pieza por pieza."</em></p>
+    </aside>
+  </section>
+
+</section>
+
+
+      <!-- ============================================================
+           §4 — Rutas, controladores y el contrato
+           ============================================================ -->
+      <!-- ============================================================
+     §4 — Rutas, controladores y el contrato (CLIMAX)
+     ============================================================ -->
+<section>
+
+  <style>
+    /* Three-card row for slide §4.4 (path / query / body mantra).
+       comparison-2col only fits two; this is the same idea for three. */
+    .s4-three-card {
+      display: flex;
+      gap: 16px;
+      align-items: stretch;
+      margin-top: 14px;
+    }
+    .s4-three-card > * { flex: 1; min-width: 0; }
+    .s4-three-card h3 {
+      margin: 0 0 8px;
+      font-size: 0.95em;
+    }
+    .s4-three-card .s4-card-eyebrow {
+      font-size: 0.62em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 0 0 4px;
+    }
+    .s4-three-card pre {
+      margin: 0 0 8px;
+      font-size: 0.6em;
+      box-shadow: none;
+    }
+    .s4-three-card p.s4-card-foot {
+      font-size: 0.7em;
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    /* Compact "decisions list" inside the hook left card. */
+    .s4-decisions {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.65em;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .s4-decisions li {
+      padding-left: 14px;
+      position: relative;
+      margin-bottom: 4px;
+    }
+    .s4-decisions li::before {
+      content: "?";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Espejo slide — extra breathing room on the headers. */
+    .s4-mirror h3 { font-size: 1em; margin-bottom: 12px; }
+    .s4-mirror pre {
+      margin: 0;
+      font-size: 0.6em;
+      box-shadow: none;
+    }
+    .s4-mirror .s4-card-foot {
+      margin-top: 12px;
+      font-size: 0.7em;
+      line-height: 1.5;
+    }
+  </style>
+
+  <!-- §4.1: Apertura — roadmap con pieza 3 activa -->
+  <section>
+    <h2>Pieza 3 — Rutas y contratos</h2>
+    <div class="piece-roadmap active-3">
+      <div class="pipe-node" data-piece="1">
+        <div class="pipe-label">HTTP</div>
+        <div class="pipe-sub">protocolo</div>
+      </div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe-node" data-piece="2">
+        <div class="pipe-label">REST</div>
+        <div class="pipe-sub">estilo</div>
+      </div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe-node" data-piece="3">
+        <div class="pipe-label">Rutas</div>
+        <div class="pipe-sub">contrato</div>
+      </div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe-node" data-piece="4">
+        <div class="pipe-label">Datos</div>
+        <div class="pipe-sub">memoria</div>
+      </div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe-node" data-piece="5">
+        <div class="pipe-label">Errores</div>
+        <div class="pipe-sub">leer fallas</div>
+      </div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe-node" data-piece="6">
+        <div class="pipe-label">Bisagra</div>
+        <div class="pipe-sub">a local</div>
+      </div>
+    </div>
+    <p style="margin-top: 28px; font-size: 0.95em; text-align: center; max-width: 36em; margin-left: auto; margin-right: auto;">
+      Llegamos al <span style="color: var(--accent);">átomo de la clase</span>: lo que la IA implementa cuando vos sabés especificar.
+    </p>
+    <aside class="notes">
+      <p><u>Apertura de §4. Pieza activa: rutas/contrato. Es el clímax de la clase: la unidad mínima dictable del backend.</u></p>
+      <p><em>"Tercera pieza, y es la que ata las dos anteriores. HTTP nos dio el protocolo, REST nos dio el estilo. Acá adentro está el átomo: la unidad más chica que se puede dictar a una IA sin ambigüedad. Si te llevás una sola cosa de la clase de hoy, llevate esto. Cuando termine la sección vas a tener un bloque de cinco líneas que reemplaza un prompt de párrafo entero."</em></p>
+    </aside>
+  </section>
+
+  <!-- §4.2: Hook — diez decisiones invisibles -->
+  <section>
+    <h2>Diez decisiones que vos no dictaste</h2>
+    <div class="comparison-2col" style="margin-top: 8px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <p class="s4-card-eyebrow" style="font-size: 0.62em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Prompt</p>
+        <p style="font-style: italic; font-size: 0.8em; line-height: 1.5; margin: 0 0 14px; color: var(--text-primary);">
+          &laquo;hac&eacute; un endpoint para crear una tarea&raquo;
+        </p>
+        <p style="font-size: 0.65em; color: var(--text-muted); margin: 0 0 8px;">Lo que la IA decidi&oacute; sin avisarte:</p>
+        <ul class="s4-decisions">
+          <li>qu&eacute; campos son requeridos y cu&aacute;les opcionales</li>
+          <li>qu&eacute; pasa si <code>due_date</code> viene mal formateada</li>
+          <li>qu&eacute; forma exacta tiene el JSON de respuesta</li>
+          <li>si devuelve <code>200</code> o <code>201</code> al crear</li>
+          <li>qu&eacute; hace si el proyecto al que pertenece no existe</li>
+          <li>si devuelve el objeto creado o solo su <code>id</code></li>
+        </ul>
+      </div>
+      <div class="bg-secondary-card fragment fade-in" style="border-left: 4px solid var(--accent);">
+        <p class="s4-card-eyebrow" style="font-size: 0.62em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px;">Prompt &mdash; el contrato</p>
+        <pre style="margin: 0; font-size: 0.6em; box-shadow: none;"><code class="language-text" data-trim>POST /projects/{id}/tasks
+  entrada (body):
+    title     string, requerido
+    due_date  ISO, opcional
+  salida 201: { id, title, due_date, project_id }
+  salida 400: title es requerido
+  salida 404: proyecto no existe</code></pre>
+        <p style="font-size: 0.7em; color: var(--accent); margin: 12px 0 0; line-height: 1.5;">
+          Las mismas decisiones, pero tomadas por vos antes de generar una sola l&iacute;nea.
+        </p>
+      </div>
+    </div>
+    <p class="fragment fade-in" style="margin-top: 18px; font-size: 0.78em; text-align: center; color: var(--text-muted); max-width: 40em; margin-left: auto; margin-right: auto;">
+      Cada decisi&oacute;n silenciosa es <span style="color: var(--accent);">una bifurcaci&oacute;n</span> que aparece cuando algo se rompe.
+    </p>
+    <aside class="notes">
+      <p><strong>Arrancar con la columna izquierda visible. Click para revelar el contrato. Click para revelar la l&iacute;nea de cierre.</strong></p>
+      <p><u>Hook de la secci&oacute;n. El prompt vago parece razonable; el contrato muestra cu&aacute;ntas decisiones hay debajo.</u></p>
+      <p><em>"Probemos algo. Le dec&iacute;s a la IA &lsquo;hac&eacute; un endpoint para crear una tarea&rsquo; y te devuelve trescientas l&iacute;neas que parecen razonables. Compila, arranca, hasta atiende un request. Pero mir&aacute; lo que la IA decidi&oacute; sin pregunt&aacute;rtelo: cu&aacute;les campos son requeridos, qu&eacute; pasa si la fecha viene rota, qu&eacute; forma tiene la respuesta, si devuelve 200 o 201, qu&eacute; pasa si el proyecto no existe, si te devuelve el objeto entero o solo el id."</em></p>
+      <p><em>"Esto es lo opuesto: el contrato. Cinco l&iacute;neas. Todas las decisiones que en el prompt vago estaban sueltas, ac&aacute; est&aacute;n fijas. Verbo, ruta, qu&eacute; entra, qu&eacute; sale en &eacute;xito, qu&eacute; sale en cada falla. Antes de generar una l&iacute;nea de c&oacute;digo, las decisiones ya las tomaste vos."</em></p>
+      <p><em>"La frase abajo es la idea de toda la secci&oacute;n. Cada decisi&oacute;n silenciosa es una bifurcaci&oacute;n; un d&iacute;a algo se rompe y descubr&iacute;s que la IA eligi&oacute; un camino que vos no hubieses elegido. Sacarlas de su imaginaci&oacute;n y ponerlas en tu prompt es la diferencia entre supervisar y rezar."</em></p>
+    </aside>
+  </section>
+
+  <!-- §4.3: Una ruta es una promesa — pipeline de cinco piezas -->
+  <section>
+    <h2>Una ruta es una promesa &mdash; cinco piezas</h2>
+    <p style="font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 38em; margin: 4px auto 24px;">
+      Un endpoint, mirado de cerca, es la suma de cinco decisiones concretas:
+    </p>
+    <div style="display: flex; align-items: center; gap: 6px; justify-content: center; flex-wrap: nowrap; margin-top: 12px;">
+      <div class="flow-step fragment fade-in" data-fragment-index="1" style="padding: 10px 14px; font-size: 0.72em; min-width: 92px;">
+        <strong style="color: var(--accent);">verbo</strong><br>
+        <span style="color: var(--text-muted); font-size: 0.85em;">qu&eacute; hace</span>
+      </div>
+      <span class="flow-arrow fragment fade-in" data-fragment-index="2">&rarr;</span>
+      <div class="flow-step fragment fade-in" data-fragment-index="2" style="padding: 10px 14px; font-size: 0.72em; min-width: 92px;">
+        <strong style="color: var(--accent);">path</strong><br>
+        <span style="color: var(--text-muted); font-size: 0.85em;">sobre qu&eacute;</span>
+      </div>
+      <span class="flow-arrow fragment fade-in" data-fragment-index="3">&rarr;</span>
+      <div class="flow-step fragment fade-in" data-fragment-index="3" style="padding: 10px 14px; font-size: 0.72em; min-width: 92px;">
+        <strong style="color: var(--accent);">schema-in</strong><br>
+        <span style="color: var(--text-muted); font-size: 0.85em;">qu&eacute; entra</span>
+      </div>
+      <span class="flow-arrow fragment fade-in" data-fragment-index="4">&rarr;</span>
+      <div class="flow-step fragment fade-in" data-fragment-index="4" style="padding: 10px 14px; font-size: 0.72em; min-width: 92px;">
+        <strong style="color: var(--accent);">schema-out</strong><br>
+        <span style="color: var(--text-muted); font-size: 0.85em;">qu&eacute; sale</span>
+      </div>
+      <span class="flow-arrow fragment fade-in" data-fragment-index="5">&rarr;</span>
+      <div class="flow-step fragment fade-in" data-fragment-index="5" style="padding: 10px 14px; font-size: 0.72em; min-width: 92px;">
+        <strong style="color: var(--accent);">c&oacute;digos</strong><br>
+        <span style="color: var(--text-muted); font-size: 0.85em;">qu&eacute; status</span>
+      </div>
+    </div>
+    <p class="fragment fade-in" data-fragment-index="6" style="margin-top: 28px; font-size: 0.82em; text-align: center; color: var(--accent); max-width: 38em; margin-left: auto; margin-right: auto;">
+      Cada pieza es una decisi&oacute;n. Si vos no las dict&aacute;s, las toma la IA y no te avisa.
+    </p>
+    <aside class="notes">
+      <p><strong>Revelar las cinco cajas en orden, una por click. Sexto click revela la l&iacute;nea de cierre.</strong></p>
+      <p><u>Pipeline de las cinco piezas del endpoint. Es la anatom&iacute;a que sostiene todo lo que viene.</u></p>
+      <p><em>"Cinco piezas. Las vamos a ir revelando una por una."</em></p>
+      <p><em>"Verbo. Lo vimos en la secci&oacute;n de HTTP: <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>PATCH</code>, <code>DELETE</code>. Dice qu&eacute; hace el endpoint."</em></p>
+      <p><em>"Path, o ruta. Dice sobre qu&eacute; recurso act&uacute;a. <code>/projects/4/tasks</code> apunta a las tareas del proyecto cuatro. Es el sujeto de la oraci&oacute;n."</em></p>
+      <p><em>"Schema de entrada. Qu&eacute; datos llegan: la estructura del payload, los tipos de cada campo, cu&aacute;les son requeridos y cu&aacute;les opcionales. Sin esto, la IA inventa la forma del body."</em></p>
+      <p><em>"Schema de salida. La forma exacta del JSON que el cliente va a recibir cuando todo sale bien. Tambi&eacute;n es un contrato: el frontend se programa contra esta forma."</em></p>
+      <p><em>"Y los c&oacute;digos posibles. No solo el de &eacute;xito: tambi&eacute;n los de falla anticipada. Si falta <code>title</code>, &iquest;qu&eacute; devolv&eacute;s? Si el proyecto no existe, &iquest;qu&eacute; devolv&eacute;s? Cada c&oacute;digo es una rama del flujo escrita de antemano."</em></p>
+      <p><em>"La frase de cierre es la idea central. Cada una de estas cinco piezas es una decisi&oacute;n que alguien tiene que tomar. Si vos no las dict&aacute;s, las toma la IA, y las toma sin avisarte. Las pr&oacute;ximas slides son zoom-ins de cada una."</em></p>
+    </aside>
+  </section>
+
+  <!-- §4.4: Path / Query / Body — el mantra -->
+  <section>
+    <h2>D&oacute;nde viajan los datos</h2>
+    <p style="font-size: 0.75em; color: var(--text-muted); text-align: center; max-width: 40em; margin: 4px auto 6px;">
+      Los datos que mand&aacute;s al servidor pueden viajar en tres lugares. D&oacute;nde los ponen no es est&eacute;tica: cambia la sem&aacute;ntica del pedido.
+    </p>
+    <div class="s4-three-card">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <p class="s4-card-eyebrow">Path</p>
+        <h3 style="color: var(--accent);">identifica</h3>
+        <pre><code class="language-text" data-trim>/projects/{id}
+&rarr; /projects/4</code></pre>
+        <p class="s4-card-foot">El <code>4</code> dice <em>este</em> proyecto, no otro. Parte de la ruta.</p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent-secondary);">
+        <p class="s4-card-eyebrow">Query</p>
+        <h3 style="color: var(--accent-secondary);">modifica</h3>
+        <pre><code class="language-text" data-trim>/projects?page=2
+        &amp;sort=date</code></pre>
+        <p class="s4-card-foot">Despu&eacute;s del <code>?</code>. Filtra, pagina, ordena. La colecci&oacute;n no cambia; el pedido s&iacute;.</p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid #f59e0b;">
+        <p class="s4-card-eyebrow">Body</p>
+        <h3 style="color: #f59e0b;">transporta</h3>
+        <pre><code class="language-json" data-trim>{
+  "title": "Comprar pan",
+  "due_date": "2026-05-08"
+}</code></pre>
+        <p class="s4-card-foot">El contenido nuevo de una creaci&oacute;n o actualizaci&oacute;n. Normalmente JSON.</p>
+      </div>
+    </div>
+    <p style="margin-top: 22px; font-size: 0.95em; text-align: center;">
+      Path <span style="color: var(--text-muted);">identifica</span>. Query <span style="color: var(--text-muted);">modifica</span>. Body <span style="color: var(--text-muted);">transporta</span>.
+    </p>
+    <aside class="notes">
+      <p><u>El mantra path/query/body. Tres palabras chicas que evitan que la IA mande el id del proyecto en el body o el title en la query.</u></p>
+      <p><em>"Tres lugares, tres trabajos distintos. Vamos uno por uno."</em></p>
+      <p><em>"Path identifica. Cuando ves <code>/projects/{id}</code> y ped&iacute;s <code>/projects/4</code>, ese cuatro est&aacute; diciendo &lsquo;este proyecto, no otro&rsquo;. El path apunta a un recurso puntual."</em></p>
+      <p><em>"Query modifica. Aparece despu&eacute;s del signo de pregunta y se usa para filtrar, paginar, ordenar. <code>/projects?page=2&amp;sort=date</code> no apunta a un proyecto distinto: apunta a la misma colecci&oacute;n pero pidiendo la segunda p&aacute;gina ordenada por fecha."</em></p>
+      <p><em>"Body transporta el contenido. Cuando hac&eacute;s POST a <code>/projects/4/tasks</code>, el cuatro va en la ruta porque identifica al proyecto, pero los datos de la tarea nueva viajan en el body, normalmente como JSON."</em></p>
+      <p><em>"Repet&iacute; el mantra cada vez que escrib&aacute;s un prompt: path identifica, query modifica, body transporta. Si la IA pone el id del proyecto en el body, mal. Si pone el title en la query, mal. Esos errores los van a generar los modelos cuando el prompt no los nombra."</em></p>
+    </aside>
+  </section>
+
+  <!-- §4.5: El controlador atiende la promesa -->
+  <section>
+    <h2>El controlador atiende la promesa</h2>
+    <div class="bg-secondary-card" style="max-width: 42em; margin: 32px auto 0; border-left: 4px solid var(--accent); padding: 24px 28px;">
+      <p style="font-size: 0.9em; line-height: 1.6; margin: 0 0 16px;">
+        Del lado del servidor, el <strong style="color: var(--accent);">controlador</strong> es la funci&oacute;n que recibe el request y produce la response.
+      </p>
+      <p style="font-size: 0.9em; line-height: 1.6; margin: 0; color: var(--text-muted);">
+        Vos no escrib&iacute;s controladores. Vos los <span style="color: var(--accent); font-style: italic;">especific&aacute;s</span>.
+      </p>
+    </div>
+    <p style="margin-top: 28px; font-size: 0.75em; color: var(--text-muted); text-align: center; max-width: 38em; margin-left: auto; margin-right: auto;">
+      La unidad m&iacute;nima que le entreg&aacute;s a la IA no es c&oacute;digo. Es un <strong>bloque de contrato</strong>.
+    </p>
+    <aside class="notes">
+      <p><u>Slide-pivote. Nombra al controlador y traslada la responsabilidad: el alumno especifica, la IA implementa. Visualmente austera a prop&oacute;sito.</u></p>
+      <p><em>"Una palabra m&aacute;s antes de armar el bloque entero. La ruta hace una promesa: si me mand&aacute;s un POST a esta direcci&oacute;n con este body, te voy a devolver esta respuesta. Bueno, &iquest;qui&eacute;n cumple esa promesa? Una funci&oacute;n del lado del servidor que se llama controlador. Recibe el request, lo procesa, devuelve la response."</em></p>
+      <p><em>"Y ac&aacute; viene la idea que cierra el espejo con la semana pasada. En este curso vos no vas a escribir controladores a mano. Los vas a especificar, y la IA los va a implementar. La unidad m&iacute;nima que le entreg&aacute;s a la IA no es c&oacute;digo Python ni c&oacute;digo JavaScript. Es un bloque de contrato. La pr&oacute;xima slide muestra exactamente c&oacute;mo se ve."</em></p>
+    </aside>
+  </section>
+
+  <!-- §4.6: El bloque de contrato concreto — code-walkthrough con highlights -->
+  <section>
+    <h2>El bloque de contrato</h2>
+    <p style="font-size: 0.72em; color: var(--text-muted); text-align: center; max-width: 38em; margin: 4px auto 14px;">
+      Crear una tarea dentro de un proyecto. Verbo, ruta, qu&eacute; entra, qu&eacute; sale en &eacute;xito, qu&eacute; sale en cada falla.
+    </p>
+    <pre style="margin: 0 auto; max-width: 38em; font-size: 0.72em; box-shadow: none;"><code class="language-text" data-trim data-line-numbers="|1|2-4|5-6|7-8|9-10"
+>POST /projects/{id}/tasks
+  entrada (body):
+    title       string, requerido
+    due_date    fecha ISO, opcional
+  salida 201 (creado):
+    { id: int, title: string, due_date: ISO|null, project_id: int }
+  salida 400 (datos inv&aacute;lidos):
+    { error: "title es requerido" }
+  salida 404 (proyecto no existe):
+    { error: "no se encontr&oacute; el proyecto {id}" }</code></pre>
+    <p style="margin-top: 18px; font-size: 0.75em; color: var(--text-muted); text-align: center; max-width: 38em; margin-left: auto; margin-right: auto;">
+      No queda decisi&oacute;n silenciosa. Si falta <code>title</code>, no es opinable: est&aacute; escrito que devuelve <strong>400</strong>.
+    </p>
+    <aside class="notes">
+      <p><strong>Empezar con el bloque entero ya visible (sin highlight). Click 1: ilumina verbo + path. Click 2: ilumina entrada. Click 3: ilumina salida 201. Click 4: ilumina salida 400. Click 5: ilumina salida 404.</strong></p>
+      <p><u>Slide-clave. El mismo bloque del archivo 04 con highlights progresivos. Cada press recorre una pieza del contrato.</u></p>
+      <p><em>"Ac&aacute; est&aacute; el bloque entero. Es lo m&aacute;s importante de la clase: si solamente se llevan esto, alcanza. Vamos a recorrerlo pieza por pieza."</em></p>
+      <p><em>"Primera l&iacute;nea: verbo y path. <code>POST /projects/{id}/tasks</code>. <code>POST</code> porque estamos creando algo nuevo. La ruta dice sobre qu&eacute; lo creamos: dentro de las tareas del proyecto cuyo id viene en la ruta. Sustantivo en plural, jerarqu&iacute;a expl&iacute;cita; las dos reglas REST que vimos en la secci&oacute;n anterior."</em></p>
+      <p><em>"Entrada, body. Dos campos. <code>title</code> es un string y es requerido: si no viene, el endpoint rechaza el pedido. <code>due_date</code> es una fecha en formato ISO y es opcional: si no viene, no pasa nada. Tipos y opcionalidad expl&iacute;citos &mdash; la IA no improvisa qu&eacute; campos esperar."</em></p>
+      <p><em>"Salida 201, creado. La forma exacta del JSON de respuesta cuando todo sale bien. Cuatro campos: el id que el servidor gener&oacute;, el title que mandaste, la due_date que mandaste o null si no la mandaste, y el project_id que vino del path. El frontend se programa contra esta forma; si la IA cambia un nombre, el frontend deja de andar."</em></p>
+      <p><em>"Salida 400, datos inv&aacute;lidos. El cliente pidi&oacute; algo mal &mdash; en este caso, mand&oacute; un body sin title. El cuatrocientos dice &lsquo;tu pedido tiene un problema&rsquo;. Devolvemos un objeto con un campo error que explica qu&eacute; falt&oacute;."</em></p>
+      <p><em>"Salida 404, proyecto no existe. El cliente pidi&oacute; crear una tarea dentro de un proyecto que no est&aacute;. Cuatrocientos cuatro dice &lsquo;eso que ped&iacute;s no existe&rsquo;. Mismo formato de error, distinto motivo. Los dos est&aacute;n contemplados antes de generar la primera l&iacute;nea de c&oacute;digo."</em></p>
+      <p><em>"Frase de cierre. Si falta title, no es opinable: est&aacute; escrito que devuelve cuatrocientos. La IA no decide; ejecuta. Eso es lo que hace que este bloque sea la unidad m&iacute;nima dictable, y eso es lo que vamos a comparar ahora con el componente de la semana pasada."</em></p>
+    </aside>
+  </section>
+
+  <!-- §4.7: EL ESPEJO — endpoint con contrato &harr; componente con props/state -->
+  <section>
+    <h2>El espejo &mdash; el &aacute;tomo dictable, los dos lados</h2>
+    <div class="comparison-2col s4-mirror" style="margin-top: 12px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <p class="s4-card-eyebrow" style="font-size: 0.6em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Frontend &mdash; semana 02</p>
+        <h3 style="color: var(--text-muted);">Componente con props y estado</h3>
+        <pre><code class="language-html" data-trim>&lt;span id="count"&gt;0&lt;/span&gt;
+&lt;button id="inc"&gt;+1&lt;/button&gt;</code></pre>
+        <pre style="margin-top: 8px;"><code class="language-javascript" data-trim>let count = 0;
+const span = document.querySelector('#count');
+const btn  = document.querySelector('#inc');
+btn.addEventListener('click', () =&gt; {
+  count++;
+  span.textContent = count;
+});</code></pre>
+        <p class="s4-card-foot" style="color: var(--text-muted);">El &aacute;tomo dictable del frontend.</p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <p class="s4-card-eyebrow" style="font-size: 0.6em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px;">Backend &mdash; esta clase</p>
+        <h3 style="color: var(--accent);">Endpoint con contrato</h3>
+        <pre><code class="language-text" data-trim>POST /projects/{id}/tasks
+  entrada (body):
+    title     string, requerido
+    due_date  ISO, opcional
+  salida 201: { id, title, due_date, project_id }
+  salida 400: title es requerido
+  salida 404: proyecto no existe</code></pre>
+        <p class="s4-card-foot" style="color: var(--accent);">El &aacute;tomo dictable del backend.</p>
+      </div>
+    </div>
+    <p style="margin-top: 22px; font-size: 0.82em; text-align: center; max-width: 44em; margin-left: auto; margin-right: auto;">
+      Una pieza chica, con bordes claros, que peg&aacute;s a la IA <span style="color: var(--accent);">sin tener que aclarar nada m&aacute;s</span>. El &aacute;tomo dictable tambi&eacute;n tiene gemelo del lado del servidor.
+    </p>
+    <aside class="notes">
+      <p><u>Slide central de la analog&iacute;a. Cierra el espejo de toda la semana: lo que la semana 02 fue para el frontend, esta clase es para el backend.</u></p>
+      <p><em>"Esta es la slide a la que apunta toda la semana. Mir&aacute; los dos lados al mismo tiempo."</em></p>
+      <p><em>"Izquierda. La semana pasada armamos el contador. Dos l&iacute;neas de HTML &mdash; un span con id count, un button con id inc &mdash; y seis l&iacute;neas de JavaScript que conectan el dato con el evento y con el DOM. Eso es un componente: una pieza con su estructura, su estado y sus eventos. El &aacute;tomo dictable del frontend. Cuando le pegabas eso a la IA y le ped&iacute;as &lsquo;agregale un bot&oacute;n de reset&rsquo;, no ten&iacute;as que aclarar nada m&aacute;s. La pieza es chiquita, los bordes son claros, el modelo entiende exactamente qu&eacute; tocar."</em></p>
+      <p><em>"Derecha. El bloque de contrato que armamos en la slide anterior. Verbo, path, schema-in, schema-out, c&oacute;digos posibles. Cinco l&iacute;neas. Mismo principio: una pieza chiquita, con bordes claros, que la IA puede implementar sin inventar. Cuando le peg&aacute;s eso a Claude o a ChatGPT y le dec&iacute;s &lsquo;implement&aacute; este endpoint en FastAPI&rsquo;, no necesit&aacute; aclarar nada m&aacute;s. Es el &aacute;tomo dictable del backend."</em></p>
+      <p><em>"La idea grande: el rol no cambi&oacute; al cruzar al servidor. Lo que cambi&oacute; es la forma del &aacute;tomo. En el navegador, un componente con su HTML, su estado y sus eventos. En el servidor, un endpoint con su verbo, su ruta, sus schemas y sus c&oacute;digos. Misma operaci&oacute;n: pieza chica, bordes claros, dictarle a la IA, leer lo que devuelve. Si te llev&aacute;s una sola idea de las dos clases juntas, llev&aacute;te esta: el &aacute;tomo dictable tiene gemelo del lado del servidor."</em></p>
+    </aside>
+  </section>
+
+  <!-- §4.8: Vago vs específico — closing pattern -->
+  <section>
+    <h2>C&oacute;mo le ped&iacute;s un endpoint a una IA</h2>
+    <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <h3 style="color: var(--text-muted); margin-bottom: 12px;">Prompt sin vocabulario</h3>
+        <p style="font-style: italic; font-size: 0.82em; line-height: 1.5;">
+          &laquo;hac&eacute; el endpoint de crear tarea&raquo;
+        </p>
+        <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 16px;">
+          La IA elige verbo, forma del body, c&oacute;digo de &eacute;xito y c&oacute;digos de falla. La pr&oacute;xima vez puede elegir distinto.
+        </p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 12px;">Prompt con vocabulario</h3>
+        <pre style="margin: 0; font-size: 0.6em; box-shadow: none;"><code class="language-text" data-trim>POST /projects/{id}/tasks
+  entrada (body):
+    title     string, requerido
+    due_date  ISO, opcional
+  salida 201: { id, title, due_date, project_id }
+  salida 400: title es requerido
+  salida 404: proyecto no existe</code></pre>
+        <p style="font-size: 0.7em; color: var(--accent); margin-top: 12px;">
+          Verbo, ruta, schema-in, schema-out y c&oacute;digos. Las cinco piezas, nombradas.
+        </p>
+      </div>
+    </div>
+    <p style="margin-top: 18px; font-size: 0.85em; text-align: center;">
+      <em>Vago = loter&iacute;a.</em> &nbsp; <em>Espec&iacute;fico = determinismo.</em>
+    </p>
+    <aside class="notes">
+      <p><u>Cierre de &sect;4. Mismo reframing que &sect;2.5 y &sect;3.7: los LLMs modernos pueden acertar con prompts vagos, pero el vocabulario sigue importando por determinismo, iteraci&oacute;n y auditor&iacute;a.</u></p>
+      <p><em>"Mismo cierre que las dos secciones anteriores. Mir&aacute; los dos prompts: la intenci&oacute;n es la misma &mdash; un endpoint para crear una tarea."</em></p>
+      <p><em>"Y el mismo descargo de honestidad: si vos hoy le ped&iacute;s a Claude o a ChatGPT &lsquo;hac&eacute; el endpoint de crear tarea&rsquo;, lo m&aacute;s probable es que te devuelva c&oacute;digo razonable. Va a elegir POST, va a poner title como requerido, va a devolver 201. El CRUD cl&aacute;sico es un caso textbook que los modelos vieron mil veces."</em></p>
+      <p><em>"Pero el vocabulario te paga por las mismas tres razones de siempre. Determinismo: el prompt vago es loter&iacute;a. Esta vez la IA eligi&oacute; 201, la pr&oacute;xima puede tirarte 200. Esta vez puso el id del proyecto en el path, la pr&oacute;xima puede mandarlo en el body. Ped&iacute;le algo m&aacute;s raro &mdash; un endpoint que mueve una tarea de un proyecto a otro, un endpoint con paginaci&oacute;n y filtros &mdash; y la variabilidad explota."</em></p>
+      <p><em>"Iteraci&oacute;n: tu pr&oacute;ximo prompt va a ser &lsquo;agregale validaci&oacute;n de fecha futura&rsquo; o &lsquo;agregale un campo prioridad&rsquo;. Si la IA tom&oacute; un mont&oacute;n de decisiones impl&iacute;citas en el primer prompt, vas a tener que adivinar cu&aacute;les fueron antes de cambiarlas. Si las dictaste en el contrato, sab&eacute;s exactamente qu&eacute; l&iacute;nea modificar."</em></p>
+      <p><em>"Auditor&iacute;a: leer el c&oacute;digo que devuelve la IA es la mitad del trabajo del supervisor. Si tenes en la cabeza verbo, ruta, schema-in, schema-out y c&oacute;digos, pod&eacute;s escanear el controlador en segundos y verificar que cumple lo prometido. Sin esos nombres, le&eacute;s un bloque opaco."</em></p>
+      <p><em>"El prompt de la derecha nombra las cinco primitivas de esta secci&oacute;n: verbo, ruta, schema-in, schema-out y c&oacute;digos posibles. Mismo principio que en HTML, en CSS y en estado: vago es loter&iacute;a, espec&iacute;fico es determinismo. Pr&oacute;xima pieza: los datos que el endpoint mueve."</em></p>
+    </aside>
+  </section>
+
+</section>
+
+
+      <!-- ============================================================
+           §5 — Datos: relaciones vs documentos
+           ============================================================ -->
+      <!-- ============================================================
+     §5 — Datos: relaciones vs documentos
+     ============================================================ -->
+<section>
+
+  <!-- §5.1: Section opener — roadmap activa "Datos" -->
+  <section>
+    <h2>Pieza 4 — Datos</h2>
+    <div class="piece-roadmap active-4">
+      <div class="pipe-node" data-piece="1">
+        <div class="pipe-label">HTTP</div>
+        <div class="pipe-sub">protocolo</div>
+      </div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe-node" data-piece="2">
+        <div class="pipe-label">REST</div>
+        <div class="pipe-sub">estilo</div>
+      </div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe-node" data-piece="3">
+        <div class="pipe-label">Rutas</div>
+        <div class="pipe-sub">contrato</div>
+      </div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe-node" data-piece="4">
+        <div class="pipe-label">Datos</div>
+        <div class="pipe-sub">memoria</div>
+      </div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe-node" data-piece="5">
+        <div class="pipe-label">Errores</div>
+        <div class="pipe-sub">leer fallas</div>
+      </div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe-node" data-piece="6">
+        <div class="pipe-label">Bisagra</div>
+        <div class="pipe-sub">a local</div>
+      </div>
+    </div>
+    <p style="margin-top: 28px; font-size: 0.9em; text-align: center; max-width: 32em; margin-left: auto; margin-right: auto;">
+      El servidor sin datos es un proceso vivo <span style="color: var(--accent);">sin memoria</span>.
+      Acá nombramos cómo guardarlos.
+    </p>
+    <aside class="notes">
+      <u>Apertura de la sección 4. Roadmap iluminado en "Datos". No hay fragmentos.</u>
+      <p><em>"Tenemos verbo, ruta y contrato. Lo que falta es el lugar donde lo que entra por el contrato queda guardado, y donde lo que sale viene a buscarse. Esa es la cuarta pieza: los datos. Sin ella, el servidor es un proceso que atiende pedidos y se olvida de todo apenas el pedido termina. Un proceso vivo sin memoria."</em></p>
+      <p><em>"Esta sección hace dos cosas. Primero te da las tres razones por las que hace falta una base, no un archivo de texto. Después te muestra las dos grandes formas de modelar esa memoria, relacional y documental, con el mismo dominio de tareas y proyectos modelado en las dos. Y termina con la heurística que vamos a usar el resto del curso."</em></p>
+    </aside>
+  </section>
+
+  <!-- §5.2: Hook — la página nunca tuvo memoria -->
+  <section>
+    <p class="big-question">
+      La página de la clase pasada nunca tuvo memoria.<br>
+      <span class="accent">El servidor es lo que se la da.</span>
+    </p>
+    <p style="margin-top: 28px; font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 28em; margin-left: auto; margin-right: auto; font-style: italic;">
+      Refrescabas la pestaña y la to-do list desaparecía.
+      Eso no era un bug; era el modelo.
+    </p>
+    <aside class="notes">
+      <strong>Dejar la frase grande respirando 5 segundos antes de hablar.</strong>
+      <u>Hook de la sección. Reactiva la to-do list de semana 02 y la convierte en motor del concepto de persistencia.</u>
+      <p><em>"Acordate de la to-do list que armamos la clase pasada. Vivía adentro de una variable de JavaScript en el navegador. Agregabas una tarea, la marcabas como hecha, y todo se veía perfecto. Refrescabas la pestaña y todo desaparecía."</em></p>
+      <p><em>"Eso no era un bug del ejercicio. Era el modelo. El navegador es un cliente; los clientes no recuerdan. Cuando vos hacés F5, la página vuelve a cargar desde cero y el estado anterior no existe. El lugar donde la información sobrevive a un refresh, a un cierre de sesión, a un despliegue del lunes a la mañana, es el servidor. Y dentro del servidor, la base de datos. La pregunta de esta sección no es si hace falta una; es qué forma tiene esa memoria."</em></p>
+    </aside>
+  </section>
+
+  <!-- §5.3: Tres razones para una base de datos -->
+  <section>
+    <h2>Tres razones para una base de datos</h2>
+    <div class="consequence-row">
+      <div class="bg-secondary-card fragment fade-in">
+        <h3>Persistencia</h3>
+        <p>Sobrevive a reinicios, despliegues y sesiones que se cierran. Lo escrito sigue ahí mañana porque vive en disco, no en memoria.</p>
+      </div>
+      <div class="bg-secondary-card fragment fade-in">
+        <h3>Eficiencia de consulta</h3>
+        <p>Buscar entre diez ítems es recorrer una lista. Buscar entre diez millones, no. La base trae &iacute;ndices y planes de ejecuci&oacute;n para que filtrar y ordenar siga siendo barato.</p>
+      </div>
+      <div class="bg-secondary-card fragment fade-in">
+        <h3>Integridad</h3>
+        <p>La base impone reglas: no creás una tarea con un <code>project_id</code> que no existe. La regla vive en la base, no en el código de aplicación.</p>
+      </div>
+    </div>
+    <aside class="notes">
+      <strong>Revelar las tres tarjetas en orden, una por click.</strong>
+      <u>Las tres razones por las que un archivo de texto no alcanza. Ancla el "por qué" antes de presentar las dos formas.</u>
+      <p><em>"Antes de elegir una forma, fijate por qué hace falta una base y no algo más simple. Hay tres razones, y conviene tenerlas separadas porque cada una manda en una decisión distinta más adelante."</em></p>
+      <p><em>"Primero, persistencia. La base guarda en disco de manera ordenada, y se asegura de que lo que escribiste hoy siga ahí mañana, después de que el servidor se reinicie, después del despliegue del próximo lunes, después de que el usuario cierre la sesión. Memoria que sobrevive."</em></p>
+      <p><em>"Segundo, eficiencia de consulta. Buscar una tarea entre diez se resuelve recorriendo una lista. Buscar entre diez millones no se resuelve así, se resuelve con índices y con planes de ejecución que la base sabe armar. A escala, esa diferencia es la que hace que tu app responda en cien milisegundos o se cuelgue."</em></p>
+      <p><em>"Y tercero, integridad. No querés que exista una tarea apuntando a un proyecto que no existe, ni que dos escrituras al mismo tiempo dejen los datos en un estado raro. La base es el lugar donde esas reglas se hacen cumplir; no es un detalle que vos vas a recordar escribir en el código de aplicación. Esto va a ser clave en el próximo slide."</em></p>
+    </aside>
+  </section>
+
+  <!-- §5.4: Relacional — tablas, columnas, foreign keys -->
+  <section>
+    <h2>Relacional &mdash; tablas, columnas, foreign keys</h2>
+    <pre style="font-size: 0.7em;"><code class="language-text" data-line-numbers="|1-3|5-9|9">projects
+  id            int, primary key
+  name          text
+
+tasks
+  id            int, primary key
+  title         text
+  due_date      ISO date | null
+  project_id    int, foreign key &rarr; projects.id
+</code></pre>
+    <p class="fragment fade-in" style="margin-top: 16px; font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 32em; margin-left: auto; margin-right: auto;">
+      Tabla, fila, columna, esquema. La <span style="color: var(--accent);">foreign key</span> es la regla que la base impone: la integridad de fábrica.
+    </p>
+    <aside class="notes">
+      <strong>Click 1: resalta projects (1-3). Click 2: resalta tasks (5-9). Click 3: resalta solamente la línea de la foreign key. Click 4: aparece la nota de cierre.</strong>
+      <u>Bloque relacional con las dos tablas del dominio del curso. La foreign key es la pieza estrella.</u>
+      <p><em>"Una base relacional, también llamada SQL, organiza los datos en tablas. Cada tabla tiene filas, que son los registros, y columnas, que son los campos con un tipo declarado. El conjunto de tablas, columnas y tipos es el esquema, la forma fija que los datos tienen que respetar."</em></p>
+      <p><em>"Empecemos por arriba. Tabla projects, dos columnas: un id que es clave primaria, y un name de tipo texto. Esa es toda la tabla. Si querés guardar el proyecto Tesis, vas a tener una fila con id 1 y name igual a Tesis."</em></p>
+      <p><em>"Abajo, tasks. Cuatro columnas. Un id propio, el título, una fecha de vencimiento que puede ser nula porque no toda tarea la tiene, y al final la columna interesante: project_id, que apunta al id de la tabla projects. Esa columna no es un número suelto; es una foreign key, una clave foránea."</em></p>
+      <p><em>"Acá está lo que vale la pena retener. La base sabe que el valor de project_id tiene que existir como id en projects, y rechaza la inserción si no existe. Esa regla no la tenés que recordar vos en el código del controlador. La base la impone. Eso es la integridad de la que hablamos en el slide anterior, hecha concreta. Y la operación que combina ambas tablas en una sola fila de resultado se llama JOIN, y es la próxima pieza."</em></p>
+    </aside>
+  </section>
+
+  <!-- §5.5: Documental — documentos anidados -->
+  <section>
+    <h2>Documental &mdash; documentos anidados</h2>
+    <pre style="font-size: 0.7em;"><code class="language-json" data-line-numbers>{
+  "id": "p1",
+  "name": "Tesis",
+  "tasks": [
+    { "id": "t1", "title": "Marco teórico", "due_date": "2026-06-01" },
+    { "id": "t2", "title": "Bibliografía",  "due_date": null }
+  ]
+}
+</code></pre>
+    <p class="fragment fade-in" style="margin-top: 16px; font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 34em; margin-left: auto; margin-right: auto;">
+      No hay foreign key, no hay JOIN. Para traer un proyecto con todas sus tareas, leés un documento. Esquema flexible. <span style="color: var(--accent);">MongoDB</span> y <span style="color: var(--accent);">DynamoDB</span> son los ejemplos típicos.
+    </p>
+    <aside class="notes">
+      <strong>Mostrar el documento. Click para revelar la nota de cierre.</strong>
+      <u>El mismo dominio modelado documental. El contraste tiene que quedar inmediato.</u>
+      <p><em>"Misma información, otra forma. Una base documental no piensa en tablas; piensa en documentos. Un documento es un objeto parecido a un JSON, con campos anidados y estructura libre. Los documentos se agrupan en colecciones, que son el equivalente más cercano a una tabla, pero sin la obligación de que todos compartan el mismo esquema."</em></p>
+      <p><em>"Mirá la diferencia. El proyecto Tesis ya no es una fila que se relaciona con otra tabla. Las tareas viven adentro del proyecto, en un campo que se llama tasks y es un arreglo de objetos. Cada tarea tiene su id, su título, su fecha. Para traer un proyecto con todas sus tareas no necesitás un JOIN, porque ya están todas en el mismo documento."</em></p>
+      <p><em>"Es cómodo cuando siempre leés todo de un proyecto junto. Es pésimo cuando las tareas también necesitan vivir solas, cuando otra entidad las referencia, o cuando querés filtrar tareas globalmente sin importar a qué proyecto pertenecen. MongoDB es el ejemplo más conocido, DynamoDB de Amazon es otro habitual. Esa familia entera se llama NoSQL."</em></p>
+    </aside>
+  </section>
+
+  <!-- §5.6: El trade-off — cuándo cada una -->
+  <section>
+    <h2>Cuándo cada una</h2>
+    <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 12px;">Relacional gana</h3>
+        <p style="font-size: 0.8em; line-height: 1.55;">
+          Cuando hay relaciones claras entre entidades y querés integridad de fábrica.
+        </p>
+        <p style="font-size: 0.72em; color: var(--text-muted); margin-top: 12px;">
+          Facturación, inventario, gestión de cualquier dominio que se modela con sustantivos relacionados.
+        </p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent-secondary);">
+        <h3 style="color: var(--accent-secondary); margin-bottom: 12px;">Documental gana</h3>
+        <p style="font-size: 0.8em; line-height: 1.55;">
+          Cuando el dato es jerárquico, el esquema flexible, y el acceso es por documento.
+        </p>
+        <p style="font-size: 0.72em; color: var(--text-muted); margin-top: 12px;">
+          Perfiles con muchos campos opcionales, logs, eventos, cachés de respuestas externas.
+        </p>
+      </div>
+    </div>
+    <p style="margin-top: 24px; font-size: 0.78em; text-align: center; max-width: 36em; margin-left: auto; margin-right: auto;">
+      Heurística para este curso: la mayoría de las apps que vas a construir <span style="color: var(--accent);">empiezan relacional y se quedan ahí</span>. Documental requiere un patrón concreto que lo justifique.
+    </p>
+    <aside class="notes">
+      <u>Trade-off explícito. Cierra la elección antes de aterrizar SQLite.</u>
+      <p><em>"La heurística es directa. Relacional cuando hay relaciones claras entre entidades y querés integridad: facturación, inventario, gestión de cualquier dominio que se modela con sustantivos que se relacionan entre sí. Tareas que pertenecen a proyectos, facturas que tienen líneas, usuarios que tienen pedidos. Toda la familia."</em></p>
+      <p><em>"Documental cuando el dato es jerárquico, el esquema es flexible, y el acceso natural es por documento entero. Perfiles de usuario donde cada uno tiene campos distintos, logs de eventos donde la forma cambia con cada versión del producto, cachés de respuestas que vienen de servicios externos."</em></p>
+      <p><em>"La regla pragmática para este curso, y para casi cualquier app que vas a empezar a construir: arrancás relacional, y la mayoría de las veces te quedás ahí. Ir a documental es una decisión deliberada que tiene que justificarse con un patrón concreto. No es por defecto, no es por moda. La consecuencia útil de esto es que sabemos qué es lo que vamos a usar para el demo."</em></p>
+    </aside>
+  </section>
+
+  <!-- §5.7: SQLite como punto de entrada -->
+  <section>
+    <h2>SQLite como punto de entrada</h2>
+    <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 12px;">Local &mdash; SQLite</h3>
+        <p style="font-size: 0.78em; line-height: 1.55;">
+          Cero configuración. Sin servidor de DB, sin red, sin usuarios. La base entera vive en un archivo en tu disco.
+        </p>
+        <p style="font-size: 0.72em; color: var(--text-muted); margin-top: 12px;">
+          La librería se importa como cualquier otra. Es lo que vamos a usar en el demo.
+        </p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <h3 style="color: var(--text-muted); margin-bottom: 12px;">Producción &mdash; Postgres</h3>
+        <p style="font-size: 0.78em; line-height: 1.55;">
+          Servidor dedicado, red, usuarios, despliegue separado. El paso natural cuando tu app sale al mundo.
+        </p>
+        <p style="font-size: 0.72em; color: var(--text-muted); margin-top: 12px;">
+          Mismas decisiones de modelado: tablas, foreign keys, tipos, JOINs.
+        </p>
+      </div>
+    </div>
+    <p style="margin-top: 24px; font-size: 0.78em; text-align: center; max-width: 36em; margin-left: auto; margin-right: auto;">
+      SQLite te deja concentrarte en <span style="color: var(--accent);">qué modelás</span>, no en dónde corre la base.
+    </p>
+    <aside class="notes">
+      <u>Aterrizaje práctico. SQLite es la elección del curso; Postgres queda nombrado para que sepan a qué transición van algún día.</u>
+      <p><em>"En este curso vamos a usar SQLite, no Postgres. La razón es práctica. SQLite es cero configuración: no hay un servidor de base aparte, no hay red, no hay usuarios, no hay credenciales. La base entera vive en un archivo en tu disco, y la librería se importa como cualquier otra del lenguaje. Si abrís el archivo del proyecto, ahí adentro está todo."</em></p>
+      <p><em>"En producción, lo más probable es que termines usando Postgres, que es la opción seria, con servidor dedicado, despliegue separado, replicación, y todo eso. La buena noticia es que las decisiones de modelado son las mismas. Las tablas, las foreign keys, los tipos de columna, los JOINs: todo eso se piensa igual en SQLite y en Postgres."</em></p>
+      <p><em>"SQLite te deja concentrarte en qué modelás, no en dónde corre la base. Por eso entra en una clase de noventa minutos. Y por eso, en el cierre de hoy, vamos a poder pedirle a Claude Code que nos arme la base completa sin que tengamos que pelearnos con un servicio aparte."</em></p>
+    </aside>
+  </section>
+
+  <!-- §5.8: Vago vs específico (closing pattern) -->
+  <section>
+    <h2>Cómo le pedís datos a una IA</h2>
+    <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <h3 style="color: var(--text-muted); margin-bottom: 12px;">Prompt sin vocabulario</h3>
+        <p style="font-style: italic; font-size: 0.78em; line-height: 1.5;">
+          "guardá tareas y proyectos en una base"
+        </p>
+        <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 16px;">
+          Motor sin definir, nombres improvisados, tipos a criterio del modelo, foreign keys opcionales. Cada generación devuelve un esquema distinto.
+        </p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 12px;">Prompt con vocabulario</h3>
+        <p style="font-style: italic; font-size: 0.74em; line-height: 1.5;">
+          "modelá dos tablas relacionales en <strong>SQLite</strong>: <strong>projects</strong>(id INTEGER PK, name TEXT NOT NULL); <strong>tasks</strong>(id INTEGER PK, title TEXT NOT NULL, due_date TEXT, project_id INTEGER NOT NULL, <strong>FOREIGN KEY</strong> (project_id) REFERENCES projects(id)). Generá las migraciones y un seed con dos proyectos y cinco tareas distribuidas."
+        </p>
+        <p style="font-size: 0.7em; color: var(--accent); margin-top: 16px;">
+          Motor, tablas, columnas, tipos y la relación nombrada. Dos generaciones convergen al mismo esquema.
+        </p>
+      </div>
+    </div>
+    <p style="margin-top: 20px; font-size: 0.85em; text-align: center;">
+      <em>Vago = lotería.</em> &nbsp; <em>Específico = determinismo.</em>
+    </p>
+    <aside class="notes">
+      <u>Cierre de §5. Mismo patrón de cierre que §2/§3/§4: misma intención en los dos prompts, vocabulario hace la diferencia.</u>
+      <p><em>"Cierre de la sección, mismo patrón que en las anteriores. Mirá los dos prompts: la intención es exactamente la misma. Querés guardar tareas y proyectos. La diferencia no está en lo que pedís, está en cómo lo pedís."</em></p>
+      <p><em>"Quiero ser honesto con un detalle. Si vos hoy le pegás el prompt de la izquierda a Claude, a ChatGPT o a Gemini, lo más probable es que te devuelva código que arranca: dos tablas, alguna foreign key, un seed. Los modelos modernos vieron este caso miles de veces y suelen acertar. Entonces la pregunta válida es por qué seguís necesitando el vocabulario."</em></p>
+      <p><em>"Por las tres razones de siempre, ahora aplicadas a datos. Determinismo: el prompt vago deja sin fijar el motor (¿SQLite, Postgres, MongoDB?), los nombres de tablas, los tipos exactos, si las foreign keys se declaran o no. Dos generaciones del mismo prompt te pueden devolver dos esquemas diferentes. El específico fija todo eso, así que dos generaciones convergen."</em></p>
+      <p><em>"Iteración: si mañana querés agregar una columna description a tasks, con el prompt específico tocás una línea del contrato y regenerás esa pieza. Con el vago tenés que volver a explicar todo el dominio."</em></p>
+      <p><em>"Auditoría: leés la migración que devolvió la IA contra el bloque del prompt específico, y ves de una si las foreign keys quedaron bien declaradas, si los tipos coinciden, si el seed respeta la relación. Sin el bloque, estás auditando contra una intuición."</em></p>
+      <p><em>"Y notá lo que el prompt específico nombra: motor, nombres de tablas, columnas, tipos, foreign key, migraciones, seed. Esas son las primitivas de esta sección. Cuando las nombrás, la IA tiene una sola interpretación posible. Próxima sección: errores. Qué hacer cuando algo de todo esto se rompe."</em></p>
+    </aside>
+  </section>
+
+</section>
+
+
+      <!-- ============================================================
+           §6 — Errores y observabilidad
+           ============================================================ -->
+      <style>
+  /* Section-6 scoped helpers. All selectors prefixed with .s6- to avoid leakage. */
+
+  /* "500 Internal Server Error" — simulated browser response panel. */
+  .s6-error-panel {
+    background: var(--bg-code);
+    border: 1px solid #ef4444;
+    border-radius: 8px;
+    max-width: 32em;
+    margin: 0 auto;
+    padding: 18px 22px;
+    box-shadow: 0 0 24px rgba(239, 68, 68, 0.18);
+  }
+  .s6-error-panel .s6-error-status {
+    font-family: var(--font-mono);
+    color: #ef4444;
+    font-size: 1.6em;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin: 0;
+  }
+  .s6-error-panel .s6-error-msg {
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    font-size: 0.85em;
+    margin: 6px 0 0;
+  }
+  .s6-error-panel .s6-error-meta {
+    color: var(--text-muted);
+    font-size: 0.65em;
+    margin: 14px 0 0;
+    font-family: var(--font-mono);
+  }
+
+  /* Ownership table row for 4xx vs 5xx. */
+  .s6-ownership-row {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+    margin-top: 14px;
+  }
+  .s6-ownership-card {
+    flex: 1;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 14px 18px;
+    border-left: 4px solid var(--text-muted);
+  }
+  .s6-ownership-card.s6-cli  { border-left-color: #f59e0b; }
+  .s6-ownership-card.s6-srv  { border-left-color: #ef4444; }
+  .s6-ownership-card .s6-fam {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.1em;
+    margin-bottom: 4px;
+  }
+  .s6-ownership-card.s6-cli .s6-fam { color: #f59e0b; }
+  .s6-ownership-card.s6-srv .s6-fam { color: #ef4444; }
+  .s6-ownership-card .s6-owner {
+    font-size: 0.78em;
+    color: var(--text-primary);
+    margin: 0 0 10px;
+  }
+  .s6-ownership-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .s6-ownership-card li {
+    font-size: 0.66em;
+    line-height: 1.5;
+    color: var(--text-primary);
+    padding: 2px 0;
+  }
+  .s6-ownership-card li code {
+    color: var(--accent);
+    font-family: var(--font-mono);
+  }
+  .s6-ownership-card .s6-forward {
+    margin-top: 8px;
+    font-size: 0.6em;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .s6-mantra {
+    margin-top: 22px;
+    text-align: center;
+    font-size: 0.85em;
+    max-width: 36em;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .s6-mantra .s6-cli-color { color: #f59e0b; font-weight: 700; }
+  .s6-mantra .s6-srv-color { color: #ef4444; font-weight: 700; }
+
+  /* Caption beneath code-walkthrough blocks. */
+  .s6-caption {
+    text-align: center;
+    font-size: 0.78em;
+    max-width: 38em;
+    margin: 14px auto 0;
+    color: var(--text-primary);
+  }
+  .s6-caption em { color: var(--text-muted); font-style: italic; }
+
+  /* Closing tagline. */
+  .s6-vago-tagline {
+    margin-top: 22px;
+    text-align: center;
+    font-size: 0.85em;
+    color: var(--text-primary);
+  }
+  .s6-vago-tagline em { font-style: italic; }
+</style>
+
+<!-- ===========================================================
+     §6 — Errores y observabilidad
+     =========================================================== -->
+<section>
+
+  <!-- §6.1: Apertura — roadmap con Errores iluminado -->
+  <section>
+    <h2>Pieza 5 — Errores</h2>
+    <div class="piece-roadmap active-5">
+      <div class="pipe-node" data-piece="1"><div class="pipe-label">HTTP</div><div class="pipe-sub">protocolo</div></div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="2"><div class="pipe-label">REST</div><div class="pipe-sub">estilo</div></div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="3"><div class="pipe-label">Rutas</div><div class="pipe-sub">contrato</div></div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="4"><div class="pipe-label">Datos</div><div class="pipe-sub">memoria</div></div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="5"><div class="pipe-label">Errores</div><div class="pipe-sub">leer fallas</div></div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="6"><div class="pipe-label">Bisagra</div><div class="pipe-sub">a local</div></div>
+    </div>
+    <p style="margin-top: 36px; text-align: center; font-size: 0.95em; max-width: 34em; margin-left: auto; margin-right: auto;">
+      Cuando algo se rompe, <span style="color: var(--accent);">leer la falla</span> es parte de supervisar.
+    </p>
+    <p style="margin-top: 8px; text-align: center; font-size: 0.72em; color: var(--text-muted); max-width: 38em; margin-left: auto; margin-right: auto;">
+      La IA escribió el endpoint; el endpoint devolvió un error. Vamos a darle nombre a las piezas de esa falla para que puedas pasársela de vuelta sin adivinar.
+    </p>
+    <aside class="notes">
+      <p><u>Apertura de §6. Roadmap con Errores encendido. Tono: leer una falla no es pánico, es vocabulario.</u></p>
+      <p><em>"Quinta pieza: errores. Hasta acá nombramos lo que pasa cuando todo sale bien — verbo, ruta, contrato, datos. Pero la mitad del trabajo del supervisor pasa cuando algo se rompe. La IA generó código, lo corriste, y el servidor te devolvió una falla. Ese momento tiene dos versiones: la que arranca con un encogimiento de hombros, y la que arranca con un movimiento concreto. La diferencia entre las dos es vocabulario, igual que en todo lo que vimos hoy. Vamos a darle nombre a las piezas de un error para que puedas pasarle a la IA evidencia, no quejas."</em></p>
+    </aside>
+  </section>
+
+  <!-- §6.2: Hook — dos reacciones frente al 500 -->
+  <section>
+    <h2>Dos reacciones frente a un 500</h2>
+    <div class="s6-error-panel">
+      <p class="s6-error-status">500 Internal Server Error</p>
+      <p class="s6-error-msg">{ "detail": "Internal Server Error" }</p>
+      <p class="s6-error-meta">POST http://localhost:8000/projects/4/tasks &nbsp;•&nbsp; 12 ms</p>
+    </div>
+    <div class="comparison-2col fragment fade-in" style="margin-top: 22px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <h3 style="color: var(--text-muted); margin-bottom: 10px;">Reacción A</h3>
+        <p style="font-size: 0.78em; line-height: 1.5; margin: 0;">
+          Copiar <em>"no funciona"</em> en el chat. Rezar.
+        </p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 10px;">Reacción B</h3>
+        <p style="font-size: 0.78em; line-height: 1.5; margin: 0;">
+          Abrir la terminal donde corre el servidor, encontrar la línea que falló, mandarle <em>eso</em> a la IA junto con el código del handler.
+        </p>
+      </div>
+    </div>
+    <p class="fragment fade-in" style="margin-top: 18px; text-align: center; font-size: 0.82em; max-width: 36em; margin-left: auto; margin-right: auto;">
+      Las dos tardan parecido. Solo una funciona. <span style="color: var(--accent);">La diferencia es vocabulario.</span>
+    </p>
+    <aside class="notes">
+      <p><strong>Arrancar con el panel del 500 visible. Click para revelar las dos reacciones. Click final para revelar la línea de cierre.</strong></p>
+      <p><u>Hook concreto: el 500 en pantalla obliga a elegir entre dos reacciones que cuestan lo mismo.</u></p>
+      <p><em>"La escena es esta. La IA te armó un endpoint. Lo pegaste al navegador, mandaste un POST a slash projects slash cuatro slash tasks, y lo que aparece es lo que tienen en pantalla: 500 Internal Server Error, sin más detalle que un JSON que dice 'algo se rompió'. Esa pantalla la van a ver muchas veces durante el curso, y vale la pena anticipar las dos reacciones posibles."</em></p>
+      <p><em>"Reacción A: copiar 'no funciona, dame fix' en el chat de la IA y rezar para que adivine. Reacción B: abrir la terminal donde está corriendo el servidor, encontrar la línea exacta donde se rompió, y mandarle eso a la IA junto con el código del handler."</em></p>
+      <p><em>"Las dos reacciones tardan parecido — un par de minutos cada una. Solo una funciona, y la diferencia entre las dos no es paciencia ni dedicación. Es vocabulario. Saber qué mirar, cómo se llama lo que mirás, y qué pedazo pegar de vuelta. Esta sección es ese vocabulario."</em></p>
+    </aside>
+  </section>
+
+  <!-- §6.3: Los errores tienen dueño — 4xx vs 5xx -->
+  <section>
+    <h2>Los errores tienen dueño</h2>
+    <p style="font-size: 0.74em; text-align: center; max-width: 40em; margin: 0 auto 6px; color: var(--text-muted);">
+      El primer dígito del código te dice <span style="color: var(--accent);">de qué lado está el problema</span> antes de mirar nada más.
+    </p>
+    <div class="s6-ownership-row">
+      <div class="s6-ownership-card s6-cli">
+        <div class="s6-fam">4xx</div>
+        <p class="s6-owner">Vos, cliente, <strong>te equivocaste</strong>.</p>
+        <ul>
+          <li><code>400</code> mal pedido — body con la forma equivocada</li>
+          <li><code>404</code> no existe — la ruta o el recurso no aparecen</li>
+          <li><code>422</code> datos inválidos — el body tiene la forma pero un campo no pasa la validación</li>
+        </ul>
+        <p class="s6-forward">401 y 403 (autenticación y permisos) → semana 7</p>
+      </div>
+      <div class="s6-ownership-card s6-srv">
+        <div class="s6-fam">5xx</div>
+        <p class="s6-owner">Yo, servidor, <strong>me caí</strong>.</p>
+        <ul>
+          <li><code>500</code> algo se rompió adentro — excepción no manejada</li>
+          <li><code>503</code> servicio no disponible — caído o saturado</li>
+        </ul>
+      </div>
+    </div>
+    <p class="s6-mantra">
+      Si arranca con <span class="s6-cli-color">4</span>, mirá <strong>tu pedido</strong>.
+      Si arranca con <span class="s6-srv-color">5</span>, mirá <strong>los logs</strong>.
+      Empezar por el lado equivocado es perder media hora.
+    </p>
+    <aside class="notes">
+      <p><u>Recuperar el mantra de §2.7 y aplicarlo. La línea de forward a semana 7 evita teach-ahead de auth.</u></p>
+      <p><em>"En la sección dos vimos las tres familias de códigos por arriba. Acá las usamos para diagnosticar. Los errores tienen dueño, y el primer dígito te dice cuál."</em></p>
+      <p><em>"Familia cuatro-equis-equis: vos, cliente, te equivocaste. El pedido llegó al servidor, lo entendió, y te dijo 'no, así no'. Cuatrocientos: el body no tiene la forma esperada. Cuatrocientos cuatro: la ruta o el recurso no existen. Cuatrocientos veintidós, que en la sección dos no nombramos: el body tiene la forma correcta pero un campo concreto no pasa la validación — por ejemplo mandaste un email que no es un email. Ahí también viven 401 y 403, autenticación y permisos, pero esos los vemos en semana 7."</em></p>
+      <p><em>"Familia cinco-equis-equis: yo, servidor, me caí. El pedido estaba bien armado pero el servidor no pudo cumplirlo. Quinientos: algo se rompió adentro, casi siempre una excepción no manejada en el código. Quinientos tres: el servicio está caído o saturado."</em></p>
+      <p><em>"Y el mantra que vamos a usar toda la sección: si arranca con cuatro, mirá tu pedido — la pelota está en tu cancha. Si arranca con cinco, mirá los logs del servidor — la pelota está del otro lado. Empezar por el lado equivocado es la forma más rápida de perder media hora, y de mandarle a la IA evidencia que apunta al lugar que no es."</em></p>
+    </aside>
+  </section>
+
+  <!-- §6.4: Logs — lo que el servidor te susurra -->
+  <section>
+    <h2>Logs: lo que el servidor te susurra</h2>
+    <p style="font-size: 0.72em; text-align: center; max-width: 42em; margin: 0 auto 10px; color: var(--text-muted);">
+      Un <strong>log</strong> es una línea que el servidor escribe cada vez que algo pasa. En local viven en la terminal donde corre el servidor.
+    </p>
+    <pre style="margin: 0 auto; max-width: 50em; box-shadow: none; font-size: 0.62em;"><code class="language-text" data-trim data-line-numbers="|1|2|3">2026-05-07 14:32:11  INFO   POST /projects/4/tasks  body={"title":"Bibliografía"}
+2026-05-07 14:32:11  ERROR  IntegrityError: NOT NULL constraint failed: tasks.project_id
+2026-05-07 14:32:11  INFO   500 Internal Server Error  duration=12ms</code></pre>
+    <p class="s6-caption">
+      Tres líneas, tres cosas distintas: <em>qué entró</em>, <em>qué se rompió</em>, <em>con qué código respondió</em>. Las tres juntas son el relato del incidente.
+    </p>
+    <aside class="notes">
+      <p><strong>Cuatro estados del bloque: vista completa, después línea 1, después línea 2, después línea 3. Un click por transición.</strong></p>
+      <p><u>Logs como evidencia primaria. Highlight progresivo: request → error interno → status code de salida. Plantar "observabilidad" como término paraguas en el script.</u></p>
+      <p><em>"La fuente de verdad cuando algo se rompe son los logs. Un log es una línea que el servidor escribe cada vez que pasa algo: cada request que entra, cada error que ocurre, cada respuesta que sale. En local los logs viven en la terminal donde corre el servidor — la ventana negra de fondo que vas a tener abierta toda la próxima clase. En producción se mandan a un sistema de agregación que los junta de muchas máquinas. La palabra paraguas para esta práctica es observabilidad: el conjunto de cosas que hacen que un sistema te cuente qué está haciendo. Logs es la pata más concreta y la única que vamos a mirar hoy."</em></p>
+      <p><em>"Mirá un log típico de un request fallido. Tres líneas, tres timestamps idénticos porque pasó todo en el mismo segundo. La primera línea dice qué request entró: nivel INFO, verbo POST, ruta projects barra cuatro barra tasks, y el body que mandó el cliente — un objeto con el título 'Bibliografía'. Eso es el relato de quién llegó."</em></p>
+      <p><em>"La segunda línea dice qué se rompió: nivel ERROR, IntegrityError, mensaje 'NOT NULL constraint failed: tasks.project_id'. Eso es la base de datos diciendo 'me pediste que insertara una tarea sin el campo project_id, y la columna no acepta nulos'. Esa es la causa concreta. Fijate: la base de datos te grita el problema con sus propias palabras."</em></p>
+      <p><em>"La tercera línea dice con qué código respondió el servidor y cuánto tardó: 500 Internal Server Error en doce milisegundos. Eso es lo que ve el cliente en la pantalla. Las tres líneas juntas son el relato completo del incidente: qué entró, qué se rompió adentro, qué salió. Cada una sola te dice una cosa parcial; las tres juntas son evidencia."</em></p>
+    </aside>
+  </section>
+
+  <!-- §6.5: El stack trace — el camino al bug -->
+  <section>
+    <h2>El stack trace: el camino al bug</h2>
+    <p style="font-size: 0.72em; text-align: center; max-width: 42em; margin: 0 auto 10px; color: var(--text-muted);">
+      Un <strong>stack trace</strong> es la cadena de llamadas que llevó al error, de la más externa a la más interna. <span style="color: var(--accent);">No se lee de arriba a abajo.</span>
+    </p>
+    <pre style="margin: 0 auto; max-width: 52em; box-shadow: none; font-size: 0.6em;"><code class="language-text" data-trim data-line-numbers="|4-5|7">Traceback (most recent call last):
+  File "uvicorn/server.py", line 245, in handle
+  File "fastapi/routing.py", line 218, in app
+  File "app/routes/tasks.py", line 14, in create_task
+    db.execute("INSERT INTO tasks (title) VALUES (?)", (body.title,))
+  File "sqlite3.py", line 312, in execute
+sqlite3.IntegrityError: NOT NULL constraint failed: tasks.project_id</code></pre>
+    <p class="s6-caption">
+      El <em>síntoma</em> grita al final. La <em>causa</em> vive en la primera línea de código que escribiste vos.
+    </p>
+    <aside class="notes">
+      <p><strong>Tres estados: vista completa, después highlight de las líneas 4 y 5 (tu archivo + el INSERT), después highlight de la línea 7 (el síntoma).</strong></p>
+      <p><u>Cómo leer un stack trace: ignorar el framework, encontrar la primera línea que menciona código tuyo, leer el síntoma al final. Aside sobre observabilidad ya plantado en slide anterior.</u></p>
+      <p><em>"Cuando el servidor revienta, además de la línea de error en los logs aparece un stack trace. Es la cadena de llamadas a funciones que llevó al error, listada desde la más externa hasta la más interna. Y la trampa para principiantes es leerlo arriba a abajo como si fuera prosa. No se lee así. La línea que importa suele ser la primera que menciona código tuyo, no del framework."</em></p>
+      <p><em>"Mirá las dos líneas iluminadas. 'app barra routes barra tasks.py línea catorce, función create_task'. Esa es la primera línea que apunta a tu carpeta app. Las dos de arriba — uvicorn, fastapi — son código de framework, ahí no vas a encontrar nada que arreglar; los frameworks rara vez son el problema. La que importa es la tuya. Y debajo tiene el detalle: el INSERT contra la tabla tasks que solamente le pasa title como columna, sin project_id. Ahí ves la causa concreta: el handler escribió un INSERT incompleto."</em></p>
+      <p><em>"Y abajo de todo, la última línea iluminada: sqlite3.IntegrityError, NOT NULL constraint failed, tasks.project_id. Ese es el síntoma — lo que la base de datos terminó gritando cuando se topó con el INSERT incompleto. Fijate el patrón, porque se repite siempre: el síntoma grita al final, la causa vive en la primera línea de código que escribiste vos. O que la IA escribió por vos. Un stack trace es un mapa con flecha: ignorá el framework, buscá tu archivo, leé qué línea de tu código provocó el grito final."</em></p>
+    </aside>
+  </section>
+
+  <!-- §6.6: Cómo le contás esto a la IA — vago vs específico -->
+  <section>
+    <h2>Cómo le contás esto a la IA</h2>
+    <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <h3 style="color: var(--text-muted); margin-bottom: 12px;">Prompt sin evidencia</h3>
+        <p style="font-style: italic; font-size: 0.78em; line-height: 1.5;">
+          "este endpoint no anda, arreglalo"
+        </p>
+        <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 16px;">
+          Sin código, sin log, sin línea exacta. La IA tiene que adivinar qué endpoint, qué falla y qué archivo.
+        </p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 12px;">Prompt con evidencia</h3>
+<pre style="margin: 0; box-shadow: none; background: transparent;"><code class="language-text" data-trim style="font-size: 0.62em; line-height: 1.5;">POST /projects/4/tasks devuelve 500.
+Log relevante:
+  IntegrityError: NOT NULL constraint failed:
+  tasks.project_id
+  en app/routes/tasks.py:14
+Handler actual:
+  [pegás acá el código]
+¿Por qué falla y cómo se arregla sin
+romper la creación de tareas en otros
+proyectos?</code></pre>
+        <p style="font-size: 0.7em; color: var(--accent); margin-top: 12px;">
+          Verbo, ruta, código devuelto, línea del error, archivo, handler e hipótesis a descartar — fijados.
+        </p>
+      </div>
+    </div>
+    <p class="s6-vago-tagline">
+      <em>Vago = lotería.</em> &nbsp; <em>Específico = determinismo.</em>
+    </p>
+    <aside class="notes">
+      <p><u>Cierre de §6 fusionado con el patrón vago vs específico. Misma intención en los dos prompts. Disclosure honesto + tres ejes — determinismo, iteración, auditoría — atados a las primitivas de esta sección.</u></p>
+      <p><em>"Cierre de la sección, mismo patrón que las anteriores. Comparemos dos prompts para resolver la misma falla: el endpoint que vimos al principio, devolviendo 500. La intención es exactamente la misma — querés saber por qué se rompió y cómo arreglarlo. Mirá las dos versiones."</em></p>
+      <p><em>"Quiero ser honesto antes de seguir, igual que en las secciones anteriores. Si vos hoy le pasás 'este endpoint no anda, arreglalo' a Claude o a ChatGPT, lo más probable es que te conteste algo razonable. Te va a pedir el código, o va a tirar tres hipótesis genéricas, o si pegaste el archivo en una conversación anterior, capaz acierta. Los modelos modernos a veces adivinan bien. La pregunta legítima es: si la IA puede llegar sola, ¿para qué junto evidencia?"</em></p>
+      <p><em>"Por las tres razones de siempre, ahora aplicadas a depurar. Determinismo: el prompt vago manda al modelo a improvisar. A veces va a apuntar al schema, a veces a la validación, a veces te va a pedir que pegues más cosas. El prompt con evidencia fija ruta, código devuelto, mensaje de error, archivo y línea — dos corridas distintas convergen en diagnósticos parecidos en lugar de inventarte tres bugs distintos."</em></p>
+      <p><em>"Iteración: si el primer diagnóstico de la IA no te convence, en la versión específica le decís 'descartá la hipótesis del schema, mirá la validación' sin reescribir el contexto. En la versión vaga tenés que reconstruir todo otra vez."</em></p>
+      <p><em>"Auditoría: leés la respuesta contra la evidencia que pegaste, no contra una idea vaga. Verificás si la causa que propone la IA explica realmente el log, o si ignora la línea que importa. Sin evidencia pegada, ni siquiera tenés la lista de cheques contra qué leer."</em></p>
+      <p><em>"Y mirá el prompt específico de cerca: nombra exactamente las primitivas de esta sección. La ruta, el código de estado, el mensaje del log, el archivo y la línea del stack trace, el handler concreto, y hasta una hipótesis explícita a descartar — 'sin romper la creación en otros proyectos'. Eso es la evidencia que la IA necesita para razonar en lugar de adivinar. Vago es lotería. Específico es determinismo."</em></p>
+    </aside>
+  </section>
+
+</section>
+
+
+      <!-- ============================================================
+           §7 — De lo local al stack
+           ============================================================ -->
+      <!-- ============================================================
+     §7 — De lo local al stack (bisagra)
+     ============================================================ -->
+<section>
+
+  <style>
+    /* Scoped helpers for §7 only. */
+    .s7-pipeline {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: nowrap;
+      margin: 24px auto 12px;
+      font-size: 0.8em;
+    }
+    .s7-pipeline .pipeline-box {
+      min-width: 110px;
+      text-align: center;
+    }
+    .s7-pipeline .pipeline-box strong {
+      display: block;
+      color: var(--text-primary);
+      font-size: 1em;
+    }
+    .s7-pipeline .pipeline-box .role {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.72em;
+      margin-top: 2px;
+    }
+    .s7-pipeline .tooltip {
+      max-width: 280px;
+      white-space: normal;
+      line-height: 1.4;
+      font-size: 0.75em;
+      text-align: left;
+    }
+    .s7-alts {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .s7-alts .bg-secondary-card {
+      padding: 12px 14px;
+    }
+    .s7-alts h3 {
+      font-size: 0.95em;
+      color: var(--accent);
+      margin: 0 0 4px;
+    }
+    .s7-alts p {
+      font-size: 0.72em;
+      line-height: 1.45;
+      margin: 0;
+      color: var(--text-primary);
+    }
+    .s7-task-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .s7-task-card {
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--accent);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .s7-task-card .step-num {
+      font-family: var(--font-mono);
+      font-size: 0.7em;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+    .s7-task-card h3 {
+      margin: 0;
+      font-size: 0.95em;
+      color: var(--text-primary);
+    }
+    .s7-task-card pre {
+      margin: 0;
+      box-shadow: none;
+      font-size: 0.7em;
+    }
+    .s7-task-card .hint {
+      font-size: 0.7em;
+      color: var(--text-muted);
+      margin: 0;
+    }
+    .s7-cli-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .s7-cli-cards .bg-secondary-card h3 {
+      font-size: 0.95em;
+      color: var(--accent);
+      margin: 0 0 8px;
+    }
+    .s7-cli-cards .bg-secondary-card p {
+      font-size: 0.72em;
+      line-height: 1.45;
+      margin: 0;
+    }
+    .s7-cli-cards .bg-secondary-card code {
+      font-size: 0.85em;
+    }
+  </style>
+
+  <!-- §7.1: Section opener — roadmap activa "Bisagra" -->
+  <section>
+    <h2>Pieza 6 — Bisagra a local</h2>
+    <div class="piece-roadmap active-6">
+      <div class="pipe-node" data-piece="1">
+        <div class="pipe-label">HTTP</div>
+        <div class="pipe-sub">protocolo</div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="2">
+        <div class="pipe-label">REST</div>
+        <div class="pipe-sub">estilo</div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="3">
+        <div class="pipe-label">Rutas</div>
+        <div class="pipe-sub">contrato</div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="4">
+        <div class="pipe-label">Datos</div>
+        <div class="pipe-sub">memoria</div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="5">
+        <div class="pipe-label">Errores</div>
+        <div class="pipe-sub">leer fallas</div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-node" data-piece="6">
+        <div class="pipe-label">Bisagra</div>
+        <div class="pipe-sub">a local</div>
+      </div>
+    </div>
+    <p style="margin-top: 32px; font-size: 0.95em; text-align: center; max-width: 36em; margin-left: auto; margin-right: auto;">
+      Cerramos el bloque conceptual y preparamos la herramienta. <span style="color: var(--accent);">La clase pivota acá.</span>
+    </p>
+    <aside class="notes">
+      <p><u>Apertura de §7. Última pieza del roadmap. Bisagra entre la parte conceptual de la clase y la parte ejecutable de la próxima semana.</u></p>
+      <p><em>"Volvemos al mapa por última vez. Recorrimos cinco piezas: HTTP, REST, rutas y contratos, datos y errores. Tenés el vocabulario backend completo. Lo que queda es la sexta pieza, que no es un concepto nuevo: es la bisagra."</em></p>
+      <p><em>"De acá hasta el final de la clase nos preparamos para usar la herramienta. La próxima semana arrancamos con Claude Code abierto en la terminal y vamos a necesitar la máquina lista. Esta sección explica por qué bajamos a CLI, qué stack vas a ver en el demo, y qué tenés que dejar instalado antes del lunes."</em></p>
+    </aside>
+  </section>
+
+  <!-- §7.2: Hook — un servidor no entra en una pestaña -->
+  <section>
+    <p class="big-question">
+      Hasta ahora todo pasaba en una pestaña.<br>
+      <span class="accent">Un servidor de verdad no entra en una pestaña.</span>
+      <span class="muted-q">Necesita un proceso vivo. Un puerto. Archivos en disco. Esa máquina sos vos.</span>
+    </p>
+    <aside class="notes">
+      <p><strong>Dejar la frase principal 4–5 segundos antes de revelar la nota inferior.</strong></p>
+      <p><u>Hook de §7. Marca el corte: lo que veníamos haciendo en sandboxes ya no alcanza para lo que viene.</u></p>
+      <p><em>"Pensá lo que hicimos hasta ahora en este curso. Canvas, ChatGPT, la página de la clase pasada, todo lo que jugamos en la semana 02. Todo pasaba en una pestaña del navegador. Funcionó porque lo que construíamos se sostenía solo: una UI que renderiza, un texto que se genera, un componente que monta y desmonta."</em></p>
+      <p><em>"Un servidor de verdad no entra en una pestaña. Necesita un proceso que se quede corriendo, vivo. Un puerto donde escuchar. Archivos en disco que sigan ahí mañana. Esa máquina sos vos, tu computadora. Es lo que vamos a tocar la semana que viene, y por eso bajamos a la terminal."</em></p>
+    </aside>
+  </section>
+
+  <!-- §7.3: Tres cosas que un servidor necesita -->
+  <section>
+    <h2>Tres cosas que una pestaña no te da</h2>
+    <div class="consequence-row">
+      <div class="bg-secondary-card fragment fade-in">
+        <h3>Proceso</h3>
+        <p>Un programa que se queda corriendo, vivo, escuchando. No se ejecuta una vez y termina: espera. <code>uvicorn app.main:app</code> queda en pie hasta que vos lo cortás.</p>
+      </div>
+      <div class="bg-secondary-card fragment fade-in">
+        <h3>Puerto</h3>
+        <p>Una dirección numerada donde el proceso escucha. <code>localhost:8000</code>. Sin puerto no hay forma de que algo de afuera te hable.</p>
+      </div>
+      <div class="bg-secondary-card fragment fade-in">
+        <h3>Sistema de archivos</h3>
+        <p>El <code>.db</code> de SQLite vive en una carpeta de tu disco. Cerrás la terminal y mañana sigue ahí. La pestaña no te da eso: cuando se cierra, el estado se evapora.</p>
+      </div>
+    </div>
+    <p class="fragment fade-in" style="margin-top: 18px; font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 38em; margin-left: auto; margin-right: auto; font-style: italic;">
+      Las pestañas de sandbox son geniales para mostrar UIs. Son un mal lugar para correr un servidor.
+    </p>
+    <aside class="notes">
+      <p><strong>Revelar las tres tarjetas en orden, una por click. Último click: la línea de cierre.</strong></p>
+      <p><u>Las tres condiciones materiales del backend. Justifica en concreto por qué Canvas no aguanta el demo de la semana 4.</u></p>
+      <p><em>"Tres cosas, una por una, que un servidor necesita y que una pestaña no puede entregar."</em></p>
+      <p><em>"Primero, un proceso. Eso es nuevo. Hasta ahora corrían scripts: ejecutás, hacen algo, terminan. Un servidor no termina; se queda escuchando. Lo arrancás con un comando — uvicorn app.main:app — y el comando no devuelve. Queda colgado en la terminal hasta que vos lo cortés con Control-C. Mientras esté vivo, responde."</em></p>
+      <p><em>"Segundo, un puerto. Es la dirección numerada en la que ese proceso escucha. Típicamente algo como localhost dos puntos ocho mil. El cliente le pega a esa dirección y el servidor contesta. Sin puerto no hay manera de que algo de afuera — el navegador, otra app, lo que sea — se le acerque."</em></p>
+      <p><em>"Tercero, un sistema de archivos. La base de SQLite es un archivo punto db en una carpeta de tu disco. Eso es lo que le da memoria al servidor. Cerrás la terminal y mañana volvés a abrirla, los datos siguen ahí. Una pestaña no te da eso: cuando se cierra, el estado se evapora."</em></p>
+      <p><em>"Las pestañas son perfectas para mostrar interfaces. Son un mal lugar para correr un servidor. Por eso bajamos."</em></p>
+    </aside>
+  </section>
+
+  <!-- §7.4: Por qué CLI antes que IDE -->
+  <section>
+    <h2>Por qué CLI antes que IDE</h2>
+    <p style="font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 38em; margin: 0 auto;">
+      La próxima clase usamos <strong style="color: var(--text-primary);">Claude Code</strong>: una herramienta de IA que corre en la terminal, no en un IDE gráfico. Tres razones.
+    </p>
+    <div class="s7-cli-cards">
+      <div class="bg-secondary-card fragment fade-in">
+        <h3>Transparencia</h3>
+        <p>Ves cada archivo que la IA crea y cada comando que ejecuta: <code>pip install</code>, <code>uvicorn ...</code>, <code>sqlite3 app.db</code>. Nada se esconde detrás de paneles que aparecen y desaparecen.</p>
+      </div>
+      <div class="bg-secondary-card fragment fade-in">
+        <h3>Foco didáctico</h3>
+        <p>Estás aprendiendo a <em>dirigir</em>, no a manejar autocompletes y menús contextuales. La terminal es la mínima superficie posible: prompt, respuesta, comando.</p>
+      </div>
+      <div class="bg-secondary-card fragment fade-in">
+        <h3>Continuidad</h3>
+        <p>La semana 4 sube a IDEs AI-native (Cursor, Antigravity). Acá nos quedamos en CLI por didáctica, no por capacidad. La IA no es menos potente en la terminal: es menos vistosa.</p>
+      </div>
+    </div>
+    <aside class="notes">
+      <p><strong>Revelar las tres tarjetas en orden.</strong></p>
+      <p><u>Justificación pedagógica de la elección de Claude Code (CLI) en lugar de un IDE AI-native como Cursor.</u></p>
+      <p><em>"Para este primer contacto con tooling de IA local vamos a usar Claude Code, que corre en la terminal. No es un IDE gráfico. Tres razones, en orden."</em></p>
+      <p><em>"Transparencia. En la terminal ves todo lo que la IA hace: cada archivo que crea, cada comando que ejecuta. Pip install. Uvicorn. Sqlite3 sobre la base. Nada se esconde detrás de una UI con paneles flotantes y notificaciones que parpadean. Si algo raro pasa, lo ves en la línea siguiente."</em></p>
+      <p><em>"Foco didáctico. En estas ocho semanas el tema es aprender a dirigir a un modelo, no a navegar menús contextuales y autocompletes inteligentes. La terminal es la mínima superficie posible: un prompt, una respuesta, un comando que se corre. Lo único que queda en pantalla es la decisión que vos tenés que tomar."</em></p>
+      <p><em>"Continuidad. La próxima clase, semana 4, ya empezamos a subir a IDEs AI-native como Cursor o Antigravity, donde la IA está incrustada en el editor. Acá nos quedamos en CLI por didáctica, no por capacidad. Claude Code en la terminal no es menos potente que cualquiera de esos IDEs: es menos vistoso, y eso es exactamente lo que queremos para empezar."</em></p>
+    </aside>
+  </section>
+
+  <!-- §7.5: El stack del demo -->
+  <section>
+    <h2>El stack del demo</h2>
+    <p style="font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 38em; margin: 0 auto;">
+      Stack chico, mainstream. Cinco piezas, cada una con un rol nombrable. Pasá el cursor para ver qué hace cada una.
+    </p>
+    <div class="s7-pipeline">
+      <div class="pipeline-box">
+        <strong>Python</strong>
+        <span class="role">lenguaje</span>
+        <div class="tooltip">El más común para backend introductorio y muy fuerte en el ecosistema de IA y data.</div>
+      </div>
+      <span class="pipeline-arrow">
+        <svg viewBox="0 0 24 14"><path d="M0 7h22M16 1l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      </span>
+      <div class="pipeline-box">
+        <strong>FastAPI</strong>
+        <span class="role">framework</span>
+        <div class="tooltip">Define rutas, schemas y respuestas con poca ceremonia. Lo que dictás se parece a lo que termina escrito.</div>
+      </div>
+      <span class="pipeline-arrow">
+        <svg viewBox="0 0 24 14"><path d="M0 7h22M16 1l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      </span>
+      <div class="pipeline-box">
+        <strong>SQLite</strong>
+        <span class="role">base</span>
+        <div class="tooltip">Vive en un archivo, sin servidor de DB aparte. Suficiente para el demo y para muchas apps en producción.</div>
+      </div>
+      <span class="pipeline-arrow">
+        <svg viewBox="0 0 24 14"><path d="M0 7h22M16 1l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      </span>
+      <div class="pipeline-box">
+        <strong>Uvicorn</strong>
+        <span class="role">servidor ASGI</span>
+        <div class="tooltip">Corre tu app FastAPI y la deja escuchando en un puerto. Es el proceso que se queda vivo.</div>
+      </div>
+      <span class="pipeline-arrow">
+        <svg viewBox="0 0 24 14"><path d="M0 7h22M16 1l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      </span>
+      <div class="pipeline-box">
+        <strong>venv</strong>
+        <span class="role">aislamiento</span>
+        <div class="tooltip">Aísla las dependencias por proyecto, sin pisar lo que tenés instalado a nivel sistema.</div>
+      </div>
+    </div>
+    <p style="margin-top: 24px; font-size: 0.78em; text-align: center; color: var(--text-muted); max-width: 38em; margin-left: auto; margin-right: auto;">
+      Suficiente para el demo y para muchas apps reales en producción.
+    </p>
+    <aside class="notes">
+      <p><strong>Pasar el cursor por cada caja en orden mientras se nombra.</strong></p>
+      <p><u>Cinco cajas con tooltip al hover. Cada caja es una pieza del demo de la semana 4.</u></p>
+      <p><em>"Cinco piezas, una por una. Pasá el cursor por cada una y aparece la descripción."</em></p>
+      <p><em>"Python es el lenguaje. Lo elegimos porque es el más común en backend introductorio y porque manda en el ecosistema de IA y de data, así que lo que aprendas acá te sirve para los temas que vienen después en este curso."</em></p>
+      <p><em>"FastAPI es el framework. Define rutas, schemas y respuestas con muy poca ceremonia. Encaja con la idea de contrato que vimos en la sección 4: lo que vos dictás se parece bastante a lo que termina escrito en el archivo, así que el código no esconde la intención."</em></p>
+      <p><em>"SQLite es la base. Vive en un solo archivo, sin servidor de DB aparte que haya que instalar. Esa es la pieza que justifica el sistema de archivos del slide anterior: el punto db es eso, el archivo en disco."</em></p>
+      <p><em>"Uvicorn es el servidor ASGI. Es el programa que efectivamente corre tu app FastAPI y la deja escuchando en un puerto. Cuando vimos proceso en el slide anterior, hablábamos de uvicorn."</em></p>
+      <p><em>"Y venv es la herramienta de Python para aislar dependencias por proyecto. Sin venv, todo lo que instalás termina en tu sistema y empezás a pisar versiones de un proyecto a otro. Con venv, cada proyecto tiene su caja propia."</em></p>
+    </aside>
+  </section>
+
+  <!-- §7.6: FastAPI es una elección, no la única -->
+  <section>
+    <h2>FastAPI es <em>una</em> elección, no la única</h2>
+    <div class="s7-alts">
+      <div class="bg-secondary-card">
+        <h3>Node + Express</h3>
+        <p>JavaScript en el servidor. Popular en startups donde el front-end ya manda; compartir lenguaje cliente↔servidor es atractivo para un equipo chico.</p>
+      </div>
+      <div class="bg-secondary-card">
+        <h3>Django</h3>
+        <p>Python opinionated. Trae todo: ORM, admin, migraciones, autenticación. Si seguís sus convenciones, escribís muy poco código.</p>
+      </div>
+      <div class="bg-secondary-card">
+        <h3>Flask</h3>
+        <p>Python minimal. Filosofía cercana a FastAPI pero sin schemas tipados de fábrica: lo armás pieza por pieza.</p>
+      </div>
+      <div class="bg-secondary-card">
+        <h3>Go (Gin / Fiber)</h3>
+        <p>Compilado, rápido, buen consumo de memoria. Popular para infra y servicios donde el costo por request importa.</p>
+      </div>
+      <div class="bg-secondary-card" style="grid-column: 1 / -1;">
+        <h3>Ruby on Rails</h3>
+        <p>Convención sobre configuración llevada al extremo. Sigue vivo en muchas apps reales en producción.</p>
+      </div>
+    </div>
+    <p style="margin-top: 16px; font-size: 0.8em; text-align: center; max-width: 40em; margin-left: auto; margin-right: auto;">
+      El punto no es aprenderlas. Es saber que <span style="color: var(--accent);">FastAPI es una elección</span>: la elegimos por tipos modernos, schemas integrados, documentación automática y baja ceremonia.
+    </p>
+    <aside class="notes">
+      <p><u>Mapa breve de alternativas. Ubica FastAPI sin sugerir que sea la única opción.</u></p>
+      <p><em>"FastAPI no es la única opción de backend, ni de cerca. La idea de mostrarte estas alternativas no es enseñártelas: es ubicar a FastAPI en un mapa para que cuando alguien te diga que su API está en Express o en Django sepas de qué te están hablando."</em></p>
+      <p><em>"Node con Express corre JavaScript en el servidor. Es popular en startups chicas donde el front-end ya manda, porque podés compartir lenguaje y a veces hasta tipos entre cliente y servidor."</em></p>
+      <p><em>"Django y Flask son las dos alternativas Python históricas. Django es opinionated y trae todo de fábrica: ORM, admin, migraciones, auth. Flask es minimal, parecido en filosofía a FastAPI pero sin schemas tipados; te lo vas armando pieza por pieza."</em></p>
+      <p><em>"Go con frameworks como Gin o Fiber produce servidores compilados, rápidos y con muy buen consumo de memoria. Lo vas a ver en infraestructura, donde el costo por request importa mucho."</em></p>
+      <p><em>"Y Rails sigue vivo. Lleva la idea de convención sobre configuración al extremo: si seguís las reglas, escribís muy poco código. Hay un montón de apps reales que corren ahí."</em></p>
+      <p><em>"El punto del slide no es que aprendas estos cinco frameworks. Es que sepas que FastAPI es una elección, no la única que existe. La elegimos por cuatro razones concretas: tipos modernos, schemas integrados, documentación automática y baja ceremonia. Para un curso introductorio donde queremos leer lo que la IA escribe sin pelear con sintaxis, esas cuatro cosas pesan."</em></p>
+    </aside>
+  </section>
+
+  <!-- §7.7: Tarea para semana 4 — checklist accionable -->
+  <section>
+    <h2>Tarea antes de la semana 4</h2>
+    <p style="font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 40em; margin: 0 auto;">
+      Dejá la máquina lista antes de la próxima clase. Cuatro pasos.
+    </p>
+    <div class="s7-task-grid">
+      <div class="s7-task-card">
+        <span class="step-num">PASO 1</span>
+        <h3>Python ≥ 3.11</h3>
+        <pre><code class="language-bash" data-trim>python --version</code></pre>
+        <p class="hint">Tiene que devolver 3.11 o superior.</p>
+      </div>
+      <div class="s7-task-card">
+        <span class="step-num">PASO 2</span>
+        <h3>Node.js ≥ 18</h3>
+        <pre><code class="language-bash" data-trim>node --version</code></pre>
+        <p class="hint">Claude Code corre sobre Node, así que es requisito.</p>
+      </div>
+      <div class="s7-task-card">
+        <span class="step-num">PASO 3</span>
+        <h3>Instalar Claude Code</h3>
+        <pre><code class="language-bash" data-trim>npm install -g @anthropic-ai/claude-code</code></pre>
+        <p class="hint">Desde npm, una sola línea.</p>
+      </div>
+      <div class="s7-task-card">
+        <span class="step-num">PASO 4</span>
+        <h3>Verificar la instalación</h3>
+        <pre><code class="language-bash" data-trim>claude --version</code></pre>
+        <p class="hint">Tiene que responder con un número.</p>
+      </div>
+    </div>
+    <p style="margin-top: 16px; font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 40em; margin-left: auto; margin-right: auto; font-style: italic;">
+      Si algo falla, avisá por el canal del curso <strong style="color: var(--accent); font-style: normal;">antes</strong> de la clase. No queremos perder tiempo de la semana 4 instalando.
+    </p>
+    <aside class="notes">
+      <p><strong>Slide para foto. Pausa, dejar que saquen captura. Confirmar que el canal del curso está claro.</strong></p>
+      <p><u>Tarea concreta para llegar a semana 4 con la máquina lista. Cuatro comandos, copy-paste-ables.</u></p>
+      <p><em>"Tarea para la próxima clase. Cuatro pasos, todos comandos de terminal. Si querés sacar foto del slide, este es el momento."</em></p>
+      <p><em>"Paso uno: tener Python 3.11 o superior. Lo verificás con python --version. Si te tira 3.10 o menos, hay que actualizar. Paso dos: tener Node 18 o superior. Claude Code corre sobre Node, así que es requisito; no es opcional. Lo verificás con node --version."</em></p>
+      <p><em>"Paso tres: instalar Claude Code desde npm. Una sola línea: npm install guion g arroba anthropic raya ai barra claude raya code. Eso lo deja disponible en cualquier carpeta de tu sistema. Paso cuatro, el más importante: claude --version. Si esa línea responde con un número, ya está. Si te dice 'comando no encontrado', algo salió mal en el paso tres."</em></p>
+      <p><em>"Y la regla de oro: si algo falla, avisame por el canal del curso antes de la clase, no durante. La semana 4 es una clase con demo en vivo y no queremos perder treinta minutos resolviendo instalaciones rotas que se podrían haber resuelto un domingo a la tarde."</em></p>
+    </aside>
+  </section>
+
+  <!-- §7.8: Vago vs específico — closing pattern -->
+  <section>
+    <h2>Cómo le pedís el setup a una IA</h2>
+    <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <h3 style="color: var(--text-muted); margin-bottom: 12px;">Prompt vago</h3>
+        <p style="font-style: italic; font-size: 0.85em; line-height: 1.5;">"armame el backend"</p>
+        <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 16px;">
+          La IA elige por vos: estructura del proyecto, dependencias, nombre de las rutas, comando de arranque. Cada generación puede elegir distinto.
+        </p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent); margin-bottom: 12px;">Prompt específico</h3>
+        <pre style="margin: 0; box-shadow: none; font-size: 0.6em;"><code class="language-text" data-trim>creá un proyecto Python con venv y FastAPI:
+- estructura: app/main.py (FastAPI),
+  app/db.py (SQLite), requirements.txt
+- dependencias: fastapi, uvicorn, pydantic
+- una ruta GET /health que devuelva
+  { "status": "ok" }
+- arrancalo con:
+  uvicorn app.main:app --reload
+- mostrame en pantalla la URL y los logs</code></pre>
+        <p style="font-size: 0.7em; color: var(--accent); margin-top: 12px;">
+          Nombra estructura, dependencias, comando de arranque y una ruta concreta.
+        </p>
+      </div>
+    </div>
+    <p style="margin-top: 18px; font-size: 0.85em; text-align: center;">
+      <em>Vago = lotería.</em> &nbsp; <em>Específico = determinismo.</em>
+    </p>
+    <aside class="notes">
+      <p><u>Cierre de §7 y de la parte conceptual de la clase. Mismo reframing que las secciones anteriores: vocabulario por determinismo, iteración y auditoría. Acá las "primitivas" son las del setup local: estructura del proyecto, dependencias, comando de arranque, ruta concreta.</u></p>
+      <p><em>"Cierre de la sección con la misma estructura que veníamos usando. Mirá los dos prompts: la intención es la misma — pedirle a la IA que te arme el backend del demo."</em></p>
+      <p><em>"Y el mismo descargo de honestidad de siempre: si vos hoy le tirás 'armame el backend' a Claude o a ChatGPT, lo más probable es que te devuelva algo que arranca. Va a elegir Flask o FastAPI, va a tirar dos rutas razonables, va a poner alguna base. No es que el prompt vago siempre falle: muchas veces el resultado es decente."</em></p>
+      <p><em>"Pero el vocabulario te paga por las tres razones de siempre. Determinismo: el prompt vago es lotería. Esta vez te tira FastAPI con SQLite, la próxima Flask con MongoDB, la próxima Express porque interpretó 'backend' como Node. Pedile algo menos común — un endpoint con paginación, un middleware de auth — y la variabilidad se dispara."</em></p>
+      <p><em>"Iteración: tu próximo prompt va a ser 'agregame una ruta para crear tareas'. Si fijaste estructura desde el primer prompt — app/main.py, app/db.py — la IA sabe dónde meter el código nuevo. Si no la fijaste, te puede armar un main.py paralelo o pisar lo anterior. Y auditoría: leer un proyecto que vos no diseñaste es leer un mapa sin leyenda; con la lista de la izquierda en el prompt, lo leés contra la spec."</em></p>
+      <p><em>"Y notá lo que nombra el prompt específico: las primitivas que vimos en esta sección. Estructura del proyecto — qué archivos hay y qué pone cada uno. Dependencias — el contenido de requirements.txt. Comando de arranque — uvicorn app.main:app --reload, el proceso vivo del que hablamos. Y una ruta concreta — GET /health, con su contrato de respuesta. Cuatro primitivas, un solo prompt, cero ambigüedad."</em></p>
+      <p><em>"Cerramos la parte conceptual de la clase. Lo que viene es el demo en vivo: Claude Code abierto, este mismo prompt sobre la mesa, leyendo ruta por ruta lo que aparece."</em></p>
+    </aside>
+  </section>
+
+</section>
+
+
+      <!-- ============================================================
+           §8 — Demo en vivo
+           ============================================================ -->
+      <!-- ============================================================
+     §8 — Demo en vivo
+     ============================================================ -->
+<section>
+
+  <!-- §8.1: Section divider — Demo en vivo -->
+  <section class="section-divider">
+    <h2>Demo en vivo</h2>
+    <p class="muted" style="font-size: 0.85em; max-width: 32em; margin: 16px auto 0;">
+      Levantamos un servidor con Claude Code. Ustedes leen junto al profesor, ruta por ruta.
+    </p>
+    <aside class="notes">
+      <p><u>Transici&oacute;n al cierre. La clase deja el modo conceptual y entra al modo demo en vivo.</u></p>
+      <p><em>"Cerramos el recorrido conceptual. Lo que sigue no es otra secci&oacute;n te&oacute;rica: es el demo. Vamos a levantar un servidor real con Claude Code, y ustedes me van a leer cada ruta conmigo, mientras aparece. La idea es cerrar el espejo en vivo &mdash; ustedes dictan el contrato, la IA escribe el c&oacute;digo, lo leemos juntos."</em></p>
+    </aside>
+  </section>
+
+  <!-- §8.2: Lo que se va a mostrar — los cinco requisitos -->
+  <section>
+    <h2>Lo que tiene que estar en pantalla</h2>
+    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 18px;">
+      <div class="bg-secondary-card" style="border-left: 3px solid var(--accent);">
+        <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Requisito 1</p>
+        <h3 style="font-size: 0.95em; color: var(--accent); margin: 0 0 8px;">Tres verbos HTTP</h3>
+        <p style="font-size: 0.7em; line-height: 1.5; margin: 0;">M&iacute;nimo: GET, POST, DELETE. Ideal: tambi&eacute;n PATCH o PUT.</p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 3px solid var(--accent);">
+        <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Requisito 2</p>
+        <h3 style="font-size: 0.95em; color: var(--accent); margin: 0 0 8px;">Una relaci&oacute;n entre tablas</h3>
+        <p style="font-size: 0.7em; line-height: 1.5; margin: 0;">Foreign key visible en la base. Dos entidades, una pertenece a la otra.</p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 3px solid var(--accent);">
+        <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Requisito 3</p>
+        <h3 style="font-size: 0.95em; color: var(--accent); margin: 0 0 8px;">Un camino de error</h3>
+        <p style="font-size: 0.7em; line-height: 1.5; margin: 0;">Un 4xx intencional, en pantalla. Para leer la respuesta, no para esquivarla.</p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 3px solid var(--accent);">
+        <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Requisito 4</p>
+        <h3 style="font-size: 0.95em; color: var(--accent); margin: 0 0 8px;">Frontend m&iacute;nimo</h3>
+        <p style="font-size: 0.7em; line-height: 1.5; margin: 0;">Una p&aacute;gina que consume la API. El cliente hablando el contrato del servidor.</p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 3px solid var(--accent);">
+        <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Requisito 5</p>
+        <h3 style="font-size: 0.95em; color: var(--accent); margin: 0 0 8px;">Dominio no trivial</h3>
+        <p style="font-size: 0.7em; line-height: 1.5; margin: 0;">Expl&iacute;citamente NO un to-do list. La clase tiene que justificarse sola.</p>
+      </div>
+    </div>
+    <p style="margin-top: 22px; font-size: 0.75em; color: var(--text-muted); text-align: center; max-width: 38em; margin-left: auto; margin-right: auto;">
+      El dominio concreto se decide al implementar. Hoy lo van a ver levantarse en vivo.
+    </p>
+    <aside class="notes">
+      <p><u>Los cinco requisitos del demo. Sirve como contrato visible con el aula sobre qu&eacute; tiene que pasar antes de que termine la clase.</u></p>
+      <p><em>"Antes de tocar nada, dejemos a la vista qu&eacute; tiene que mostrar este demo. Cinco cosas. Tres verbos HTTP en juego, m&iacute;nimo GET, POST y DELETE. Una relaci&oacute;n entre dos tablas, con la foreign key visible. Un camino de error: un cuatrocientos provocado a prop&oacute;sito, para que lo lean en pantalla. Un frontend m&iacute;nimo que consuma la API. Y un dominio que no sea una to-do list, porque ya tuvimos una y no alcanza para justificar lo que vamos a hacer."</em></p>
+      <p><em>"El dominio concreto lo defino cuando arranque a tipear. Ustedes lo van a ver levantarse en vivo. Si en alg&uacute;n momento alguno de estos cinco no aparece, me lo marcan."</em></p>
+    </aside>
+  </section>
+
+  <!-- §8.3: La plantilla de contrato — antes de tocar Claude Code -->
+  <section>
+    <h2>El contrato &mdash; antes de tocar Claude Code</h2>
+    <p style="font-size: 0.72em; color: var(--text-muted); text-align: center; max-width: 38em; margin: 4px auto 14px;">
+      Lo dictamos nosotros. La IA elige el c&oacute;mo.
+    </p>
+    <pre style="margin: 0 auto; max-width: 38em; font-size: 0.7em; box-shadow: none;"><code class="language-text" data-trim data-line-numbers="|1|3-5|7-12|14-17"
+>stack: Python + FastAPI + SQLite + Uvicorn
+
+modelo de datos:
+  [tabla A](id, ...)
+  [tabla B](id, ..., a_id foreign key &rarr; A.id)
+
+endpoints:
+  GET    /[recurso A]
+  POST   /[recurso A]
+  GET    /[recurso A]/{id}/[recurso B]
+  POST   /[recurso A]/{id}/[recurso B]
+  DELETE /[recurso A]/{id}/[recurso B]/{bid}
+
+frontend:
+  una p&aacute;gina index.html servida por la API
+  formulario para crear A y B
+  lista que renderiza el GET y permite borrar</code></pre>
+    <p style="margin-top: 18px; font-size: 0.75em; color: var(--text-muted); text-align: center; max-width: 38em; margin-left: auto; margin-right: auto;">
+      Este bloque es el contrato. Cuando lo dictamos, le damos el <strong>qu&eacute;</strong>. La IA elige el <strong>c&oacute;mo</strong>.
+    </p>
+    <aside class="notes">
+      <p><strong>Mostrar el bloque entero, sin highlight, mientras lo escrib&iacute;s en vivo. Luego: click 1 ilumina stack. Click 2 ilumina modelo de datos. Click 3 ilumina endpoints. Click 4 ilumina frontend.</strong></p>
+      <p><u>Plantilla del contrato. Misma forma que la slide §4.6, ahora aplicada al demo entero. Se queda en pantalla mientras se dicta a Claude Code.</u></p>
+      <p><em>"Antes de invocar a la IA, escribimos el contrato a mano. Esta plantilla la van a ver levantarse en vivo arriba a la izquierda. Vamos a recorrerla pieza por pieza, igual que recorrimos el bloque de la secci&oacute;n cuatro."</em></p>
+      <p><em>"Primera l&iacute;nea: el stack. Python como lenguaje, FastAPI como framework, SQLite como base, Uvicorn como servidor ASGI. Cuatro elecciones, cada una nombrada en la secci&oacute;n siete."</em></p>
+      <p><em>"Modelo de datos. Dos tablas, A y B, con sus columnas. La cosa importante es la foreign key: B pertenece a A, est&aacute; escrito y la base lo va a hacer cumplir. Ese es el requisito dos del demo."</em></p>
+      <p><em>"Endpoints. Cinco rutas. GET y POST sobre el recurso A; despu&eacute;s GET, POST y DELETE sobre el recurso B anidado dentro de A. Tres verbos distintos, jerarqu&iacute;a expl&iacute;cita en la URL: las dos reglas REST de la secci&oacute;n tres aterrizando en una API concreta."</em></p>
+      <p><em>"Frontend. Una p&aacute;gina servida por la misma app, con formulario y lista. Lo m&iacute;nimo para que el cliente hable el contrato. Cuando dictemos esto, le estamos dando el qu&eacute; a la IA. La IA elige el c&oacute;mo &mdash; qu&eacute; archivos crea, c&oacute;mo organiza el c&oacute;digo, qu&eacute; librer&iacute;as importa. Si despu&eacute;s tenemos que cambiar algo, cambiamos el contrato y volvemos a dictar."</em></p>
+    </aside>
+  </section>
+
+  <!-- §8.4: Beats del demo — clickable-steps -->
+  <section>
+    <h2>Los seis beats del demo</h2>
+    <p style="font-size: 0.72em; color: var(--text-muted); text-align: center; max-width: 38em; margin: 4px auto 14px;">
+      Checklist de momentos donde paramos a leer junto con ustedes.
+    </p>
+    <div id="demo-beats"></div>
+    <aside class="notes">
+      <p><strong>Usar como checklist mientras corre el demo. Click en cada beat al cubrirlo para mostrar el detalle al aula y dejar marca de avance.</strong></p>
+      <p><u>Slide-anclaje del demo. Las seis pausas explicitan d&oacute;nde se rompe la inercia del &laquo;sigue tipeando&raquo; para leer.</u></p>
+      <p><em>"Mientras corra el demo, esta slide queda atr&aacute;s. Son seis momentos donde voy a pausar y vamos a leer juntos. No son seis &laquo;pasos a seguir&raquo;: son las seis veces que rompemos la inercia para mirar lo que apareci&oacute;. Si alguno se les pasa, me lo marcan."</em></p>
+    </aside>
+  </section>
+
+  <!-- §8.5: Lo que NO se intenta hoy -->
+  <section>
+    <h2>Lo que NO se intenta hoy</h2>
+    <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
+        <h3 style="color: var(--text-muted);">Lo que NO entra</h3>
+        <p style="font-size: 0.78em; line-height: 1.6; margin: 0;">
+          No autenticaci&oacute;n.<br>
+          No deploy.<br>
+          No testing automatizado.<br>
+          No CSS bonito.
+        </p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <h3 style="color: var(--accent);">Lo que S&Iacute; pasa</h3>
+        <p style="font-size: 0.78em; line-height: 1.6; margin: 0;">
+          La cadena contrato &rarr; c&oacute;digo &rarr; servidor &rarr; cliente, en vivo.
+        </p>
+      </div>
+    </div>
+    <p style="margin-top: 22px; font-size: 0.75em; color: var(--text-muted); text-align: center; max-width: 38em; margin-left: auto; margin-right: auto;">
+      Si algo de lo de la izquierda aparece accidentalmente en el c&oacute;digo, lo se&ntilde;alamos y lo dejamos para despu&eacute;s.
+    </p>
+    <aside class="notes">
+      <p><u>Disclaimer de foco. Protege el demo de derivar a temas de otras semanas.</u></p>
+      <p><em>"Antes de empezar, una aclaraci&oacute;n de foco. En este demo no hay autenticaci&oacute;n, no hay deploy, no hay testing automatizado, no hay CSS bonito. Esos cuatro viven en otras semanas y cada uno se come una clase entera. Lo que s&iacute; pasa hoy es la cadena: contrato, c&oacute;digo, servidor, cliente, en vivo."</em></p>
+      <p><em>"Si la IA improvisa y agrega cualquiera de las cuatro cosas de la izquierda, no peleamos contra eso: lo se&ntilde;alamos en pantalla y lo dejamos para despu&eacute;s. Foco."</em></p>
+    </aside>
+  </section>
+
+  <!-- §8.6: Cierre — el espejo se cierra -->
+  <section>
+    <p class="big-question" style="font-size: 1.5em;">
+      Ustedes no tipearon nada.<br>
+      <span class="accent">Lo que dirigieron fue el contrato.</span>
+    </p>
+    <p class="muted" style="font-size: 0.85em; max-width: 32em; margin: 28px auto 0; text-align: center;">
+      El rol &mdash; supervisor arquitect&oacute;nico &mdash; sobrevivi&oacute; la mudanza al servidor.
+    </p>
+    <aside class="notes">
+      <p><strong>Treinta segundos. Voz baja, mirar al aula, dejar la frase respirar.</strong></p>
+      <p><u>Cierre del demo y de la clase. Cierra el espejo con semana 02.</u></p>
+      <p><em>"Lo que acaba de pasar: ustedes no tipearon nada. Lo que dirigieron fue el contrato. La IA escribi&oacute; el c&oacute;digo; ustedes leyeron, corrigieron y aprobaron."</em></p>
+      <p><em>"Eso es exactamente lo mismo que hicimos la semana pasada con el frontend. Cambi&oacute; el terreno, no el rol. El supervisor arquitect&oacute;nico sobrevivi&oacute; la mudanza al servidor. La pr&oacute;xima clase abrimos Claude Code en sus m&aacute;quinas."</em></p>
+    </aside>
+  </section>
+
+</section>
+
+    </div>
+  </div>
+
+  <script src="../../../node_modules/reveal.js/dist/reveal.js"></script>
+  <script src="../../../node_modules/reveal.js/plugin/highlight/highlight.js"></script>
+  <script src="../../../node_modules/reveal.js/plugin/notes/notes.js"></script>
+    <script src="clickable-steps.js"></script>
+<script>
+  initClickableSteps({
+    containerId: 'demo-beats',
+    steps: [
+      {
+        title: 'Beat 1',
+        summary: 'Despu&eacute;s del primer prompt &mdash; abrir el &aacute;rbol de archivos.',
+        color: 'var(--accent-secondary)',
+        borderColor: 'var(--text-muted)',
+        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Despu&eacute;s del primer prompt:</div>'
+          + '<div style="line-height: 1.5;">Abrir el &aacute;rbol de archivos. Se&ntilde;alar <code>app/main.py</code>, <code>app/db.py</code>, <code>requirements.txt</code>. Frase clave: <em>&laquo;esto no lo escribimos; lo dictamos&raquo;</em>.</div>'
+      },
+      {
+        title: 'Beat 2',
+        summary: 'Cuando aparezca la primera ruta &mdash; pausar y leerla como contrato.',
+        color: 'var(--accent-secondary)',
+        borderColor: 'var(--text-muted)',
+        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Cuando aparezca la primera ruta:</div>'
+          + '<div style="line-height: 1.5;">Pausar. Leer en voz alta: verbo, path, qu&eacute; entra, qu&eacute; sale. Conectar expl&iacute;citamente con la secci&oacute;n cuatro &mdash; este es el bloque de contrato hecho c&oacute;digo.</div>'
+      },
+      {
+        title: 'Beat 3',
+        summary: 'Cuando se levante el servidor &mdash; abrir <code>localhost:8000</code> y <code>/docs</code>.',
+        color: 'var(--accent-secondary)',
+        borderColor: 'var(--text-muted)',
+        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Cuando se levante el servidor:</div>'
+          + '<div style="line-height: 1.5;">Terminal con Uvicorn corriendo. Abrir <code>http://localhost:8000</code> en el navegador. Si FastAPI gener&oacute; <code>/docs</code>, mostrar la documentaci&oacute;n autom&aacute;tica como espejo del contrato.</div>'
+      },
+      {
+        title: 'Beat 4',
+        summary: 'Provocar un 4xx intencional &mdash; POST sin un campo requerido.',
+        color: 'var(--accent-secondary)',
+        borderColor: 'var(--text-muted)',
+        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Provocar un 4xx intencional:</div>'
+          + '<div style="line-height: 1.5;">POST sin un campo requerido. Mostrar el c&oacute;digo de respuesta en el navegador y el log en la terminal lado a lado. Conectar con la secci&oacute;n seis: el cuatro dice cliente, no servidor.</div>'
+      },
+      {
+        title: 'Beat 5',
+        summary: 'Cuando aparezca el frontend &mdash; abrir el HTML, leer el <code>fetch</code>.',
+        color: 'var(--accent-secondary)',
+        borderColor: 'var(--text-muted)',
+        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Cuando aparezca el frontend:</div>'
+          + '<div style="line-height: 1.5;">Abrir el HTML, mostrar la llamada <code>fetch</code> y leerla en voz alta como <em>&laquo;el cliente est&aacute; hablando el contrato del servidor&raquo;</em>.</div>'
+      },
+      {
+        title: 'Beat 6',
+        summary: 'Cierre 30 seg &mdash; enmarcar lo que pas&oacute;.',
+        color: 'var(--accent)',
+        borderColor: 'var(--accent)',
+        borderFull: true,
+        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Cierre, treinta segundos:</div>'
+          + '<div style="line-height: 1.5;">Enmarcar lo que pas&oacute;: <em>&laquo;ustedes no tipearon nada. Lo que dirigieron fue el contrato. La IA escribi&oacute; el c&oacute;digo; ustedes leyeron, corrigieron y aprobaron.&raquo;</em></div>'
+      }
+    ]
+  });
+</script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: true,
+      transition: 'fade',
+      width: 1280,
+      height: 800,
+      margin: 0.02,
+      plugins: [RevealHighlight, RevealNotes]
+    });
+  </script>
+</body>
+</html>
