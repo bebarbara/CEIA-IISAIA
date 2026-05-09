@@ -115,7 +115,7 @@ function initBackendFlow(opts) {
           '</div>' +
           // Servidor box
           '<div class="s14-server">' +
-            '<div class="s14-server-label">Servidor</div>' +
+            '<div class="s14-server-label">Servidor · API de tareas</div>' +
             '<div class="s14-pipeline-top">' +
               buildNode('http',      'HTTP',      'protocolo', 'globe',     1) +
               hArrow() +
