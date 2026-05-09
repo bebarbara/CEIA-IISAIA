@@ -8,7 +8,7 @@
 **Key analogy:** El espejo de la semana 02. Frontend ↔ backend como las dos mitades simétricas de la misma habilidad: nombrar piezas para dirigir a una IA.
 **What students walk away knowing:**
 - El rol "supervisor arquitectónico" sobrevive al cambio de capa; lo que cambia es el vocabulario.
-- El mapa de la clase: HTTP → REST → paths/contratos → datos → errores → salto al stack local.
+- El mapa de la clase: HTTP → REST → endpoints → datos → errores → salto al stack local.
 **Animations / interactive:** None new. Considerar reutilizar `pipeline-roadmap` (semana 01) para mostrar el arco de las 6 piezas y volver a iluminarlas al abrir cada sección.
 **Slide budget:** 3 slides (espejo → roadmap → disclaimer). Sin hook ni "tres cosas que cambian": ambos pre-cargan vocabulario backend que el alumno todavía no tiene; cada consecuencia (persistencia, contratos, leer la respuesta) se motiva en su propia sección más adelante.
 

@@ -28,7 +28,7 @@ El resto de la semana la vamos a pasar desarmando seis piezas. Una frase por pie
 
 1. **HTTP** — el protocolo de pedido y respuesta entre cliente y servidor.
 2. **REST** — el estilo arquitectónico que organiza esos pedidos alrededor de recursos.
-3. **Rutas y contratos** — la unidad mínima dictable: method + path + entrada + salida + códigos.
+3. **Endpoints** — la unidad mínima dictable: method + path + entrada + salida + códigos.
 4. **Datos** — cómo se persiste, relaciones vs. documentos.
 5. **Errores y observabilidad** — leer fallas como parte de supervisar.
 6. **Salto al stack local** — por qué el navegador ya no alcanza, qué herramienta abre la siguiente clase.
