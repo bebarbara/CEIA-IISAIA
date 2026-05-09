@@ -10,7 +10,7 @@
 **What students walk away knowing:**
 - El rol "supervisor arquitectónico" sobrevive al cambio de capa; lo que cambia es el vocabulario.
 - Tres cosas distintas pasan al mover el código del navegador al servidor: la persistencia (los errores quedan escritos), los contratos (cliente y servidor son dos programas que se hablan), la lectura de la respuesta (códigos, JSON, logs).
-- El mapa de la clase: HTTP → REST → rutas/contratos → datos → errores → bisagra al stack local.
+- El mapa de la clase: HTTP → REST → rutas/contratos → datos → errores → salto al stack local.
 **Animations / interactive:** None new. Considerar reutilizar `pipeline-roadmap` (semana 01) para mostrar el arco de las 6 piezas y volver a iluminarlas al abrir cada sección.
 **Slide budget:** 5–6
 
@@ -70,7 +70,7 @@
 **Animations / interactive:** None new. `code-walkthrough` con highlights sobre log de 3 líneas y stack trace; posible `comparison-2col` para "prompt malo" vs "prompt con evidencia".
 **Slide budget:** 6–7
 
-## Section 7: De lo local al stack (bisagra)
+## Section 7: De lo local al stack (salto)
 **Source material:** `source_material/07-de-lo-local-al-stack.md`
 **Through-line:** Una pestaña no aguanta un servidor de verdad — hace falta proceso, puerto y sistema de archivos. Por eso bajamos a CLI con Claude Code: transparencia, foco didáctico, continuidad con la próxima clase. Stack del demo (Python + FastAPI + SQLite + Uvicorn + venv) y tarea para llegar a semana 4 con la máquina lista.
 **Hook:** Hasta ahora todo pasaba en una pestaña del navegador. Un servidor de verdad no entra en una pestaña — necesita un proceso vivo, un puerto donde escuchar y archivos en disco. Esa máquina sos vos.
