@@ -399,12 +399,15 @@
     <div id="s14-backend-flow"></div>
 
     <aside class="notes">
-      <p><strong>Botón "Avanzar" recorre los 6 pasos. En el paso 4 (Datos) el componente tira el dado: 70% éxito (verde) / 30% error (rojo). El paso 6 cierra el ciclo: el cliente recibe la response.</strong></p>
-      <p><u>Diagrama interactivo del ciclo cliente-servidor-cliente. Cinco de las seis piezas (HTTP, REST, Endpoints, Datos, Errores) viven dentro del servidor. Salto al stack local NO está acá — es la bisagra a la próxima clase, no parte del request lifecycle. Aparece listada en la espejo card §1.2.</u></p>
-      <p><em>"Una request no nace en el servidor. Nace en el cliente — tu navegador, tu app, lo que sea. Y termina ahí también: la response vuelve. Lo que pasa en el medio es lo que vamos a desarmar pieza por pieza el resto de la clase."</em></p>
-      <p><em>"Voy a avanzar paso a paso. El cliente arma un POST. La request entra al servidor por HTTP. REST identifica el recurso. Endpoints encuentra el handler. Datos consulta la base. Y ahí pasa una de dos cosas."</em></p>
-      <p><em>"O la base aceptó, el servidor arma una response 200, y vuelve al cliente. O la base rechazó, queda registro en el log de Errores, y vuelve un 500. Los dos caminos son legítimos; los dos los vamos a leer durante el curso."</em></p>
-      <p><em>"Vamos a volver a este mapa al inicio de cada sección — ahí lo van a ver con la pieza activa marcada."</em></p>
+      <p><strong>Click en "Avanzar" 6 veces para recorrer el ciclo. En el paso 4 (Datos) el componente tira el dado: 70% éxito (verde) / 30% error (rojo). "Reiniciar" vuelve al inicio y re-tira el dado.</strong></p>
+      <p><u>Diagrama interactivo del ciclo cliente-servidor-cliente. 5 de las 6 piezas (HTTP, REST, Endpoints, Datos, Errores) viven dentro del servidor. Salto al stack local NO aparece — es la bisagra a la próxima clase, no parte del request lifecycle. Sigue listado en la espejo card §1.2.</u></p>
+      <p><em>"Una request no nace en el servidor. Nace en el cliente — tu navegador, tu app, lo que sea. Y termina ahí también: la response vuelve. Lo que pasa en el medio es lo que vamos a desarmar pieza por pieza el resto de la clase. Acá tenemos el diagrama: cliente a la izquierda, servidor a la derecha con sus piezas adentro. Voy avanzando."</em></p>
+      <p><em>"Click. El cliente arma un POST y la request viaja al servidor. La primera pieza que toca es HTTP — el protocolo. Lee el method, el path, los headers, el body. Es el desempaque del pedido."</em></p>
+      <p><em>"Click. REST. A partir de la URL, identifica el recurso solicitado: tasks, dentro de projects/4. Sustantivo en plural, jerarquía explícita. La acción viaja en el method, no en el path."</em></p>
+      <p><em>"Click. Endpoints. Match contra la tabla de endpoints. Encuentra el handler que cumple este contrato: method más path más schema-in más schema-out más status codes. El átomo que vamos a desarmar en detalle en la sección cuatro."</em></p>
+      <p><em>"Click. Datos. El handler ejecuta el INSERT contra la base. Y acá está el momento de la verdad: la base puede aceptar la escritura o rechazarla por sus propias reglas. El componente tira el dado — setenta por ciento éxito, treinta por ciento error."</em></p>
+      <p><em>"Click. Y se decide el camino. Si la base aceptó, sale por Response: un dos-equis-equis con el objeto creado. Si rechazó, sale por Errores: un cinco-equis-equis con el log del fallo. Los dos caminos son legítimos, los dos los vamos a leer durante el curso — Errores en su sección propia."</em></p>
+      <p><em>"Click. Y la response vuelve al cliente. Cierra el ciclo. Mirá el bloque cliente: cambió de 'enviando' a 'recibido'. La cadena completa, en seis pasos. Vamos a volver a este mapa al inicio de cada sección, ahí lo van a ver con la pieza activa marcada."</em></p>
     </aside>
   </section>
 
