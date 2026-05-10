@@ -2357,100 +2357,94 @@ proyectos?</code></pre>
 
 
       <!-- ============================================================
-           §8 — Demo en vivo
+           §8 — Demo en vivo: canvas escribe el openapi.yaml
            ============================================================ -->
-      <!-- ============================================================
-     §8 — Demo en vivo
-     ============================================================ -->
 <section>
 
   <!-- §8.1: Section divider — Demo en vivo -->
   <section class="section-divider">
     <h2>Demo en vivo</h2>
-    <p class="muted" style="font-size: 0.85em; max-width: 32em; margin: 16px auto 0;">
-      Levantamos un servidor con Claude Code. Ustedes leen junto al profesor, endpoint por endpoint.
+    <p class="muted" style="font-size: 0.85em; max-width: 36em; margin: 16px auto 0;">
+      ChatGPT canvas escribe el <code>openapi.yaml</code>. Ustedes leen junto al profesor, endpoint por endpoint.
     </p>
     <aside class="notes">
       <p><u>Transici&oacute;n al cierre. La clase deja el modo conceptual y entra al modo demo en vivo.</u></p>
-      <p><em>"Cerramos el recorrido conceptual. Lo que sigue no es otra secci&oacute;n te&oacute;rica: es el demo. Vamos a levantar un servidor real con Claude Code, y ustedes me van a leer cada path conmigo, mientras aparece. La idea es cerrar el espejo en vivo &mdash; ustedes dictan el contrato, la IA escribe el c&oacute;digo, lo leemos juntos."</em></p>
+      <p><em>"Cerramos el recorrido conceptual. Lo que sigue no es otra secci&oacute;n te&oacute;rica: es el demo. Vamos a abrir ChatGPT, pegar un prompt y ver canvas escribir el openapi.yaml en pantalla. Ustedes me van a leer cada endpoint conmigo, mapeando al bloque del §4. Al final lo renderizamos en Swagger UI para ver las docs interactivas que salen del mismo archivo."</em></p>
     </aside>
   </section>
 
-  <!-- §8.2: Lo que se va a mostrar — los cinco requisitos -->
+  <!-- §8.2: Lo que el yaml tiene que tener — 5 requisitos -->
   <section>
-    <h2>Lo que tiene que estar en pantalla</h2>
+    <h2>Lo que el yaml tiene que tener</h2>
     <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 18px;">
       <div class="bg-secondary-card" style="border-left: 3px solid var(--accent);">
         <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Requisito 1</p>
-        <h3 style="font-size: 0.95em; color: var(--accent); margin: 0 0 8px;">Tres methods HTTP</h3>
-        <p style="font-size: 0.7em; line-height: 1.5; margin: 0;">M&iacute;nimo: GET, POST, DELETE. Ideal: tambi&eacute;n PATCH o PUT.</p>
+        <h3 style="font-size: 0.95em; color: var(--accent); margin: 0 0 8px;">Tres methods</h3>
+        <p style="font-size: 0.7em; line-height: 1.5; margin: 0;">M&iacute;nimo: GET, POST, DELETE.</p>
       </div>
       <div class="bg-secondary-card" style="border-left: 3px solid var(--accent);">
         <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Requisito 2</p>
-        <h3 style="font-size: 0.95em; color: var(--accent); margin: 0 0 8px;">Una relaci&oacute;n entre tablas</h3>
-        <p style="font-size: 0.7em; line-height: 1.5; margin: 0;">Foreign key visible en la base. Dos entidades, una pertenece a la otra.</p>
+        <h3 style="font-size: 0.95em; color: var(--accent); margin: 0 0 8px;">Jerarqu&iacute;a de recursos</h3>
+        <p style="font-size: 0.7em; line-height: 1.5; margin: 0;"><code>projects &rarr; tasks</code>. Path nesting visible.</p>
       </div>
       <div class="bg-secondary-card" style="border-left: 3px solid var(--accent);">
         <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Requisito 3</p>
-        <h3 style="font-size: 0.95em; color: var(--accent); margin: 0 0 8px;">Un camino de error</h3>
-        <p style="font-size: 0.7em; line-height: 1.5; margin: 0;">Un 4xx intencional, en pantalla. Para leer la respuesta, no para esquivarla.</p>
+        <h3 style="font-size: 0.95em; color: var(--accent); margin: 0 0 8px;">Una respuesta de error</h3>
+        <p style="font-size: 0.7em; line-height: 1.5; margin: 0;">Al menos un 400 o 404 documentado.</p>
       </div>
       <div class="bg-secondary-card" style="border-left: 3px solid var(--accent);">
         <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Requisito 4</p>
-        <h3 style="font-size: 0.95em; color: var(--accent); margin: 0 0 8px;">Frontend m&iacute;nimo</h3>
-        <p style="font-size: 0.7em; line-height: 1.5; margin: 0;">Una p&aacute;gina que consume la API. El cliente hablando el contrato del servidor.</p>
+        <h3 style="font-size: 0.95em; color: var(--accent); margin: 0 0 8px;">Schemas tipados</h3>
+        <p style="font-size: 0.7em; line-height: 1.5; margin: 0;"><code>type</code>, <code>required</code>, <code>format</code> donde aplique.</p>
       </div>
       <div class="bg-secondary-card" style="border-left: 3px solid var(--accent);">
         <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Requisito 5</p>
-        <h3 style="font-size: 0.95em; color: var(--accent); margin: 0 0 8px;">Dominio no trivial</h3>
-        <p style="font-size: 0.7em; line-height: 1.5; margin: 0;">Expl&iacute;citamente NO un to-do list. La clase tiene que justificarse sola.</p>
+        <h3 style="font-size: 0.95em; color: var(--accent); margin: 0 0 8px;">Iteraci&oacute;n en vivo</h3>
+        <p style="font-size: 0.7em; line-height: 1.5; margin: 0;">Agregar un endpoint sin reescribir todo.</p>
       </div>
     </div>
-    <p style="margin-top: 22px; font-size: 0.75em; color: var(--text-muted); text-align: center; max-width: 38em; margin-left: auto; margin-right: auto;">
-      El dominio concreto se decide al implementar. Hoy lo van a ver levantarse en vivo.
+    <p style="margin-top: 22px; font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 44em; margin-left: auto; margin-right: auto;">
+      <strong style="color: var(--text-muted);">Lo que NO entra:</strong> implementaci&oacute;n, base de datos, auth, deploy. Hoy: el contrato como archivo, le&iacute;do y editable.
     </p>
     <aside class="notes">
-      <p><u>Los cinco requisitos del demo. Sirve como contrato visible con el aula sobre qu&eacute; tiene que pasar antes de que termine la clase.</u></p>
-      <p><em>"Antes de tocar nada, dejemos a la vista qu&eacute; tiene que mostrar este demo. Cinco cosas. Tres methods HTTP en juego, m&iacute;nimo GET, POST y DELETE. Una relaci&oacute;n entre dos tablas, con la foreign key visible. Un camino de error: un cuatrocientos provocado a prop&oacute;sito, para que lo lean en pantalla. Un frontend m&iacute;nimo que consuma la API. Y un dominio que no sea una to-do list, porque ya tuvimos una y no alcanza para justificar lo que vamos a hacer."</em></p>
-      <p><em>"El dominio concreto lo defino cuando arranque a tipear. Ustedes lo van a ver levantarse en vivo. Si en alg&uacute;n momento alguno de estos cinco no aparece, me lo marcan."</em></p>
+      <p><u>Los cinco requisitos del demo. Sirve como contrato visible con el aula sobre qu&eacute; tiene que aparecer en el yaml.</u></p>
+      <p><em>"Antes de tocar nada, dejemos a la vista qu&eacute; tiene que tener el yaml. Cinco cosas. Tres methods HTTP &mdash; m&iacute;nimo GET, POST y DELETE. Una jerarqu&iacute;a de recursos &mdash; <code>projects</code> y dentro <code>tasks</code>, anidaci&oacute;n visible en el path. Una respuesta de error documentada &mdash; al menos un 400 o un 404. Schemas con tipos, requireds, formatos. E iteraci&oacute;n en vivo &mdash; vamos a agregar un endpoint sin reescribir el archivo entero."</em></p>
+      <p><em>"Y abajo, el descargo de foco. No hay implementaci&oacute;n, ni base de datos real, ni autenticaci&oacute;n, ni deploy. Hoy es el contrato como archivo, le&iacute;do y editable. Si en alg&uacute;n momento alguno de estos cinco no aparece, me lo marcan."</em></p>
     </aside>
   </section>
 
-  <!-- §8.3: La plantilla de contrato — antes de tocar Claude Code -->
+  <!-- §8.3: La plantilla — el primer prompt -->
   <section>
-    <h2>El contrato &mdash; antes de tocar Claude Code</h2>
+    <h2>El primer prompt &mdash; antes de invocar canvas</h2>
     <p style="font-size: 0.72em; color: var(--text-muted); text-align: center; max-width: 38em; margin: 4px auto 14px;">
-      Lo dictamos nosotros. La IA elige el c&oacute;mo.
+      Le damos el qu&eacute;. Canvas se abre. Editamos en vivo.
     </p>
-    <pre style="margin: 0 auto; max-width: 38em; font-size: 0.7em; box-shadow: none;"><code class="language-text" data-trim data-line-numbers="|1|3-5|7-12|14-17"
->stack: Python + FastAPI + SQLite + Uvicorn
+    <pre style="margin: 0 auto; max-width: 38em; font-size: 0.7em; box-shadow: none;"><code class="language-text" data-trim data-line-numbers="|1|3-5|7-12|14"
+>Necesito un openapi.yaml (3.1) para una API de proyectos y tareas.
 
-modelo de datos:
-  [tabla A](id, ...)
-  [tabla B](id, ..., a_id foreign key &rarr; A.id)
+recursos:
+  Project   { id, name }
+  Task      { id, title, due_date?, project_id }
 
 endpoints:
-  GET    /[recurso A]
-  POST   /[recurso A]
-  GET    /[recurso A]/{id}/[recurso B]
-  POST   /[recurso A]/{id}/[recurso B]
-  DELETE /[recurso A]/{id}/[recurso B]/{bid}
+  GET    /projects
+  POST   /projects
+  GET    /projects/{id}/tasks
+  POST   /projects/{id}/tasks   &rarr; 201 / 400 / 404
+  DELETE /projects/{id}/tasks/{taskId}
 
-frontend:
-  una p&aacute;gina index.html servida por la API
-  formulario para crear A y B
-  lista que renderiza el GET y permite borrar</code></pre>
-    <p style="margin-top: 18px; font-size: 0.75em; color: var(--text-muted); text-align: center; max-width: 38em; margin-left: auto; margin-right: auto;">
-      Este bloque es el contrato. Cuando lo dictamos, le damos el <strong>qu&eacute;</strong>. La IA elige el <strong>c&oacute;mo</strong>.
+abrilo en canvas para que podamos editarlo juntos.</code></pre>
+    <p style="margin-top: 18px; font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 38em; margin-left: auto; margin-right: auto;">
+      Mismo dominio que el §4. Mismas cinco piezas. Ahora hechas archivo.
     </p>
     <aside class="notes">
-      <p><strong>Mostrar el bloque entero, sin highlight, mientras lo escrib&iacute;s en vivo. Luego: click 1 ilumina stack. Click 2 ilumina modelo de datos. Click 3 ilumina endpoints. Click 4 ilumina frontend.</strong></p>
-      <p><u>Plantilla del contrato. Misma forma que la slide §4.6, ahora aplicada al demo entero. Se queda en pantalla mientras se dicta a Claude Code.</u></p>
-      <p><em>"Antes de invocar a la IA, escribimos el contrato a mano. Esta plantilla la van a ver levantarse en vivo arriba a la izquierda. Vamos a recorrerla pieza por pieza, igual que recorrimos el bloque de la secci&oacute;n cuatro."</em></p>
-      <p><em>"Primera l&iacute;nea: el stack. Python como lenguaje, FastAPI como framework, SQLite como base, Uvicorn como servidor ASGI. Cuatro elecciones, cada una nombrada en la secci&oacute;n siete."</em></p>
-      <p><em>"Modelo de datos. Dos tablas, A y B, con sus columnas. La cosa importante es la foreign key: B pertenece a A, est&aacute; escrito y la base lo va a hacer cumplir. Ese es el requisito dos del demo."</em></p>
-      <p><em>"Endpoints. Cinco paths. GET y POST sobre el recurso A; despu&eacute;s GET, POST y DELETE sobre el recurso B anidado dentro de A. Tres methods distintos, jerarqu&iacute;a expl&iacute;cita en la URL: las dos reglas REST de la secci&oacute;n tres aterrizando en una API concreta."</em></p>
-      <p><em>"Frontend. Una p&aacute;gina servida por la misma app, con formulario y lista. Lo m&iacute;nimo para que el cliente hable el contrato. Cuando dictemos esto, le estamos dando el qu&eacute; a la IA. La IA elige el c&oacute;mo &mdash; qu&eacute; archivos crea, c&oacute;mo organiza el c&oacute;digo, qu&eacute; librer&iacute;as importa. Si despu&eacute;s tenemos que cambiar algo, cambiamos el contrato y volvemos a dictar."</em></p>
+      <p><strong>Mostrar el bloque entero, sin highlight, mientras se tipea en vivo. Click 1 ilumina la l&iacute;nea de framing. Click 2 ilumina recursos. Click 3 ilumina endpoints. Click 4 ilumina la l&iacute;nea de canvas.</strong></p>
+      <p><u>Plantilla del prompt. Misma forma que §4.6 y §3.9 (vago vs espec&iacute;fico): expl&iacute;cita, pieza por pieza, mapeable a lo que termina escrito.</u></p>
+      <p><em>"Antes de invocar canvas, escribimos el prompt a mano. Esta plantilla la van a ver levantarse en vivo en mi pantalla. Vamos a recorrerla pieza por pieza, igual que recorrimos el bloque del §4."</em></p>
+      <p><em>"Primera l&iacute;nea: el framing. <code>openapi.yaml (3.1) para una API de proyectos y tareas</code>. Tres elecciones expl&iacute;citas &mdash; el formato (yaml), la versi&oacute;n (3.1) y el dominio (proyectos y tareas, el mismo del §4). Cero ambig&uuml;edad."</em></p>
+      <p><em>"Recursos. Dos: <code>Project</code> con id y name; <code>Task</code> con id, title, due_date opcional, y project_id. La interrogaci&oacute;n marca campos opcionales, igual que en TypeScript. Los nombres son los mismos que vinimos usando."</em></p>
+      <p><em>"Endpoints. Cinco. GET y POST sobre <code>/projects</code>; despu&eacute;s GET, POST y DELETE sobre <code>/projects/{id}/tasks</code> con anidaci&oacute;n. Tres methods, jerarqu&iacute;a expl&iacute;cita, y en el POST anidado dictamos los tres status: 201 cuando se cre&oacute;, 400 cuando el body est&aacute; mal, 404 cuando el proyecto no existe. Las cinco piezas del §4."</em></p>
+      <p><em>"&Uacute;ltima l&iacute;nea: <code>abrilo en canvas</code>. Eso le dice al modelo que esto va a ser un documento que vamos a editar en colaboraci&oacute;n, no una respuesta corta del chat. Si por alguna raz&oacute;n no se abre, lo pedimos expl&iacute;citamente."</em></p>
     </aside>
   </section>
 
@@ -2468,50 +2462,25 @@ frontend:
     </aside>
   </section>
 
-  <!-- §8.5: Lo que NO se intenta hoy -->
+  <!-- §8.5: Cierre — el contrato tiene archivo -->
   <section>
-    <h2>Lo que NO se intenta hoy</h2>
-    <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
-      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
-        <h3 style="color: var(--text-muted);">Lo que NO entra</h3>
-        <p style="font-size: 0.78em; line-height: 1.6; margin: 0;">
-          No autenticaci&oacute;n.<br>
-          No deploy.<br>
-          No testing automatizado.<br>
-          No CSS bonito.
-        </p>
-      </div>
-      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
-        <h3 style="color: var(--accent);">Lo que S&Iacute; pasa</h3>
-        <p style="font-size: 0.78em; line-height: 1.6; margin: 0;">
-          La cadena contrato &rarr; c&oacute;digo &rarr; servidor &rarr; cliente, en vivo.
-        </p>
-      </div>
-    </div>
-    <p style="margin-top: 22px; font-size: 0.75em; color: var(--text-muted); text-align: center; max-width: 38em; margin-left: auto; margin-right: auto;">
-      Si algo de lo de la izquierda aparece accidentalmente en el c&oacute;digo, lo se&ntilde;alamos y lo dejamos para despu&eacute;s.
-    </p>
-    <aside class="notes">
-      <p><u>Disclaimer de foco. Protege el demo de derivar a temas de otras semanas.</u></p>
-      <p><em>"Antes de empezar, una aclaraci&oacute;n de foco. En este demo no hay autenticaci&oacute;n, no hay deploy, no hay testing automatizado, no hay CSS bonito. Esos cuatro viven en otras semanas y cada uno se come una clase entera. Lo que s&iacute; pasa hoy es la cadena: contrato, c&oacute;digo, servidor, cliente, en vivo."</em></p>
-      <p><em>"Si la IA improvisa y agrega cualquiera de las cuatro cosas de la izquierda, no peleamos contra eso: lo se&ntilde;alamos en pantalla y lo dejamos para despu&eacute;s. Foco."</em></p>
-    </aside>
-  </section>
-
-  <!-- §8.6: Cierre — el espejo se cierra -->
-  <section>
-    <p class="big-question" style="font-size: 1.5em;">
+    <p class="big-question" style="font-size: 1.4em;">
       Ustedes no tipearon nada.<br>
-      <span class="accent">Lo que dirigieron fue el contrato.</span>
+      <span class="fragment fade-in accent">Lo que dirigieron fue el contrato.</span><br>
+      <span class="fragment fade-in" style="color: var(--accent);">Y ahora tiene archivo.</span>
     </p>
     <p class="muted" style="font-size: 0.85em; max-width: 32em; margin: 28px auto 0; text-align: center;">
       El rol &mdash; supervisor arquitect&oacute;nico &mdash; sobrevivi&oacute; la mudanza al servidor.
     </p>
+    <p style="margin-top: 32px; padding-top: 18px; border-top: 1px solid var(--bg-secondary); font-size: 0.7em; color: var(--text-muted); text-align: center; max-width: 38em; margin-left: auto; margin-right: auto;">
+      <strong style="color: var(--text-muted);">Pr&oacute;xima clase:</strong> tomamos este yaml y se lo damos a una IA local para que escriba la implementaci&oacute;n. Tarea de instalaci&oacute;n se confirma por el canal del curso esta semana.
+    </p>
     <aside class="notes">
-      <p><strong>Treinta segundos. Voz baja, mirar al aula, dejar la frase respirar.</strong></p>
-      <p><u>Cierre del demo y de la clase. Cierra el espejo con semana 02.</u></p>
-      <p><em>"Lo que acaba de pasar: ustedes no tipearon nada. Lo que dirigieron fue el contrato. La IA escribi&oacute; el c&oacute;digo; ustedes leyeron, corrigieron y aprobaron."</em></p>
-      <p><em>"Eso es exactamente lo mismo que hicimos la semana pasada con el frontend. Cambi&oacute; el terreno, no el rol. El supervisor arquitect&oacute;nico sobrevivi&oacute; la mudanza al servidor. La pr&oacute;xima clase abrimos Claude Code en sus m&aacute;quinas."</em></p>
+      <p><strong>Treinta segundos. Voz baja, mirar al aula, dejar las frases respirar entre fragments.</strong></p>
+      <p><u>Cierre del demo y de la clase. Cierra el espejo con semana 02 y bridge a semana 4.</u></p>
+      <p><em>"Lo que acaba de pasar: ustedes no tipearon nada. Lo que dirigieron fue el contrato. Y ahora tiene archivo &mdash; un openapi.yaml que pueden bajar, versionar, dictar de nuevo, pasar a otro modelo."</em></p>
+      <p><em>"Eso es exactamente lo mismo que hicimos la semana pasada con el frontend. Cambi&oacute; el terreno, no el rol. El supervisor arquitect&oacute;nico sobrevivi&oacute; la mudanza al servidor."</em></p>
+      <p><em>"La pr&oacute;xima clase tomamos exactamente este yaml y se lo damos a una IA local para que escriba la implementaci&oacute;n. La tarea de instalaci&oacute;n para llegar listos la mando esta semana por el canal del curso, junto con el yaml de hoy. Nos vemos."</em></p>
     </aside>
   </section>
 
@@ -2530,52 +2499,52 @@ frontend:
     steps: [
       {
         title: 'Beat 1',
-        summary: 'Despu&eacute;s del primer prompt &mdash; abrir el &aacute;rbol de archivos.',
+        summary: 'Pegar el prompt &mdash; canvas se abre con el yaml inicial.',
         color: 'var(--accent-secondary)',
         borderColor: 'var(--text-muted)',
-        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Despu&eacute;s del primer prompt:</div>'
-          + '<div style="line-height: 1.5;">Abrir el &aacute;rbol de archivos. Se&ntilde;alar <code>app/main.py</code>, <code>app/db.py</code>, <code>requirements.txt</code>. Frase clave: <em>&laquo;esto no lo escribimos; lo dictamos&raquo;</em>.</div>'
+        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Pegar el prompt:</div>'
+          + '<div style="line-height: 1.5;">Canvas se abre con el yaml inicial. Frase clave: <em>&laquo;esto no lo escribimos; lo dictamos&raquo;</em>.</div>'
       },
       {
         title: 'Beat 2',
-        summary: 'Cuando aparezca la primera path &mdash; pausar y leerla como contrato.',
+        summary: 'Leer el primer endpoint &mdash; mapear al bloque del §4.',
         color: 'var(--accent-secondary)',
         borderColor: 'var(--text-muted)',
-        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Cuando aparezca la primera path:</div>'
-          + '<div style="line-height: 1.5;">Pausar. Leer en voz alta: method, path, qu&eacute; entra, qu&eacute; sale. Conectar expl&iacute;citamente con la secci&oacute;n cuatro &mdash; este es el bloque de contrato hecho c&oacute;digo.</div>'
+        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Leer <code>POST /projects/{id}/tasks</code>:</div>'
+          + '<div style="line-height: 1.5;">Recorrer en voz alta: <code>paths</code>, <code>post</code>, <code>parameters</code>, <code>requestBody</code>, <code>responses</code>. Mapear a las cinco piezas del §4.</div>'
       },
       {
         title: 'Beat 3',
-        summary: 'Cuando se levante el servidor &mdash; abrir <code>localhost:8000</code> y <code>/docs</code>.',
+        summary: 'Agregar un endpoint en vivo desde el chat.',
         color: 'var(--accent-secondary)',
         borderColor: 'var(--text-muted)',
-        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Cuando se levante el servidor:</div>'
-          + '<div style="line-height: 1.5;">Terminal con Uvicorn corriendo. Abrir <code>http://localhost:8000</code> en el navegador. Si FastAPI gener&oacute; <code>/docs</code>, mostrar la documentaci&oacute;n autom&aacute;tica como espejo del contrato.</div>'
+        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Pedirle al modelo:</div>'
+          + '<div style="line-height: 1.5;"><em>&laquo;agregame DELETE /projects/{id}, con 404 si no existe&raquo;</em>. Mostrar canvas actualizando en tiempo real. Frase: <em>&laquo;el contrato es editable; no es un prompt de un solo tiro&raquo;</em>.</div>'
       },
       {
         title: 'Beat 4',
-        summary: 'Provocar un 4xx intencional &mdash; POST sin un campo requerido.',
+        summary: 'Editar a mano dentro del canvas.',
         color: 'var(--accent-secondary)',
         borderColor: 'var(--text-muted)',
-        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Provocar un 4xx intencional:</div>'
-          + '<div style="line-height: 1.5;">POST sin un campo requerido. Mostrar el c&oacute;digo de respuesta en el navegador y el log en la terminal lado a lado. Conectar con la secci&oacute;n seis: el cuatro dice cliente, no servidor.</div>'
+        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Editar el yaml directamente:</div>'
+          + '<div style="line-height: 1.5;">Por ejemplo, agregar un campo <code>description</code> opcional al schema de <code>Task</code>. Frase: <em>&laquo;la IA y vos comparten editor&raquo;</em>.</div>'
       },
       {
         title: 'Beat 5',
-        summary: 'Cuando aparezca el frontend &mdash; abrir el HTML, leer el <code>fetch</code>.',
+        summary: 'Pegar el yaml en <code>editor.swagger.io</code> &mdash; ver Swagger UI renderizado.',
         color: 'var(--accent-secondary)',
         borderColor: 'var(--text-muted)',
-        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Cuando aparezca el frontend:</div>'
-          + '<div style="line-height: 1.5;">Abrir el HTML, mostrar la llamada <code>fetch</code> y leerla en voz alta como <em>&laquo;el cliente est&aacute; hablando el contrato del servidor&raquo;</em>.</div>'
+        example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Renderizar el yaml:</div>'
+          + '<div style="line-height: 1.5;">Pegar en <code>editor.swagger.io</code>. Click en <code>POST /projects</code> &rarr; <em>&laquo;Try it out&raquo;</em> &rarr; <em>&laquo;Execute&raquo;</em>. Frase: <em>&laquo;del mismo archivo salieron docs interactivas. Codegen es real, no abstracci&oacute;n&raquo;</em>.</div>'
       },
       {
         title: 'Beat 6',
-        summary: 'Cierre 30 seg &mdash; enmarcar lo que pas&oacute;.',
+        summary: 'Cierre 30 seg &mdash; el contrato tiene archivo.',
         color: 'var(--accent)',
         borderColor: 'var(--accent)',
         borderFull: true,
         example: '<div style="color: var(--text-muted); margin-bottom: 6px;">Cierre, treinta segundos:</div>'
-          + '<div style="line-height: 1.5;">Enmarcar lo que pas&oacute;: <em>&laquo;ustedes no tipearon nada. Lo que dirigieron fue el contrato. La IA escribi&oacute; el c&oacute;digo; ustedes leyeron, corrigieron y aprobaron.&raquo;</em></div>'
+          + '<div style="line-height: 1.5;"><em>&laquo;ustedes no tipearon nada. Lo que dirigieron fue el contrato. Y ahora tiene archivo.&raquo;</em> Bridge a semana 4: <em>&laquo;la pr&oacute;xima clase tomamos este yaml y se lo damos a una IA local para que escriba la implementaci&oacute;n.&raquo;</em></div>'
       }
     ]
   });
