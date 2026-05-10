@@ -2209,425 +2209,147 @@ proyectos?</code></pre>
 
 
       <!-- ============================================================
-           §7 — De lo local al stack
+           §7 — OpenAPI: el contrato escrito
            ============================================================ -->
-      <!-- ============================================================
-     §7 — De lo local al stack (salto)
-     ============================================================ -->
 <section>
 
-  <style>
-    /* Scoped helpers for §7 only. */
-    .s7-pipeline {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: nowrap;
-      margin: 24px auto 12px;
-      font-size: 0.8em;
-    }
-    .s7-pipeline .pipeline-box {
-      min-width: 110px;
-      text-align: center;
-    }
-    .s7-pipeline .pipeline-box strong {
-      display: block;
-      color: var(--text-primary);
-      font-size: 1em;
-    }
-    .s7-pipeline .pipeline-box .role {
-      display: block;
-      color: var(--text-muted);
-      font-size: 0.72em;
-      margin-top: 2px;
-    }
-    .s7-pipeline .tooltip {
-      max-width: 280px;
-      white-space: normal;
-      line-height: 1.4;
-      font-size: 0.75em;
-      text-align: left;
-    }
-    .s7-alts {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 12px;
-    }
-    .s7-alts .bg-secondary-card {
-      padding: 12px 14px;
-    }
-    .s7-alts h3 {
-      font-size: 0.95em;
-      color: var(--accent);
-      margin: 0 0 4px;
-    }
-    .s7-alts p {
-      font-size: 0.72em;
-      line-height: 1.45;
-      margin: 0;
-      color: var(--text-primary);
-    }
-    .s7-task-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      margin-top: 16px;
-    }
-    .s7-task-card {
-      background: var(--bg-secondary);
-      border-radius: 8px;
-      padding: 14px 16px;
-      border-left: 4px solid var(--accent);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .s7-task-card .step-num {
-      font-family: var(--font-mono);
-      font-size: 0.7em;
-      color: var(--accent);
-      letter-spacing: 0.04em;
-    }
-    .s7-task-card h3 {
-      margin: 0;
-      font-size: 0.95em;
-      color: var(--text-primary);
-    }
-    .s7-task-card pre {
-      margin: 0;
-      box-shadow: none;
-      font-size: 0.7em;
-    }
-    .s7-task-card .hint {
-      font-size: 0.7em;
-      color: var(--text-muted);
-      margin: 0;
-    }
-    .s7-cli-cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 16px;
-    }
-    .s7-cli-cards .bg-secondary-card h3 {
-      font-size: 0.95em;
-      color: var(--accent);
-      margin: 0 0 8px;
-    }
-    .s7-cli-cards .bg-secondary-card p {
-      font-size: 0.72em;
-      line-height: 1.45;
-      margin: 0;
-    }
-    .s7-cli-cards .bg-secondary-card code {
-      font-size: 0.85em;
-    }
-  </style>
-
-  <!-- §7.1: Section opener — roadmap activa "Salto" -->
+  <!-- §7.1: Section opener — roadmap activa "OpenAPI" -->
   <section>
-    <h2>Pieza 6 — Salto al stack local</h2>
+    <h2>Pieza 6 &mdash; OpenAPI <span style="color: var(--text-muted); font-size: 0.55em; font-weight: 400; letter-spacing: 0.04em;">(el contrato escrito)</span></h2>
     <div class="piece-roadmap active-6">
       <div class="pipe-node" data-piece="1">
         <div class="pipe-label">HTTP</div>
         <div class="pipe-sub">protocolo</div>
       </div>
-      <span class="pipe-arrow">→</span>
+      <span class="pipe-arrow">&rarr;</span>
       <div class="pipe-node" data-piece="2">
         <div class="pipe-label">REST</div>
         <div class="pipe-sub">estilo</div>
       </div>
-      <span class="pipe-arrow">→</span>
+      <span class="pipe-arrow">&rarr;</span>
       <div class="pipe-node" data-piece="3">
         <div class="pipe-label">Endpoints</div>
         <div class="pipe-sub">contract</div>
       </div>
-      <span class="pipe-arrow">→</span>
+      <span class="pipe-arrow">&rarr;</span>
       <div class="pipe-node" data-piece="4">
         <div class="pipe-label">Datos</div>
         <div class="pipe-sub">memoria</div>
       </div>
-      <span class="pipe-arrow">→</span>
+      <span class="pipe-arrow">&rarr;</span>
       <div class="pipe-node" data-piece="5">
         <div class="pipe-label">Errores</div>
         <div class="pipe-sub">leer fallas</div>
       </div>
-      <span class="pipe-arrow">→</span>
+      <span class="pipe-arrow">&rarr;</span>
       <div class="pipe-node" data-piece="6">
-        <div class="pipe-label">Salto</div>
-        <div class="pipe-sub">al stack</div>
+        <div class="pipe-label">OpenAPI</div>
+        <div class="pipe-sub">contrato escrito</div>
       </div>
     </div>
     <p style="margin-top: 32px; font-size: 0.95em; text-align: center; max-width: 36em; margin-left: auto; margin-right: auto;">
-      Cerramos el bloque conceptual y preparamos la herramienta. <span style="color: var(--accent);">La clase pivota acá.</span>
+      El contrato dej&oacute; de ser una idea. <span style="color: var(--accent);">Tiene un nombre y un archivo.</span>
+    </p>
+    <p style="margin-top: 8px; font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 36em; margin-left: auto; margin-right: auto;">
+      OpenAPI 3.1 &mdash; el formato est&aacute;ndar para describir una API REST.
     </p>
     <aside class="notes">
-      <p><u>Apertura de §7. Última pieza del roadmap. El salto entre la parte conceptual de la clase y la parte ejecutable de la próxima semana.</u></p>
-      <p><em>"Volvemos al mapa por última vez. Recorrimos cinco piezas: HTTP, REST, endpoints, datos y errores. Tenés el vocabulario backend completo. Lo que queda es la sexta pieza, que no es un concepto nuevo: es el salto al stack local."</em></p>
-      <p><em>"De acá hasta el final de la clase nos preparamos para usar la herramienta. La próxima semana arrancamos con Claude Code abierto en la terminal y vamos a necesitar la máquina lista. Esta sección explica por qué bajamos a CLI, qué stack vas a ver en el demo, y qué tenés que dejar instalado antes del lunes."</em></p>
+      <p><u>Apertura de §7. Lo que vinimos llamando "contrato" durante toda la clase tiene un nombre formal y un archivo.</u></p>
+      <p><em>"&Uacute;ltima pieza del mapa. Recorrimos cinco: HTTP, REST, endpoints, datos, errores. Tenemos el vocabulario backend completo. La sexta no es un concepto nuevo &mdash; es lo mismo que vinimos llamando 'contrato' en la secci&oacute;n cuatro, ahora con un nombre y un formato est&aacute;ndar."</em></p>
+      <p><em>"Se llama OpenAPI. Versi&oacute;n actual 3.1. Es el est&aacute;ndar de la industria para describir una API REST de punta a punta. Si ya escribiste el bloque del §4, ya pensaste en OpenAPI sin saberlo. Lo que viene son tres slides para verlo, y despu&eacute;s el demo en vivo."</em></p>
     </aside>
   </section>
 
-  <!-- §7.2: Hook — un servidor no entra en una pestaña -->
+  <!-- §7.2: Side-by-side — bloque de contrato §4 ↔ openapi.yaml -->
   <section>
-    <p class="big-question">
-      Hasta ahora todo pasaba en una pestaña.<br>
-      <span class="accent">Un servidor de verdad no entra en una pestaña.</span>
-      <span class="muted-q">Necesita un proceso vivo. Un puerto. Archivos en disco. Esa máquina sos vos.</span>
-    </p>
-    <aside class="notes">
-      <p><strong>Dejar la frase principal 4–5 segundos antes de revelar la nota inferior.</strong></p>
-      <p><u>Hook de §7. Marca el corte: lo que veníamos haciendo en sandboxes ya no alcanza para lo que viene.</u></p>
-      <p><em>"Pensá lo que hicimos hasta ahora en este curso. Canvas, ChatGPT, la página de la clase pasada, todo lo que jugamos en la semana 02. Todo pasaba en una pestaña del navegador. Funcionó porque lo que construíamos se sostenía solo: una UI que renderiza, un texto que se genera, un componente que monta y desmonta."</em></p>
-      <p><em>"Un servidor de verdad no entra en una pestaña. Necesita un proceso que se quede corriendo, vivo. Un puerto donde escuchar. Archivos en disco que sigan ahí mañana. Esa máquina sos vos, tu computadora. Es lo que vamos a tocar la semana que viene, y por eso bajamos a la terminal."</em></p>
-    </aside>
-  </section>
-
-  <!-- §7.3: Tres cosas que un servidor necesita -->
-  <section>
-    <h2>Tres cosas que una pestaña no te da</h2>
-    <div class="consequence-row">
-      <div class="bg-secondary-card fragment fade-in">
-        <h3>Proceso</h3>
-        <p>Un programa que se queda corriendo, vivo, escuchando. No se ejecuta una vez y termina: espera. <code>uvicorn app.main:app</code> queda en pie hasta que vos lo cortás.</p>
-      </div>
-      <div class="bg-secondary-card fragment fade-in">
-        <h3>Puerto</h3>
-        <p>Una dirección numerada donde el proceso escucha. <code>localhost:8000</code>. Sin puerto no hay forma de que algo de afuera te hable.</p>
-      </div>
-      <div class="bg-secondary-card fragment fade-in">
-        <h3>Sistema de archivos</h3>
-        <p>El <code>.db</code> de SQLite vive en una carpeta de tu disco. Cerrás la terminal y mañana sigue ahí. La pestaña no te da eso: cuando se cierra, el estado se evapora.</p>
-      </div>
-    </div>
-    <p class="fragment fade-in" style="margin-top: 18px; font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 38em; margin-left: auto; margin-right: auto; font-style: italic;">
-      Las pestañas de sandbox son geniales para mostrar UIs. Son un mal lugar para correr un servidor.
-    </p>
-    <aside class="notes">
-      <p><strong>Revelar las tres tarjetas en orden, una por click. Último click: la línea de cierre.</strong></p>
-      <p><u>Las tres condiciones materiales del backend. Justifica en concreto por qué Canvas no aguanta el demo de la semana 4.</u></p>
-      <p><em>"Tres cosas, una por una, que un servidor necesita y que una pestaña no puede entregar."</em></p>
-      <p><em>"Primero, un proceso. Eso es nuevo. Hasta ahora corrían scripts: ejecutás, hacen algo, terminan. Un servidor no termina; se queda escuchando. Lo arrancás con un comando — uvicorn app.main:app — y el comando no devuelve. Queda colgado en la terminal hasta que vos lo cortés con Control-C. Mientras esté vivo, responde."</em></p>
-      <p><em>"Segundo, un puerto. Es la dirección numerada en la que ese proceso escucha. Típicamente algo como localhost dos puntos ocho mil. El cliente le pega a esa dirección y el servidor contesta. Sin puerto no hay manera de que algo de afuera — el navegador, otra app, lo que sea — se le acerque."</em></p>
-      <p><em>"Tercero, un sistema de archivos. La base de SQLite es un archivo punto db en una carpeta de tu disco. Eso es lo que le da memoria al servidor. Cerrás la terminal y mañana volvés a abrirla, los datos siguen ahí. Una pestaña no te da eso: cuando se cierra, el estado se evapora."</em></p>
-      <p><em>"Las pestañas son perfectas para mostrar interfaces. Son un mal lugar para correr un servidor. Por eso bajamos."</em></p>
-    </aside>
-  </section>
-
-  <!-- §7.4: Por qué CLI antes que IDE -->
-  <section>
-    <h2>Por qué CLI antes que IDE</h2>
-    <p style="font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 38em; margin: 0 auto;">
-      La próxima clase usamos <strong style="color: var(--text-primary);">Claude Code</strong>: una herramienta de IA que corre en la terminal, no en un IDE gráfico. Tres razones.
-    </p>
-    <div class="s7-cli-cards">
-      <div class="bg-secondary-card fragment fade-in">
-        <h3>Transparencia</h3>
-        <p>Ves cada archivo que la IA crea y cada comando que ejecuta: <code>pip install</code>, <code>uvicorn ...</code>, <code>sqlite3 app.db</code>. Nada se esconde detrás de paneles que aparecen y desaparecen.</p>
-      </div>
-      <div class="bg-secondary-card fragment fade-in">
-        <h3>Foco didáctico</h3>
-        <p>Estás aprendiendo a <em>dirigir</em>, no a manejar autocompletes y menús contextuales. La terminal es la mínima superficie posible: prompt, respuesta, comando.</p>
-      </div>
-      <div class="bg-secondary-card fragment fade-in">
-        <h3>Continuidad</h3>
-        <p>La semana 4 sube a IDEs AI-native (Cursor, Antigravity). Acá nos quedamos en CLI por didáctica, no por capacidad. La IA no es menos potente en la terminal: es menos vistosa.</p>
-      </div>
-    </div>
-    <aside class="notes">
-      <p><strong>Revelar las tres tarjetas en orden.</strong></p>
-      <p><u>Justificación pedagógica de la elección de Claude Code (CLI) en lugar de un IDE AI-native como Cursor.</u></p>
-      <p><em>"Para este primer contacto con tooling de IA local vamos a usar Claude Code, que corre en la terminal. No es un IDE gráfico. Tres razones, en orden."</em></p>
-      <p><em>"Transparencia. En la terminal ves todo lo que la IA hace: cada archivo que crea, cada comando que ejecuta. Pip install. Uvicorn. Sqlite3 sobre la base. Nada se esconde detrás de una UI con paneles flotantes y notificaciones que parpadean. Si algo raro pasa, lo ves en la línea siguiente."</em></p>
-      <p><em>"Foco didáctico. En estas ocho semanas el tema es aprender a dirigir a un modelo, no a navegar menús contextuales y autocompletes inteligentes. La terminal es la mínima superficie posible: un prompt, una respuesta, un comando que se corre. Lo único que queda en pantalla es la decisión que vos tenés que tomar."</em></p>
-      <p><em>"Continuidad. La próxima clase, semana 4, ya empezamos a subir a IDEs AI-native como Cursor o Antigravity, donde la IA está incrustada en el editor. Acá nos quedamos en CLI por didáctica, no por capacidad. Claude Code en la terminal no es menos potente que cualquiera de esos IDEs: es menos vistoso, y eso es exactamente lo que queremos para empezar."</em></p>
-    </aside>
-  </section>
-
-  <!-- §7.5: El stack del demo -->
-  <section>
-    <h2>El stack del demo</h2>
-    <p style="font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 38em; margin: 0 auto;">
-      Stack chico, mainstream. Cinco piezas, cada una con un rol nombrable. Pasá el cursor para ver qué hace cada una.
-    </p>
-    <div class="s7-pipeline">
-      <div class="pipeline-box">
-        <strong>Python</strong>
-        <span class="role">lenguaje</span>
-        <div class="tooltip">El más común para backend introductorio y muy fuerte en el ecosistema de IA y data.</div>
-      </div>
-      <span class="pipeline-arrow">
-        <svg viewBox="0 0 24 14"><path d="M0 7h22M16 1l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-      </span>
-      <div class="pipeline-box">
-        <strong>FastAPI</strong>
-        <span class="role">framework</span>
-        <div class="tooltip">Define paths, schemas y respuestas con poca ceremonia. Lo que dictás se parece a lo que termina escrito.</div>
-      </div>
-      <span class="pipeline-arrow">
-        <svg viewBox="0 0 24 14"><path d="M0 7h22M16 1l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-      </span>
-      <div class="pipeline-box">
-        <strong>SQLite</strong>
-        <span class="role">base</span>
-        <div class="tooltip">Vive en un archivo, sin servidor de DB aparte. Suficiente para el demo y para muchas apps en producción.</div>
-      </div>
-      <span class="pipeline-arrow">
-        <svg viewBox="0 0 24 14"><path d="M0 7h22M16 1l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-      </span>
-      <div class="pipeline-box">
-        <strong>Uvicorn</strong>
-        <span class="role">servidor ASGI</span>
-        <div class="tooltip">Corre tu app FastAPI y la deja escuchando en un puerto. Es el proceso que se queda vivo.</div>
-      </div>
-      <span class="pipeline-arrow">
-        <svg viewBox="0 0 24 14"><path d="M0 7h22M16 1l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-      </span>
-      <div class="pipeline-box">
-        <strong>venv</strong>
-        <span class="role">aislamiento</span>
-        <div class="tooltip">Aísla las dependencias por proyecto, sin pisar lo que tenés instalado a nivel sistema.</div>
-      </div>
-    </div>
-    <p style="margin-top: 24px; font-size: 0.78em; text-align: center; color: var(--text-muted); max-width: 38em; margin-left: auto; margin-right: auto;">
-      Suficiente para el demo y para muchas apps reales en producción.
-    </p>
-    <aside class="notes">
-      <p><strong>Pasar el cursor por cada caja en orden mientras se nombra.</strong></p>
-      <p><u>Cinco cajas con tooltip al hover. Cada caja es una pieza del demo de la semana 4.</u></p>
-      <p><em>"Cinco piezas, una por una. Pasá el cursor por cada una y aparece la descripción."</em></p>
-      <p><em>"Python es el lenguaje. Lo elegimos porque es el más común en backend introductorio y porque manda en el ecosistema de IA y de data, así que lo que aprendas acá te sirve para los temas que vienen después en este curso."</em></p>
-      <p><em>"FastAPI es el framework. Define paths, schemas y respuestas con muy poca ceremonia. Encaja con la idea de contrato que vimos en la sección 4: lo que vos dictás se parece bastante a lo que termina escrito en el archivo, así que el código no esconde la intención."</em></p>
-      <p><em>"SQLite es la base. Vive en un solo archivo, sin servidor de DB aparte que haya que instalar. Esa es la pieza que justifica el sistema de archivos del slide anterior: el punto db es eso, el archivo en disco."</em></p>
-      <p><em>"Uvicorn es el servidor ASGI. Es el programa que efectivamente corre tu app FastAPI y la deja escuchando en un puerto. Cuando vimos proceso en el slide anterior, hablábamos de uvicorn."</em></p>
-      <p><em>"Y venv es la herramienta de Python para aislar dependencias por proyecto. Sin venv, todo lo que instalás termina en tu sistema y empezás a pisar versiones de un proyecto a otro. Con venv, cada proyecto tiene su caja propia."</em></p>
-    </aside>
-  </section>
-
-  <!-- §7.6: FastAPI es una elección, no la única -->
-  <section>
-    <h2>FastAPI es <em>una</em> elección, no la única</h2>
-    <div class="s7-alts">
-      <div class="bg-secondary-card">
-        <h3>Node + Express</h3>
-        <p>JavaScript en el servidor. Popular en startups donde el front-end ya manda; compartir lenguaje cliente↔servidor es atractivo para un equipo chico.</p>
-      </div>
-      <div class="bg-secondary-card">
-        <h3>Django</h3>
-        <p>Python opinionated. Trae todo: ORM, admin, migraciones, autenticación. Si seguís sus convenciones, escribís muy poco código.</p>
-      </div>
-      <div class="bg-secondary-card">
-        <h3>Flask</h3>
-        <p>Python minimal. Filosofía cercana a FastAPI pero sin schemas tipados de fábrica: lo armás pieza por pieza.</p>
-      </div>
-      <div class="bg-secondary-card">
-        <h3>Go (Gin / Fiber)</h3>
-        <p>Compilado, rápido, buen consumo de memoria. Popular para infra y servicios donde el costo por request importa.</p>
-      </div>
-      <div class="bg-secondary-card" style="grid-column: 1 / -1;">
-        <h3>Ruby on Rails</h3>
-        <p>Convención sobre configuración llevada al extremo. Sigue vivo en muchas apps reales en producción.</p>
-      </div>
-    </div>
-    <p style="margin-top: 16px; font-size: 0.8em; text-align: center; max-width: 40em; margin-left: auto; margin-right: auto;">
-      El punto no es aprenderlas. Es saber que <span style="color: var(--accent);">FastAPI es una elección</span>: la elegimos por tipos modernos, schemas integrados, documentación automática y baja ceremonia.
-    </p>
-    <aside class="notes">
-      <p><u>Mapa breve de alternativas. Ubica FastAPI sin sugerir que sea la única opción.</u></p>
-      <p><em>"FastAPI no es la única opción de backend, ni de cerca. La idea de mostrarte estas alternativas no es enseñártelas: es ubicar a FastAPI en un mapa para que cuando alguien te diga que su API está en Express o en Django sepas de qué te están hablando."</em></p>
-      <p><em>"Node con Express corre JavaScript en el servidor. Es popular en startups chicas donde el front-end ya manda, porque podés compartir lenguaje y a veces hasta tipos entre cliente y servidor."</em></p>
-      <p><em>"Django y Flask son las dos alternativas Python históricas. Django es opinionated y trae todo de fábrica: ORM, admin, migraciones, auth. Flask es minimal, parecido en filosofía a FastAPI pero sin schemas tipados; te lo vas armando pieza por pieza."</em></p>
-      <p><em>"Go con frameworks como Gin o Fiber produce servidores compilados, rápidos y con muy buen consumo de memoria. Lo vas a ver en infraestructura, donde el costo por request importa mucho."</em></p>
-      <p><em>"Y Rails sigue vivo. Lleva la idea de convención sobre configuración al extremo: si seguís las reglas, escribís muy poco código. Hay un montón de apps reales que corren ahí."</em></p>
-      <p><em>"El punto del slide no es que aprendas estos cinco frameworks. Es que sepas que FastAPI es una elección, no la única que existe. La elegimos por cuatro razones concretas: tipos modernos, schemas integrados, documentación automática y baja ceremonia. Para un curso introductorio donde queremos leer lo que la IA escribe sin pelear con sintaxis, esas cuatro cosas pesan."</em></p>
-    </aside>
-  </section>
-
-  <!-- §7.7: Tarea para semana 4 — checklist accionable -->
-  <section>
-    <h2>Tarea antes de la semana 4</h2>
-    <p style="font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 40em; margin: 0 auto;">
-      Dejá la máquina lista antes de la próxima clase. Cuatro pasos.
-    </p>
-    <div class="s7-task-grid">
-      <div class="s7-task-card">
-        <span class="step-num">PASO 1</span>
-        <h3>Python ≥ 3.11</h3>
-        <pre><code class="language-bash" data-trim>python --version</code></pre>
-        <p class="hint">Tiene que devolver 3.11 o superior.</p>
-      </div>
-      <div class="s7-task-card">
-        <span class="step-num">PASO 2</span>
-        <h3>Node.js ≥ 18</h3>
-        <pre><code class="language-bash" data-trim>node --version</code></pre>
-        <p class="hint">Claude Code corre sobre Node, así que es requisito.</p>
-      </div>
-      <div class="s7-task-card">
-        <span class="step-num">PASO 3</span>
-        <h3>Instalar Claude Code</h3>
-        <pre><code class="language-bash" data-trim>npm install -g @anthropic-ai/claude-code</code></pre>
-        <p class="hint">Desde npm, una sola línea.</p>
-      </div>
-      <div class="s7-task-card">
-        <span class="step-num">PASO 4</span>
-        <h3>Verificar la instalación</h3>
-        <pre><code class="language-bash" data-trim>claude --version</code></pre>
-        <p class="hint">Tiene que responder con un número.</p>
-      </div>
-    </div>
-    <p style="margin-top: 16px; font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 40em; margin-left: auto; margin-right: auto; font-style: italic;">
-      Si algo falla, avisá por el canal del curso <strong style="color: var(--accent); font-style: normal;">antes</strong> de la clase. No queremos perder tiempo de la semana 4 instalando.
-    </p>
-    <aside class="notes">
-      <p><strong>Slide para foto. Pausa, dejar que saquen captura. Confirmar que el canal del curso está claro.</strong></p>
-      <p><u>Tarea concreta para llegar a semana 4 con la máquina lista. Cuatro comandos, copy-paste-ables.</u></p>
-      <p><em>"Tarea para la próxima clase. Cuatro pasos, todos comandos de terminal. Si querés sacar foto del slide, este es el momento."</em></p>
-      <p><em>"Paso uno: tener Python 3.11 o superior. Lo verificás con python --version. Si te tira 3.10 o menos, hay que actualizar. Paso dos: tener Node 18 o superior. Claude Code corre sobre Node, así que es requisito; no es opcional. Lo verificás con node --version."</em></p>
-      <p><em>"Paso tres: instalar Claude Code desde npm. Una sola línea: npm install guion g arroba anthropic raya ai barra claude raya code. Eso lo deja disponible en cualquier carpeta de tu sistema. Paso cuatro, el más importante: claude --version. Si esa línea responde con un número, ya está. Si te dice 'comando no encontrado', algo salió mal en el paso tres."</em></p>
-      <p><em>"Y la regla de oro: si algo falla, avisame por el canal del curso antes de la clase, no durante. La semana 4 es una clase con demo en vivo y no queremos perder treinta minutos resolviendo instalaciones rotas que se podrían haber resuelto un domingo a la tarde."</em></p>
-    </aside>
-  </section>
-
-  <!-- §7.8: Vago vs específico — closing pattern -->
-  <section>
-    <h2>Cómo le pedís el setup a una IA</h2>
+    <h2>El bloque de contrato, en dos formatos</h2>
     <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
       <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
-        <h3 style="color: var(--text-muted); margin-bottom: 12px;">Prompt vago</h3>
-        <p style="font-style: italic; font-size: 0.85em; line-height: 1.5;">"armame el backend"</p>
-        <p style="font-size: 0.7em; color: var(--text-muted); margin-top: 16px;">
-          La IA elige por vos: estructura del proyecto, dependencias, nombre de los paths, comando de arranque. Cada generación puede elegir distinto.
-        </p>
+        <p style="font-size: 0.6em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Contrato &mdash; §4</p>
+        <h3 style="color: var(--text-muted);">Texto informal</h3>
+        <pre style="margin: 0; box-shadow: none; font-size: 0.62em;"><code class="language-text" data-trim data-line-numbers="|1|2-4|5-6|7-10"
+>POST /projects/{id}/tasks
+  entrada (body):
+    title       string, requerido
+    due_date    fecha ISO, opcional
+  salida 201 (creado):
+    { id, title, due_date, project_id }
+  salida 400 (datos inv&aacute;lidos):
+    { error: "title es requerido" }
+  salida 404 (proyecto no existe):
+    { error: "no se encontr&oacute; el proyecto {id}" }</code></pre>
       </div>
       <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
-        <h3 style="color: var(--accent); margin-bottom: 12px;">Prompt específico</h3>
-        <pre style="margin: 0; box-shadow: none; font-size: 0.6em;"><code class="language-text" data-trim>creá un proyecto Python con venv y FastAPI:
-- estructura: app/main.py (FastAPI),
-  app/db.py (SQLite), requirements.txt
-- dependencias: fastapi, uvicorn, pydantic
-- un path GET /health que devuelva
-  { "status": "ok" }
-- arrancalo con:
-  uvicorn app.main:app --reload
-- mostrame en pantalla la URL y los logs</code></pre>
-        <p style="font-size: 0.7em; color: var(--accent); margin-top: 12px;">
-          Nombra estructura, dependencias, comando de arranque y un path concreta.
-        </p>
+        <p style="font-size: 0.6em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px;">OpenAPI 3.1</p>
+        <h3 style="color: var(--accent);">YAML, machine-readable</h3>
+        <pre style="margin: 0; box-shadow: none; font-size: 0.58em;"><code class="language-yaml" data-trim data-line-numbers="|2|3|4-13|14-17|18-23"
+>paths:
+  /projects/{id}/tasks:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title]
+              properties:
+                title:    { type: string }
+                due_date: { type: string, format: date, nullable: true }
+      responses:
+        '201':
+          description: Created
+          content: { application/json: { schema: { $ref: '#/components/schemas/Task' } } }
+        '400':
+          description: title es requerido
+        '404':
+          description: proyecto no existe</code></pre>
       </div>
     </div>
-    <p style="margin-top: 18px; font-size: 0.85em; text-align: center;">
-      <em>Vago = lotería.</em> &nbsp; <em>Específico = determinismo.</em>
+    <p style="margin-top: 18px; font-size: 0.82em; text-align: center; max-width: 44em; margin-left: auto; margin-right: auto;">
+      Misma informaci&oacute;n, dos formatos. La derecha es <span style="color: var(--accent);">la que la IA prefiere</span> &mdash; y la que el equipo versiona ma&ntilde;ana.
     </p>
     <aside class="notes">
-      <p><u>Cierre de §7 y de la parte conceptual de la clase. Mismo reframing que las secciones anteriores: vocabulario por determinismo, iteración y auditoría. Acá las "primitivas" son las del setup local: estructura del proyecto, dependencias, comando de arranque, path concreta.</u></p>
-      <p><em>"Cierre de la sección con la misma estructura que veníamos usando. Mirá los dos prompts: la intención es la misma — pedirle a la IA que te arme el backend del demo."</em></p>
-      <p><em>"Y el mismo descargo de honestidad de siempre: si vos hoy le tirás 'armame el backend' a Claude o a ChatGPT, lo más probable es que te devuelva algo que arranca. Va a elegir Flask o FastAPI, va a tirar dos paths razonables, va a poner alguna base. No es que el prompt vago siempre falle: muchas veces el resultado es decente."</em></p>
-      <p><em>"Pero el vocabulario te paga por las tres razones de siempre. Determinismo: el prompt vago es lotería. Esta vez te tira FastAPI con SQLite, la próxima Flask con MongoDB, la próxima Express porque interpretó 'backend' como Node. Pedile algo menos común — un endpoint con paginación, un middleware de auth — y la variabilidad se dispara."</em></p>
-      <p><em>"Iteración: tu próximo prompt va a ser 'agregame un path para crear tareas'. Si fijaste estructura desde el primer prompt — app/main.py, app/db.py — la IA sabe dónde meter el código nuevo. Si no la fijaste, te puede armar un main.py paralelo o pisar lo anterior. Y auditoría: leer un proyecto que vos no diseñaste es leer un mapa sin leyenda; con la lista de la izquierda en el prompt, lo leés contra la spec."</em></p>
-      <p><em>"Y notá lo que nombra el prompt específico: las primitivas que vimos en esta sección. Estructura del proyecto — qué archivos hay y qué pone cada uno. Dependencias — el contenido de requirements.txt. Comando de arranque — uvicorn app.main:app --reload, el proceso vivo del que hablamos. Y un path concreta — GET /health, con su contrato de respuesta. Cuatro primitivas, un solo prompt, cero ambigüedad."</em></p>
-      <p><em>"Cerramos la parte conceptual de la clase. Lo que viene es el demo en vivo: Claude Code abierto, este mismo prompt sobre la mesa, leyendo endpoint por endpoint lo que aparece."</em></p>
+      <p><strong>Click 1: ilumina <code>POST</code> a la izquierda y la key <code>post:</code> a la derecha (method). Click 2: ilumina <code>/projects/{id}/tasks</code> en ambos lados (path). Click 3: ilumina <code>entrada (body)</code> &harr; <code>requestBody</code> (schema-in). Click 4: ilumina <code>salida 201</code> &harr; <code>responses '201'</code>. Click 5: ilumina las salidas 400/404 &harr; <code>'400'</code> y <code>'404'</code> (errores).</strong></p>
+      <p><u>Slide-clave de §7. Mapeo l&iacute;nea-a-l&iacute;nea entre el bloque del §4 y el yaml.</u></p>
+      <p><em>"Ac&aacute; est&aacute; el mismo bloque de contrato que armamos en la secci&oacute;n cuatro, dos formatos. A la izquierda, el texto informal que dictamos. A la derecha, el equivalente en OpenAPI 3.1. Misma informaci&oacute;n, distinto vestido."</em></p>
+      <p><em>"Voy a recorrer las cinco piezas. Method &mdash; en el §4 es la palabra <code>POST</code> al principio; en OpenAPI es la key <code>post:</code> bajo <code>paths</code>. Path &mdash; en los dos lados es lo mismo, <code>/projects/{id}/tasks</code>, con la variable entre llaves."</em></p>
+      <p><em>"Schema-in &mdash; lo que en el §4 llam&aacute;bamos 'entrada (body)' en OpenAPI se llama <code>requestBody</code>. Y dentro hay una clave nueva: <code>schema</code>, con tipos expl&iacute;citos (<code>type: string</code>), formatos (<code>format: date</code>), required, nullable. El nivel de detalle ya no es opinable."</em></p>
+      <p><em>"Schema-out &mdash; lo que llam&aacute;bamos 'salida 201' / 'salida 400' / 'salida 404' en OpenAPI son entries dentro de <code>responses</code>, con la key igual al status code. Cada entry describe el cuerpo de la respuesta para ese c&oacute;digo. La separaci&oacute;n por status code que pintamos en la slide del §4.6 ya estaba apuntando ac&aacute; sin nombrar el formato."</em></p>
+      <p><em>"Cinco piezas, cinco mappings, una correspondencia exacta. La derecha no agrega informaci&oacute;n nueva; cierra ambig&uuml;edades. Y como es un archivo machine-readable, mucho de lo que vimos manualmente lo va a poder hacer una herramienta."</em></p>
+    </aside>
+  </section>
+
+  <!-- §7.3: Por qué importa que sea un archivo (3 razones) -->
+  <section>
+    <h2>Por qu&eacute; importa que sea un archivo</h2>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px;">
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Raz&oacute;n 1</p>
+        <h3 style="font-size: 1em; color: var(--accent); margin: 0 0 8px;">Menos ambig&uuml;edad</h3>
+        <p style="font-size: 0.78em; line-height: 1.5; margin: 0;">Tipos, formatos, requeridos, nullables: <strong>fijados</strong>. Lo que en un prompt es opinable, en el yaml est&aacute; escrito. La IA no improvisa.</p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Raz&oacute;n 2</p>
+        <h3 style="font-size: 1em; color: var(--accent); margin: 0 0 8px;">Codegen real</h3>
+        <p style="font-size: 0.78em; line-height: 1.5; margin: 0;">Del mismo archivo: <strong>docs interactivas</strong> (Swagger UI), <strong>clientes</strong> en cualquier lenguaje, <strong>mocks</strong>, <strong>tests de contrato</strong>. Una sola fuente, muchos artefactos.</p>
+      </div>
+      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+        <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Raz&oacute;n 3</p>
+        <h3 style="font-size: 1em; color: var(--accent); margin: 0 0 8px;">Durabilidad</h3>
+        <p style="font-size: 0.78em; line-height: 1.5; margin: 0;">No es un prompt que se pierde. Es un archivo en el repo: <strong>se versiona</strong>, se compara entre branches, se vuelve a dictar.</p>
+      </div>
+    </div>
+    <p style="margin-top: 28px; font-size: 0.92em; text-align: center; max-width: 40em; margin-left: auto; margin-right: auto;">
+      El supervisor arquitect&oacute;nico ahora dirige <span style="color: var(--accent);">un artefacto durable</span>.
+    </p>
+    <aside class="notes">
+      <p><u>Cierre de §7. Tres razones por las que el contrato hecho archivo desbloquea cosas que un prompt no puede.</u></p>
+      <p><em>"Tres razones por las que importa que el contrato sea un archivo y no un prompt. Una por una."</em></p>
+      <p><em>"Primera, ambig&uuml;edad. El yaml fija tipos, formatos como <code>format: date</code>, requeridos, nullables. Cada uno de esos detalles, en un prompt vago, lo decide la IA. En el yaml lo decid&iacute;s vos. Es la misma idea de 'vago vs espec&iacute;fico' que cerr&oacute; las cinco secciones anteriores, ahora hecha archivo."</em></p>
+      <p><em>"Segunda, codegen. Y esto es lo que vamos a ver renderizado en el demo. Del mismo openapi.yaml salen docs interactivas &mdash; eso es Swagger UI, lo van a ver en pantalla en cinco minutos. Salen clientes generados en cualquier lenguaje (Python, TypeScript, Go), salen mocks que el frontend puede consumir mientras el backend no existe, salen tests que verifican que la implementaci&oacute;n cumple el contrato. Una sola fuente, muchos artefactos derivados. Eso es codegen real, no abstracci&oacute;n."</em></p>
+      <p><em>"Tercera, durabilidad. Un prompt vive en una conversaci&oacute;n. Cuando cerr&aacute;s la pesta&ntilde;a se pierde, o se diluye en mil mensajes despu&eacute;s. El yaml vive en el repo: se versiona en git, se compara entre branches con un diff, se vuelve a dictar a otra IA cuando cambia algo. El supervisor arquitect&oacute;nico que vinimos nombrando toda la clase, ahora tiene un artefacto durable que dirige."</em></p>
+      <p><em>"Y con eso cerramos la parte conceptual de la clase. Lo que viene es el demo en vivo: pegar un prompt, ver canvas escribir el yaml, leerlo juntos, y al final renderizarlo en Swagger UI."</em></p>
     </aside>
   </section>
 
