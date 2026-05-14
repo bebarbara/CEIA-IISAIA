@@ -22,7 +22,7 @@ Una sesión de logs típica para un request fallido se ve así:
 2026-05-07 14:32:11  INFO   500 Internal Server Error  duration=12ms
 ```
 
-Tres líneas, tres cosas distintas. La primera dice qué request entró: verbo, ruta, body. La segunda, qué se rompió y por qué: una columna `project_id` que llegó vacía cuando la base la exige. La tercera, con qué código respondió el servidor y cuánto tardó. Las tres juntas son el relato completo del incidente.
+Tres líneas, tres cosas distintas. La primera dice qué request entró: method, path, body. La segunda, qué se rompió y por qué: una columna `project_id` que llegó vacía cuando la base la exige. La tercera, con qué código respondió el servidor y cuánto tardó. Las tres juntas son el relato completo del incidente.
 
 ## El stack trace: el camino al bug
 
@@ -60,7 +60,7 @@ Handler actual:
 ¿Por qué falla y cómo se arregla sin romper la creación de tareas en otros proyectos?
 ```
 
-La diferencia no es de cortesía. Le estás pasando a la IA la misma evidencia que necesitaría una persona: verbo, ruta, código devuelto, línea exacta del error, archivo y handler. Sin esa evidencia el modelo adivina; con ella, razona.
+La diferencia no es de cortesía. Le estás pasando a la IA la misma evidencia que necesitaría una persona: method, path, código devuelto, línea exacta del error, archivo y handler. Sin esa evidencia el modelo adivina; con ella, razona.
 
 ## Observabilidad: la palabra paraguas
 
@@ -78,4 +78,4 @@ el endpoint POST /tasks devuelve 500. El log adjunto muestra:
 mando body { "title": "X" }. ¿Es un bug del schema (falta default), de la validación (debería rechazar el body) o falta una columna? Quiero entender la causa antes del parche.
 ```
 
-Los dos pueden producir un parche que arranca; un LLM resuelve cualquiera. La diferencia vive en los tres ejes de siempre. Determinismo: el específico fija ruta, código, mensaje de error y body, así que dos generaciones convergen en diagnósticos parecidos en lugar de inventar tres bugs distintos. Iteración: si el primer diagnóstico no convence, pedís descartar una de las tres hipótesis sin reescribir el contexto. Auditoría: leés la respuesta contra la evidencia pegada y verificás si la causa propuesta explica realmente el log o ignora la línea que importa.
+Los dos pueden producir un parche que arranca; un LLM resuelve cualquiera. La diferencia vive en los tres ejes de siempre. Determinismo: el específico fija path, código, mensaje de error y body, así que dos generaciones convergen en diagnósticos parecidos en lugar de inventar tres bugs distintos. Iteración: si el primer diagnóstico no convence, pedís descartar una de las tres hipótesis sin reescribir el contexto. Auditoría: leés la respuesta contra la evidencia pegada y verificás si la causa propuesta explica realmente el log o ignora la línea que importa.

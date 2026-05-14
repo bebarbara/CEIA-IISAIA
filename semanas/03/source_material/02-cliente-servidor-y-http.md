@@ -16,7 +16,7 @@ De hecho, la página que armaste en semana 2 ya era un cliente; no la nombramos 
 
 Ese idioma es **HTTP**: un protocolo de pedido y respuesta. El cliente arma un **request**, el servidor arma una **response**, y entre los dos cabe casi todo lo que hace internet hoy.
 
-Un request tiene cuatro partes: un método (el verbo que ya viene), una URL (a qué recurso le hablás), unos headers (metadatos) y, opcionalmente, un body. Una response tiene tres: un código de estado, unos headers, y un body.
+Un request tiene cuatro partes: un método (el method que ya viene), una URL (a qué recurso le hablás), unos headers (metadatos) y, opcionalmente, un body. Una response tiene tres: un status code, unos headers, y un body.
 
 Un par concreto se ve así:
 
@@ -34,9 +34,9 @@ Content-Type: application/json
 
 Ese ida y vuelta, repetido millones de veces por segundo, es internet.
 
-## Los verbos: los sustantivos del trabajo
+## Los methods: el repertorio de operaciones
 
-HTTP define un puñado de métodos, llamados *verbos*. La palabra engaña: no son acciones que vos componés libremente, son los pocos sustantivos del trabajo que pedís — las operaciones que se repiten en toda API.
+HTTP define un puñado de métodos, llamados *methods*. La palabra engaña: no son acciones que vos componés libremente, son el repertorio fijo de operaciones que pedís — las que se repiten en toda API.
 
 Los cinco que importan:
 
@@ -46,21 +46,21 @@ Los cinco que importan:
 - **PATCH** — modificar parte de un recurso, dejando el resto como estaba.
 - **DELETE** — borrar un recurso.
 
-Eso es todo el repertorio que vas a necesitar el 95% del tiempo. El resto de la conversación va por verbos y rutas.
+Eso es todo el repertorio que vas a necesitar el 95% del tiempo. El resto de la conversación va por methods y paths.
 
-## Códigos de estado: el vocabulario de las fallas
+## Status codes: el vocabulario de las fallas
 
-Cuando el servidor responde, lo primero que dice es un número de tres dígitos: el código de estado. Está agrupado por familias, y cada familia te dice de qué tipo es la respuesta.
+Cuando el servidor responde, lo primero que dice es un número de tres dígitos: el status code. Está agrupado por familias, y cada familia te dice de qué tipo es la respuesta.
 
 - **2xx** (todo bien) — 200 (OK) para un GET que devolvió lo pedido, 201 (creado) para un POST, 204 (sin contenido) para un DELETE.
-- **4xx** (vos, cliente, te equivocaste) — el pedido llegó pero algo del cliente está mal. 400 (mal pedido) si el body no tiene la forma esperada, 404 (no existe) si la ruta o el recurso no aparecen. Acá también viven 401 y 403, autenticación y permisos; *los vemos en semana 7*.
+- **4xx** (vos, cliente, te equivocaste) — el pedido llegó pero algo del cliente está mal. 400 (mal pedido) si el body no tiene la forma esperada, 404 (no existe) si el path o el recurso no aparecen. Acá también viven 401 y 403, autenticación y permisos; *los vemos en semana 7*.
 - **5xx** (yo, servidor, me caí) — el pedido estaba bien pero el servidor no pudo cumplirlo. 500 (algo se rompió adentro), 503 (servicio no disponible).
 
 Cuando leés un código, estás leyendo *de qué lado* fue la falla. Si arranca con 4, mirá tu pedido. Si arranca con 5, mirá los logs del servidor. Esa lectura te ahorra horas de buscar en el lugar equivocado.
 
 ## Por qué importa para vos como supervisor
 
-Cuando le pedís a la IA que te arme un endpoint, deberías poder especificar el verbo, predecir el código de estado que va a devolver, y leer la respuesta para confirmar que hizo lo que dijo. Si no podés hacer esas tres cosas, estás aceptando decisiones que no sabías que estabas tomando, y vos te enterás cuando algo se rompe.
+Cuando le pedís a la IA que te arme un endpoint, deberías poder especificar el method, predecir el status code que va a devolver, y leer la respuesta para confirmar que hizo lo que dijo. Si no podés hacer esas tres cosas, estás aceptando decisiones que no sabías que estabas tomando, y vos te enterás cuando algo se rompe.
 
 ## Vago vs. específico
 
@@ -74,6 +74,6 @@ hace una API para guardar tareas
 definí un endpoint POST /tasks que reciba en el body { title: string (requerido), due_date: string ISO (opcional) }, devuelva 201 con el objeto creado o 400 si falta title. Servir respuesta como JSON.
 ```
 
-Los dos pueden generar código que parece correcto a primera vista — un LLM es bueno produciendo cosas que compilan. La diferencia no está en si funciona, está en si es auditable. El específico fija verbo, ruta, forma del body, código de éxito y código de falla; eso es un contrato. El vago hereda decisiones invisibles: el modelo elige todo eso por vos y no lo sabés hasta leer línea por línea.
+Los dos pueden generar código que parece correcto a primera vista — un LLM es bueno produciendo cosas que compilan. La diferencia no está en si funciona, está en si es auditable. El específico fija method, path, forma del body, código de éxito y código de falla; eso es un contrato. El vago hereda decisiones invisibles: el modelo elige todo eso por vos y no lo sabés hasta leer línea por línea.
 
 Tres ejes. Determinismo: cuanto más específico el prompt, más cerca estás de obtener siempre la misma respuesta; con LLMs nunca es total, dos corridas pueden diferir en detalles, pero el espacio de variación cae mucho. Iteración: el prompt específico te deja cambiar una pieza nombrada, no rehacer todo. Auditoría: verificás el código punto por punto contra el contrato que escribiste, no contra una idea vaga en tu cabeza.

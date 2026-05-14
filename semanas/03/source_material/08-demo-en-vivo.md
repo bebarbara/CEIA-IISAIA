@@ -1,54 +1,68 @@
-# Demo en vivo: del contrato al servidor corriendo
+# Demo en vivo: canvas escribe el openapi.yaml
 
-Este archivo es el guion del demo de cierre. No es un capítulo conceptual: es la coreografía del cierre. La clase termina con el profesor levantando un servidor en local con Claude Code, mientras los alumnos miran y conectan los conceptos vistos con código real apareciendo en pantalla. La intención es que cada beat del demo aterrice algo que ya se nombró en los archivos previos.
+Este archivo es el guion del demo de cierre. No es un capítulo conceptual: es la coreografía. La clase termina con el profesor pegando un prompt en ChatGPT canvas, leyendo el yaml que aparece, agregando un endpoint en vivo desde el chat, editando a mano dentro del canvas, y al final pegando el yaml en `editor.swagger.io` para que el alumno vea las docs interactivas. La intención es que cada beat conecte un concepto que ya se nombró en los archivos previos — sobre todo el bloque de contrato del §4.
 
 ## Qué tiene que mostrar el demo
 
-1. Al menos 3 verbos HTTP distintos en juego (mínimo: GET, POST, DELETE; idealmente también PATCH o PUT).
-2. Al menos una relación entre dos tablas (foreign key visible en la base).
-3. Al menos un camino de error visible: un 4xx que el alumno pueda ver en pantalla intencionalmente.
-4. Frontend mínimo que consuma la API (puede ser una sola página HTML servida por la misma app, o un archivo aparte abierto en el navegador).
-5. Dominio no trivial: explícitamente NO un to-do list. Tiene que justificar la clase.
+Cinco cosas tienen que ser visibles para que el demo cumpla el rol pedagógico. En este orden:
 
-## TBD: dominio
+1. Tres methods HTTP en juego, mínimo: GET, POST y DELETE.
+2. Una jerarquía de recursos visible en el path: `projects → projects/{id}/tasks → projects/{id}/tasks/{taskId}`. La pertenencia se ve, no se explica.
+3. Al menos una respuesta de error documentada: 400 o 404. Los errores en el yaml dejan de ser adorno.
+4. Schemas tipados: `type`, `required`, y `format` cuando aplique (`format: date`, `format: date-time`).
+5. Iteración en vivo: agregar un endpoint nuevo desde el chat y ver el canvas actualizarse en tiempo real, sin tipear yaml a mano.
 
-El dominio concreto se decide al implementar el demo, respetando los cinco requisitos de arriba. Tres ideas-anclas como puntos de partida, sin compromiso: un mini-CRM de contactos con notas asociadas; un tracker de aplicaciones a trabajos con estados (postulado, entrevista, oferta, rechazo); un catálogo de libros leídos con reseñas. La elección final queda para la fase de implementación.
+## Dominio: projects/tasks (fijo)
 
-## Plan que se dicta antes de tocar Claude Code
-
-El demo abre con el profesor escribiendo, visible en pantalla, un bloque de contrato (misma forma que el del archivo 04) *antes* de invocar a la IA. La plantilla que se llena en vivo:
+El dominio no se decide en el momento. Se reusa el del §4 — el `POST /projects/{id}/tasks` con `title` requerido, `due_date` opcional, 201/400/404 — porque la fuerza del demo está justamente en que el alumno lo reconozca. Endpoints completos:
 
 ```
-stack: Python + FastAPI + SQLite + Uvicorn
+GET    /projects
+POST   /projects
+GET    /projects/{id}/tasks
+POST   /projects/{id}/tasks
+DELETE /projects/{id}/tasks/{taskId}
+```
 
-modelo de datos:
-  [tabla A](id, ...)
-  [tabla B](id, ..., a_id foreign key → A.id)
+## El primer prompt (visible en pantalla mientras se tipea)
+
+```
+Necesito un openapi.yaml (3.1) para una API de proyectos y tareas.
+
+recursos:
+  Project   { id, name }
+  Task      { id, title, due_date?, project_id }
 
 endpoints:
-  GET    /[recurso A]
-  POST   /[recurso A]
-  GET    /[recurso A]/{id}/[recurso B]
-  POST   /[recurso A]/{id}/[recurso B]
-  DELETE /[recurso A]/{id}/[recurso B]/{bid}
+  GET    /projects
+  POST   /projects
+  GET    /projects/{id}/tasks
+  POST   /projects/{id}/tasks   → 201 / 400 / 404
+  DELETE /projects/{id}/tasks/{taskId}
 
-frontend:
-  una página index.html servida por la API
-  formulario para crear A y B
-  lista que renderiza el GET y permite borrar
+abrilo en canvas para que podamos editarlo juntos.
 ```
 
-Este bloque es el contrato. Cuando lo dictás a Claude Code, le estás dando el *qué*. La IA elige el *cómo*. Si más adelante tenés que cambiar algo, cambiás el contrato y volvés a dictar.
+El alumno tiene que ver el prompt aparecer letra por letra. Esa parte del demo es tan importante como el yaml que sale: lo que se está mostrando es que el contrato se dicta, no se tipea.
 
-## Beats del demo
+## Los seis beats
 
-1. **Después del primer prompt**: abrir el árbol de archivos que apareció. Señalar `app/main.py`, `app/db.py`, `requirements.txt`. "Esto no lo escribimos; lo dictamos."
-2. **Cuando aparezca la primera ruta**: pausar. Leer la ruta en voz alta como contrato: verbo, path, qué entra, qué sale. Conectar explícitamente con el archivo 04.
-3. **Cuando se levante el servidor**: terminal con Uvicorn corriendo. Abrir `http://localhost:8000` en el navegador. Si FastAPI generó `/docs`, abrirla y mostrar la documentación automática como espejo del contrato.
-4. **Cuando peguen a un endpoint mal**: provocar intencionalmente un 4xx (por ejemplo, POST sin un campo requerido). Mostrar el código de respuesta en el navegador y el log en la terminal. Conectar con el archivo 06.
-5. **Cuando aparezca el frontend**: abrir el HTML, mostrar la llamada `fetch` (o equivalente) y leerla como "el cliente está hablando el contrato del servidor".
-6. **Cierre (30 segundos)**: enmarcar lo que pasó. "Ustedes no tipearon nada. Lo que dirigieron fue el contrato. La IA escribió el código; ustedes leyeron, corrigieron y aprobaron."
+**Beat 1 — Pegar el prompt.** Canvas se abre con el yaml inicial. Frase para el aire: *"Esto no lo escribimos; lo dictamos."*
 
-## Lo que NO se intenta en este demo
+**Beat 2 — Leer el primer endpoint.** Bajar al `POST /projects/{id}/tasks` y recorrerlo en voz alta: `paths`, después la key `post`, después `parameters`, después `requestBody`, después `responses`. Mientras lo recorrés, mapeás cada cosa a las cinco piezas del §4 — method, path, schema-in, schema-out, errores. La idea es que el alumno escuche la traducción una vez, en vivo.
 
-No autenticación, no deploy, no testing automatizado, no CSS bonito. Esos viven en otras semanas. Si algo de eso aparece accidentalmente en el código generado, el profesor lo señala y lo deja para después. La regla es proteger el foco: lo que se muestra hoy es la cadena contrato-código-servidor-cliente, y nada más.
+**Beat 3 — Agregar un endpoint en vivo desde el chat.** Sin tocar el canvas, escribir en el chat: *"agregá `DELETE /projects/{id}`, con 404 si el proyecto no existe."* Mostrar el canvas actualizándose en tiempo real. Frase para el aire: *"El contrato es editable; no es un prompt de un solo tiro."*
+
+**Beat 4 — Editar a mano dentro del canvas.** Click directo en el canvas y editar. Por ejemplo, agregar `description` opcional al schema de `Task`, o cambiar `due_date` de `string` plano a `string` con `format: date-time`. Frase para el aire: *"La IA y vos comparten editor."*
+
+**Beat 5 — Pegar el yaml en `editor.swagger.io`.** Copiar el contenido del canvas, abrir `editor.swagger.io`, pegarlo. Aparece Swagger UI renderizado del lado derecho. Click en `POST /projects` → "Try it out" → "Execute". Frase para el aire: *"Del mismo archivo salieron docs interactivas. Codegen es real, no abstracción."* No hace falta que el endpoint conecte con un servidor real; alcanza con ver la UI funcional.
+
+**Beat 6 — Cierre 30 segundos.** Enmarcar lo que pasó. *"Ustedes no tipearon nada. Lo que dirigieron fue el contrato. Y ahora tiene archivo."* Bridge a la próxima clase: *"La próxima clase tomamos este yaml y se lo damos a una IA local para que escriba la implementación."*
+
+## Lo que NO se intenta hoy
+
+No hay implementación, no hay base de datos real, no hay deploy, no hay tests automatizados. Solo el contrato como archivo, leído y editable, con su render como bonus. Si en algún momento la IA ofrece "y querés que te genere el código del servidor también", el profesor lo corta: hoy es el contrato, mañana la implementación.
+
+## Plan B si canvas no aparece
+
+Si por alguna razón canvas no se dispara con el primer prompt, pedirlo explícitamente: *"abrilo en canvas"*. Si sigue sin abrirse, copiar el yaml a un editor local cualquiera (VS Code, Sublime, lo que esté abierto) y seguir el demo desde ahí. La pieza importante es el yaml, no la herramienta — el beat 5 (Swagger UI) funciona igual con cualquier fuente del texto.
