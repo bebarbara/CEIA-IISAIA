@@ -1057,7 +1057,7 @@ Content-Type: application/json
       <p><u>La idea central de REST. Tres formas de URL — colección, item, recurso anidado — y el mantra que separa method de URL.</u></p>
       <p><em>"La idea central de REST cabe en una sola frase, y vale la pena aprenderla así: REST modela cosas, no acciones. Todo lo que la API expone es un recurso — algo concreto. Un proyecto, una tarea, un usuario, un mensaje. Las URLs nombran esas cosas. Eso es lo que descarta barra borrar-tarea (un verbo metido en la URL) y deja barra tasks barra diecisiete (una cosa identificable, ubicable)."</em></p>
       <p><em>"Los recursos vienen en dos formas, más una variante. Una colección es el conjunto entero: barra projects significa 'todos los proyectos'. Un item es uno solo: barra projects barra cuatro es 'el proyecto cuatro'. Y si un recurso solamente tiene sentido dentro de otro, anidás: barra projects barra cuatro barra tasks barra diecisiete es 'la tarea diecisiete del proyecto cuatro'. Tres formas, mismo principio: la URL es un camino que nombra cosas."</em></p>
-      <p><em>"Y acá está la regla que conviene memorizar. El method dice qué hacer; la URL dice sobre qué. GET barra projects barra cuatro lee el proyecto cuatro. DELETE barra projects barra cuatro lo borra. PUT barra projects barra cuatro lo reemplaza. La URL no cambia según la acción — el sustantivo es el mismo. La acción viaja siempre en el method. Si te encontrás escribiendo una URL con un verbo adentro (borrar, crear, actualizar), algo está mal."</em></p>
+      <p><em>"Y acá está la regla que conviene memorizar. El method dice qué hacer; la URL dice sobre qué. GET barra projects barra cuatro lee el proyecto cuatro. DELETE barra projects barra cuatro lo borra. PUT barra projects barra cuatro lo reemplaza. La URL no cambia según la acción — el recurso es el mismo. La acción viaja siempre en el method. Si te encontrás escribiendo una URL con un verbo adentro (borrar, crear, actualizar), algo está mal."</em></p>
     </aside>
   </section>
 
@@ -1081,7 +1081,7 @@ GET  /projects/4</code></pre>
       </div>
     </div>
     <p style="margin-top: 22px; font-size: 0.78em; text-align: center; max-width: 42em; margin-left: auto; margin-right: auto;">
-      Una colección está en plural. Cuando querés uno, el item aparece como <code>/users/42</code> — no como un sustantivo distinto. Una API mezclada es impredecible para quien la consume, incluida <span style="color: var(--accent);">la IA que le genera el cliente</span>.
+      Una colección está en plural. Cuando querés uno, el item aparece como <code>/users/42</code> — no como un recurso distinto. Una API mezclada es impredecible para quien la consume, incluida <span style="color: var(--accent);">la IA que le genera el cliente</span>.
     </p>
     <aside class="notes">
       <p><u>Primera regla operativa. Convención de naming: plural para colecciones, item dentro del plural.</u></p>
@@ -1161,14 +1161,14 @@ GET  /projects/4</code></pre>
       </table>
     </div>
     <p class="fragment fade-in" style="margin-top: 20px; font-size: 0.82em; text-align: center; max-width: 40em; margin-left: auto; margin-right: auto;">
-      Si era idempotente, <span style="color: var(--accent);">retentás sin miedo</span>. Si era <code>POST</code>, <span style="color: var(--text-muted);">retentar duplica</span>.
+      Si era idempotente, <span style="color: var(--accent);">reintentás sin miedo</span>. Si era <code>POST</code>, <span style="color: var(--text-muted);">reintentar duplica</span>.
     </p>
     <aside class="notes">
-      <p><strong>Mostrar la tabla. Click para revelar la consecuencia práctica de retentar.</strong></p>
-      <p><u>Tabla de idempotencia. La consecuencia de retentar es lo que les importa cuando dirigen a la IA en un cliente.</u></p>
+      <p><strong>Mostrar la tabla. Click para revelar la consecuencia práctica de reintentar.</strong></p>
+      <p><u>Tabla de idempotencia. La consecuencia de reintentar es lo que les importa cuando dirigen a la IA en un cliente.</u></p>
       <p><em>"Tercera regla. Una operación es idempotente si llamarla dos veces deja el sistema igual que llamarla una. La definición suena abstracta, pero ya la viviste: pensalo como apretar F5 dos veces en el navegador. Cargás la página dos veces y no pasa nada distinto — la página sigue ahí, igual. Eso es idempotente. La consecuencia es muy concreta y aparece todo el tiempo."</em></p>
       <p><em>"Recorré la tabla. GET es idempotente: leer dos veces no cambia nada. DELETE también: borrar algo borrado lo deja borrado. PUT igual: reemplazar el recurso por la misma versión dos veces da el mismo estado final. PATCH depende: si tu PATCH suma uno a un contador, dos llamadas suman dos; si tu PATCH fija un campo a un valor, dos llamadas dan el mismo resultado. Y POST no: dos POST a barra projects crean dos proyectos distintos."</em></p>
-      <p><em>"Click. Acá está la consecuencia. Imaginá que mandás un request, la red se cae y no sabés si el servidor lo recibió. ¿Lo mandás de nuevo? Si era idempotente, sí, sin miedo: en el peor caso pasó dos veces y el estado sigue siendo el mismo. Si era POST, no: retentar te crea un proyecto duplicado, una transferencia duplicada, una notificación duplicada. La idempotencia es lo que te dice si tu cliente puede tener un botón 'reintentar' o si necesita lógica más cuidadosa. Cuando le pidas a la IA un cliente que tolere fallos de red, el primer dato que tiene que conocer es qué de tu API es idempotente."</em></p>
+      <p><em>"Click. Acá está la consecuencia. Imaginá que mandás un request, la red se cae y no sabés si el servidor lo recibió. ¿Lo mandás de nuevo? Si era idempotente, sí, sin miedo: en el peor caso pasó dos veces y el estado sigue siendo el mismo. Si era POST, no: reintentar te crea un proyecto duplicado, una transferencia duplicada, una notificación duplicada. La idempotencia es lo que te dice si tu cliente puede tener un botón 'reintentar' o si necesita lógica más cuidadosa. Cuando le pidas a la IA un cliente que tolere fallos de red, el primer dato que tiene que conocer es qué de tu API es idempotente."</em></p>
     </aside>
   </section>
 
@@ -1297,18 +1297,6 @@ GET  /projects/4</code></pre>
       font-weight: 700;
     }
 
-    /* Espejo slide — extra breathing room on the headers. */
-    .s4-mirror h3 { font-size: 1em; margin-bottom: 12px; }
-    .s4-mirror pre {
-      margin: 0;
-      font-size: 0.6em;
-      box-shadow: none;
-    }
-    .s4-mirror .s4-card-foot {
-      margin-top: 12px;
-      font-size: 0.7em;
-      line-height: 1.5;
-    }
   </style>
 
   <!-- §4.1: Apertura — roadmap con pieza 3 activa -->
@@ -1536,59 +1524,16 @@ GET  /projects/4</code></pre>
       <p><strong>Empezar con el bloque entero ya visible (sin highlight). Click 1: ilumina method + path. Click 2: ilumina entrada. Click 3: ilumina salida 201. Click 4: ilumina salida 400. Click 5: ilumina salida 404.</strong></p>
       <p><u>Slide-clave. El mismo bloque del archivo 04 con highlights progresivos. Cada press recorre una pieza del contrato.</u></p>
       <p><em>"Ac&aacute; est&aacute; el bloque entero. Es lo m&aacute;s importante de la clase: si solamente se llevan esto, alcanza. Vamos a recorrerlo pieza por pieza."</em></p>
-      <p><em>"Primera l&iacute;nea: method y path. <code>POST /projects/{id}/tasks</code>. <code>POST</code> porque estamos creando algo nuevo. El path dice sobre qu&eacute; lo creamos: dentro de las tareas del proyecto cuyo id viene en el path. Sustantivo en plural, jerarqu&iacute;a expl&iacute;cita; las dos reglas REST que vimos en la secci&oacute;n anterior."</em></p>
+      <p><em>"Primera l&iacute;nea: method y path. <code>POST /projects/{id}/tasks</code>. <code>POST</code> porque estamos creando algo nuevo. El path dice sobre qu&eacute; lo creamos: dentro de las tareas del proyecto cuyo id viene en el path. Recurso en plural, jerarqu&iacute;a expl&iacute;cita; las dos reglas REST que vimos en la secci&oacute;n anterior."</em></p>
       <p><em>"Entrada, body. Dos campos. <code>title</code> es un string y es requerido: si no viene, el endpoint rechaza el pedido. <code>due_date</code> es una fecha en formato ISO y es opcional: si no viene, no pasa nada. Tipos y opcionalidad expl&iacute;citos &mdash; la IA no improvisa qu&eacute; campos esperar."</em></p>
       <p><em>"Salida 201, creado. La forma exacta del JSON de respuesta cuando todo sale bien. Cuatro campos: el id que el servidor gener&oacute;, el title que mandaste, la due_date que mandaste o null si no la mandaste, y el project_id que vino del path. El frontend se programa contra esta forma; si la IA cambia un nombre, el frontend deja de andar."</em></p>
       <p><em>"Salida 400, datos inv&aacute;lidos. El cliente pidi&oacute; algo mal &mdash; en este caso, mand&oacute; un body sin title. El cuatrocientos dice &lsquo;tu pedido tiene un problema&rsquo;. Devolvemos un objeto con un campo error que explica qu&eacute; falt&oacute;."</em></p>
       <p><em>"Salida 404, proyecto no existe. El cliente pidi&oacute; crear una tarea dentro de un proyecto que no est&aacute;. Cuatrocientos cuatro dice &lsquo;eso que ped&iacute;s no existe&rsquo;. Mismo formato de error, distinto motivo. Los dos est&aacute;n contemplados antes de generar la primera l&iacute;nea de c&oacute;digo."</em></p>
-      <p><em>"Frase de cierre. Si falta title, no es opinable: est&aacute; escrito que devuelve cuatrocientos. La IA no decide; ejecuta. Eso es lo que hace que este bloque sea la unidad m&iacute;nima dictable, y eso es lo que vamos a comparar ahora con el componente de la semana pasada."</em></p>
+      <p><em>"Frase de cierre. Si falta title, no es opinable: est&aacute; escrito que devuelve cuatrocientos. La IA no decide; ejecuta. Eso es lo que hace que este bloque sea la unidad m&iacute;nima dictable."</em></p>
     </aside>
   </section>
 
-  <!-- §4.7: EL ESPEJO — endpoint con contrato &harr; componente con props/state -->
-  <section>
-    <h2>El espejo &mdash; el &aacute;tomo dictable, los dos lados</h2>
-    <div class="comparison-2col s4-mirror" style="margin-top: 12px; align-items: stretch;">
-      <div class="bg-secondary-card" style="border-left: 4px solid var(--text-muted);">
-        <p class="s4-card-eyebrow" style="font-size: 0.6em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Frontend &mdash; semana 02</p>
-        <h3 style="color: var(--text-muted);">Componente con props y estado</h3>
-        <pre><code class="language-html" data-trim>&lt;span id="count"&gt;0&lt;/span&gt;
-&lt;button id="inc"&gt;+1&lt;/button&gt;</code></pre>
-        <pre style="margin-top: 8px;"><code class="language-javascript" data-trim>let count = 0;
-const span = document.querySelector('#count');
-const btn  = document.querySelector('#inc');
-btn.addEventListener('click', () =&gt; {
-  count++;
-  span.textContent = count;
-});</code></pre>
-        <p class="s4-card-foot" style="color: var(--text-muted);">El &aacute;tomo dictable del frontend.</p>
-      </div>
-      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
-        <p class="s4-card-eyebrow" style="font-size: 0.6em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px;">Backend &mdash; esta clase</p>
-        <h3 style="color: var(--accent);">Endpoint con contrato</h3>
-        <pre><code class="language-text" data-trim>POST /projects/{id}/tasks
-  entrada (body):
-    title     string, requerido
-    due_date  ISO, opcional
-  salida 201: { id, title, due_date, project_id }
-  salida 400: title es requerido
-  salida 404: proyecto no existe</code></pre>
-        <p class="s4-card-foot" style="color: var(--accent);">El &aacute;tomo dictable del backend.</p>
-      </div>
-    </div>
-    <p style="margin-top: 22px; font-size: 0.82em; text-align: center; max-width: 44em; margin-left: auto; margin-right: auto;">
-      Una pieza chica, con bordes claros, que peg&aacute;s a la IA <span style="color: var(--accent);">sin tener que aclarar nada m&aacute;s</span>. El &aacute;tomo dictable tambi&eacute;n tiene gemelo del lado del servidor.
-    </p>
-    <aside class="notes">
-      <p><u>Slide central de la analog&iacute;a. Cierra el espejo de toda la semana: lo que la semana 02 fue para el frontend, esta clase es para el backend.</u></p>
-      <p><em>"Esta es la slide a la que apunta toda la semana. Mir&aacute; los dos lados al mismo tiempo."</em></p>
-      <p><em>"Izquierda. La semana pasada armamos el contador. Dos l&iacute;neas de HTML &mdash; un span con id count, un button con id inc &mdash; y seis l&iacute;neas de JavaScript que conectan el dato con el evento y con el DOM. Eso es un componente: una pieza con su estructura, su estado y sus eventos. El &aacute;tomo dictable del frontend. Cuando le pegabas eso a la IA y le ped&iacute;as &lsquo;agregale un bot&oacute;n de reset&rsquo;, no ten&iacute;as que aclarar nada m&aacute;s. La pieza es chiquita, los bordes son claros, el modelo entiende exactamente qu&eacute; tocar."</em></p>
-      <p><em>"Derecha. El bloque de contrato que armamos en la slide anterior. Method, path, schema-in, schema-out, c&oacute;digos posibles. Cinco l&iacute;neas. Mismo principio: una pieza chiquita, con bordes claros, que la IA puede implementar sin inventar. Cuando le peg&aacute;s eso a Claude o a ChatGPT y le dec&iacute;s &lsquo;implement&aacute; este endpoint en FastAPI&rsquo;, no necesit&aacute; aclarar nada m&aacute;s. Es el &aacute;tomo dictable del backend."</em></p>
-      <p><em>"La idea grande: el rol no cambi&oacute; al cruzar al servidor. Lo que cambi&oacute; es la forma del &aacute;tomo. En el navegador, un componente con su HTML, su estado y sus eventos. En el servidor, un endpoint con su method, su path, sus schemas y sus c&oacute;digos. Misma operaci&oacute;n: pieza chica, bordes claros, dictarle a la IA, leer lo que devuelve. Si te llev&aacute;s una sola idea de las dos clases juntas, llev&aacute;te esta: el &aacute;tomo dictable tiene gemelo del lado del servidor."</em></p>
-    </aside>
-  </section>
-
-  <!-- §4.8: Vago vs específico — closing pattern -->
+  <!-- §4.7: Vago vs específico — closing pattern -->
   <section>
     <h2>C&oacute;mo le ped&iacute;s un endpoint a una IA</h2>
     <div class="comparison-2col" style="margin-top: 12px; align-items: stretch;">
@@ -1692,7 +1637,7 @@ btn.addEventListener('click', () =&gt; {
       <span class="accent">El servidor es lo que se la da.</span>
     </p>
     <p style="margin-top: 28px; font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 28em; margin-left: auto; margin-right: auto; font-style: italic;">
-      Refrescabas la pestaña y la to-do list desaparecía.
+      Refrescabas la pestaña y todo lo que habías hecho desaparecía.
       Eso no era un bug; era el modelo.
     </p>
     <aside class="notes">
@@ -1790,7 +1735,7 @@ tasks
           Cuando hay relaciones claras entre entidades y querés integridad de fábrica.
         </p>
         <p style="font-size: 0.72em; color: var(--text-muted); margin-top: 12px;">
-          Facturación, inventario, gestión de cualquier dominio que se modela con sustantivos relacionados.
+          Facturación, inventario, gestión de cualquier dominio que se modela con entidades relacionadas.
         </p>
       </div>
       <div class="bg-secondary-card" style="border-left: 4px solid var(--accent-secondary);">
@@ -1804,11 +1749,11 @@ tasks
       </div>
     </div>
     <p style="margin-top: 24px; font-size: 0.78em; text-align: center; max-width: 36em; margin-left: auto; margin-right: auto;">
-      Heurística para este curso: la mayoría de las apps que vas a construir <span style="color: var(--accent);">empiezan relational y se quedan ahí</span>. Document requiere un patrón concreto que lo justifique.
+      Heurística para este curso: <span style="color: var(--accent);">la mayoría de las apps arrancan relational</span>. Document tiene sentido cuando el patrón de datos lo pide.
     </p>
     <aside class="notes">
       <u>Trade-off explícito. Cierra la elección antes de aterrizar SQLite.</u>
-      <p><em>"La heurística es directa. Relational cuando hay relaciones claras entre entidades y querés integridad: facturación, inventario, gestión de cualquier dominio que se modela con sustantivos que se relacionan entre sí. Tareas que pertenecen a proyectos, facturas que tienen líneas, usuarios que tienen pedidos. Toda la familia."</em></p>
+      <p><em>"La heurística es directa. Relational cuando hay relaciones claras entre entidades y querés integridad: facturación, inventario, gestión de cualquier dominio que se modela con entidades que se relacionan entre sí. Tareas que pertenecen a proyectos, facturas que tienen líneas, usuarios que tienen pedidos. Toda la familia."</em></p>
       <p><em>"Document cuando el dato es jerárquico, el schema es flexible, y el acceso natural es por documento entero. Perfiles de usuario donde cada uno tiene campos distintos, logs de eventos donde la forma cambia con cada versión del producto, cachés de respuestas que vienen de servicios externos."</em></p>
       <p><em>"La regla pragmática para este curso, y para casi cualquier app que vas a empezar a construir: arrancás relational, y la mayoría de las veces te quedás ahí. Ir a document es una decisión deliberada que tiene que justificarse con un patrón concreto. No es por defecto, no es por moda. La consecuencia útil de esto es que sabemos qué es lo que vamos a usar para el demo."</em></p>
     </aside>
@@ -2324,17 +2269,17 @@ proyectos?</code></pre>
   <section>
     <h2>Por qu&eacute; importa que sea un archivo</h2>
     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px;">
-      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+      <div class="bg-secondary-card fragment fade-in" style="border-left: 4px solid var(--accent);">
         <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Raz&oacute;n 1</p>
         <h3 style="font-size: 1em; color: var(--accent); margin: 0 0 8px;">Menos ambig&uuml;edad</h3>
         <p style="font-size: 0.78em; line-height: 1.5; margin: 0;">Tipos, formatos, requeridos, nullables: <strong>fijados</strong>. Lo que en un prompt es opinable, en el yaml est&aacute; escrito. La IA no improvisa.</p>
       </div>
-      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+      <div class="bg-secondary-card fragment fade-in" style="border-left: 4px solid var(--accent);">
         <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Raz&oacute;n 2</p>
         <h3 style="font-size: 1em; color: var(--accent); margin: 0 0 8px;">Codegen real</h3>
         <p style="font-size: 0.78em; line-height: 1.5; margin: 0;">Del mismo archivo: <strong>docs interactivas</strong> (Swagger UI), <strong>clientes</strong> en cualquier lenguaje, <strong>mocks</strong>, <strong>tests de contrato</strong>. Una sola fuente, muchos artefactos.</p>
       </div>
-      <div class="bg-secondary-card" style="border-left: 4px solid var(--accent);">
+      <div class="bg-secondary-card fragment fade-in" style="border-left: 4px solid var(--accent);">
         <p style="font-size: 0.6em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 6px;">Raz&oacute;n 3</p>
         <h3 style="font-size: 1em; color: var(--accent); margin: 0 0 8px;">Durabilidad</h3>
         <p style="font-size: 0.78em; line-height: 1.5; margin: 0;">No es un prompt que se pierde. Es un archivo en el repo: <strong>se versiona</strong>, se compara entre branches, se vuelve a dictar.</p>
@@ -2373,7 +2318,42 @@ proyectos?</code></pre>
     </aside>
   </section>
 
-  <!-- §8.2: Lo que el yaml tiene que tener — 5 requisitos -->
+  <!-- §8.2: La plantilla — el primer prompt -->
+  <section>
+    <h2>El primer prompt &mdash; antes de invocar canvas</h2>
+    <p style="font-size: 0.72em; color: var(--text-muted); text-align: center; max-width: 38em; margin: 4px auto 14px;">
+      Le damos el qu&eacute;. Canvas se abre. Editamos en vivo.
+    </p>
+    <pre style="margin: 0 auto; max-width: 38em; font-size: 0.7em; box-shadow: none;"><code class="language-text" data-trim data-line-numbers="|1|3-5|7-12|14"
+>Necesito un openapi.yaml (3.1) para una API de proyectos y tareas.
+
+recursos:
+  Project   { id, name }
+  Task      { id, title, due_date?, project_id }
+
+endpoints:
+  GET    /projects
+  POST   /projects
+  GET    /projects/{id}/tasks
+  POST   /projects/{id}/tasks   &rarr; 201 / 400 / 404
+  DELETE /projects/{id}/tasks/{taskId}
+
+abrilo en canvas para que podamos editarlo juntos.</code></pre>
+    <p style="margin-top: 18px; font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 38em; margin-left: auto; margin-right: auto;">
+      Mismo dominio que el §4. Mismas cinco piezas. Ahora hechas archivo.
+    </p>
+    <aside class="notes">
+      <p><strong>Mostrar el bloque entero, sin highlight, mientras se tipea en vivo. Click 1 ilumina la l&iacute;nea de framing. Click 2 ilumina recursos. Click 3 ilumina endpoints. Click 4 ilumina la l&iacute;nea de canvas.</strong></p>
+      <p><u>Plantilla del prompt. Misma forma que §4.6 y §3.9 (vago vs espec&iacute;fico): expl&iacute;cita, pieza por pieza, mapeable a lo que termina escrito.</u></p>
+      <p><em>"Antes de invocar canvas, escribimos el prompt a mano. Esta plantilla la van a ver levantarse en vivo en mi pantalla. Vamos a recorrerla pieza por pieza, igual que recorrimos el bloque del §4."</em></p>
+      <p><em>"Primera l&iacute;nea: el framing. <code>openapi.yaml (3.1) para una API de proyectos y tareas</code>. Tres elecciones expl&iacute;citas &mdash; el formato (yaml), la versi&oacute;n (3.1) y el dominio (proyectos y tareas, el mismo del §4). Cero ambig&uuml;edad."</em></p>
+      <p><em>"Recursos. Dos: <code>Project</code> con id y name; <code>Task</code> con id, title, due_date opcional, y project_id. La interrogaci&oacute;n marca campos opcionales, igual que en TypeScript. Los nombres son los mismos que vinimos usando."</em></p>
+      <p><em>"Endpoints. Cinco. GET y POST sobre <code>/projects</code>; despu&eacute;s GET, POST y DELETE sobre <code>/projects/{id}/tasks</code> con anidaci&oacute;n. Tres methods, jerarqu&iacute;a expl&iacute;cita, y en el POST anidado dictamos los tres status: 201 cuando se cre&oacute;, 400 cuando el body est&aacute; mal, 404 cuando el proyecto no existe. Las cinco piezas del §4."</em></p>
+      <p><em>"&Uacute;ltima l&iacute;nea: <code>abrilo en canvas</code>. Eso le dice al modelo que esto va a ser un documento que vamos a editar en colaboraci&oacute;n, no una respuesta corta del chat. Si por alguna raz&oacute;n no se abre, lo pedimos expl&iacute;citamente."</em></p>
+    </aside>
+  </section>
+
+  <!-- §8.3: Lo que el yaml tiene que tener — 5 requisitos -->
   <section>
     <h2>Lo que el yaml tiene que tener</h2>
     <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 18px;">
@@ -2408,43 +2388,8 @@ proyectos?</code></pre>
     </p>
     <aside class="notes">
       <p><u>Los cinco requisitos del demo. Sirve como contrato visible con el aula sobre qu&eacute; tiene que aparecer en el yaml.</u></p>
-      <p><em>"Antes de tocar nada, dejemos a la vista qu&eacute; tiene que tener el yaml. Cinco cosas. Tres methods HTTP &mdash; m&iacute;nimo GET, POST y DELETE. Una jerarqu&iacute;a de recursos &mdash; <code>projects</code> y dentro <code>tasks</code>, anidaci&oacute;n visible en el path. Una respuesta de error documentada &mdash; al menos un 400 o un 404. Schemas con tipos, requireds, formatos. E iteraci&oacute;n en vivo &mdash; vamos a agregar un endpoint sin reescribir el archivo entero."</em></p>
+      <p><em>"Antes de mandar el prompt, dejemos a la vista qu&eacute; tiene que tener el yaml. Cinco cosas. Tres methods HTTP &mdash; m&iacute;nimo GET, POST y DELETE. Una jerarqu&iacute;a de recursos &mdash; <code>projects</code> y dentro <code>tasks</code>, anidaci&oacute;n visible en el path. Una respuesta de error documentada &mdash; al menos un 400 o un 404. Schemas con tipos, requireds, formatos. E iteraci&oacute;n en vivo &mdash; vamos a agregar un endpoint sin reescribir el archivo entero."</em></p>
       <p><em>"Y abajo, el descargo de foco. No hay implementaci&oacute;n, ni base de datos real, ni autenticaci&oacute;n, ni deploy. Hoy es el contrato como archivo, le&iacute;do y editable. Si en alg&uacute;n momento alguno de estos cinco no aparece, me lo marcan."</em></p>
-    </aside>
-  </section>
-
-  <!-- §8.3: La plantilla — el primer prompt -->
-  <section>
-    <h2>El primer prompt &mdash; antes de invocar canvas</h2>
-    <p style="font-size: 0.72em; color: var(--text-muted); text-align: center; max-width: 38em; margin: 4px auto 14px;">
-      Le damos el qu&eacute;. Canvas se abre. Editamos en vivo.
-    </p>
-    <pre style="margin: 0 auto; max-width: 38em; font-size: 0.7em; box-shadow: none;"><code class="language-text" data-trim data-line-numbers="|1|3-5|7-12|14"
->Necesito un openapi.yaml (3.1) para una API de proyectos y tareas.
-
-recursos:
-  Project   { id, name }
-  Task      { id, title, due_date?, project_id }
-
-endpoints:
-  GET    /projects
-  POST   /projects
-  GET    /projects/{id}/tasks
-  POST   /projects/{id}/tasks   &rarr; 201 / 400 / 404
-  DELETE /projects/{id}/tasks/{taskId}
-
-abrilo en canvas para que podamos editarlo juntos.</code></pre>
-    <p style="margin-top: 18px; font-size: 0.78em; color: var(--text-muted); text-align: center; max-width: 38em; margin-left: auto; margin-right: auto;">
-      Mismo dominio que el §4. Mismas cinco piezas. Ahora hechas archivo.
-    </p>
-    <aside class="notes">
-      <p><strong>Mostrar el bloque entero, sin highlight, mientras se tipea en vivo. Click 1 ilumina la l&iacute;nea de framing. Click 2 ilumina recursos. Click 3 ilumina endpoints. Click 4 ilumina la l&iacute;nea de canvas.</strong></p>
-      <p><u>Plantilla del prompt. Misma forma que §4.6 y §3.9 (vago vs espec&iacute;fico): expl&iacute;cita, pieza por pieza, mapeable a lo que termina escrito.</u></p>
-      <p><em>"Antes de invocar canvas, escribimos el prompt a mano. Esta plantilla la van a ver levantarse en vivo en mi pantalla. Vamos a recorrerla pieza por pieza, igual que recorrimos el bloque del §4."</em></p>
-      <p><em>"Primera l&iacute;nea: el framing. <code>openapi.yaml (3.1) para una API de proyectos y tareas</code>. Tres elecciones expl&iacute;citas &mdash; el formato (yaml), la versi&oacute;n (3.1) y el dominio (proyectos y tareas, el mismo del §4). Cero ambig&uuml;edad."</em></p>
-      <p><em>"Recursos. Dos: <code>Project</code> con id y name; <code>Task</code> con id, title, due_date opcional, y project_id. La interrogaci&oacute;n marca campos opcionales, igual que en TypeScript. Los nombres son los mismos que vinimos usando."</em></p>
-      <p><em>"Endpoints. Cinco. GET y POST sobre <code>/projects</code>; despu&eacute;s GET, POST y DELETE sobre <code>/projects/{id}/tasks</code> con anidaci&oacute;n. Tres methods, jerarqu&iacute;a expl&iacute;cita, y en el POST anidado dictamos los tres status: 201 cuando se cre&oacute;, 400 cuando el body est&aacute; mal, 404 cuando el proyecto no existe. Las cinco piezas del §4."</em></p>
-      <p><em>"&Uacute;ltima l&iacute;nea: <code>abrilo en canvas</code>. Eso le dice al modelo que esto va a ser un documento que vamos a editar en colaboraci&oacute;n, no una respuesta corta del chat. Si por alguna raz&oacute;n no se abre, lo pedimos expl&iacute;citamente."</em></p>
     </aside>
   </section>
 

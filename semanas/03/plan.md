@@ -75,7 +75,7 @@ NB: omitido un hook tipo big-question (era redundante con la pregunta de semana 
 4. Todo es recurso — concepto + ejemplos: colección (`/projects`), item (`/projects/4`), recurso anidado (`/projects/4/tasks`, `/projects/4/tasks/17`). Mantra: "el method dice qué hacer; la URL dice sobre qué".
 5. Regla 1 — Plural. `comparison-2col` `/users` ↔ `/user`, con explicación corta.
 6. Regla 2 — Jerarquía cuando hay relación. Pertenencia estructural vs opcional con dos ejemplos: `/projects/4/tasks` (anidado) ↔ `/tasks?project=4` (filtro plano).
-7. Regla 3 — Idempotencia. Tabla con 5 methods × idempotente sí/no, con consecuencia práctica (retentar sin miedo vs duplicar).
+7. Regla 3 — Idempotencia. Tabla con 5 methods × idempotente sí/no, con consecuencia práctica (reintentar sin miedo vs duplicar).
 8. Regla 4 — Stateless. Frase + por qué importa para escalar y por qué van a aparecer tokens de auth en semana 7.
 9. Vago vs específico (con el ejemplo del source).
 

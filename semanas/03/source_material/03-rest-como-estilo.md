@@ -12,7 +12,7 @@ HTTP es el transporte: define cómo viaja un pedido y cómo viene la respuesta. 
 
 ## Todo es un recurso
 
-La idea central de REST es que todo lo que la API expone es un **recurso**: un sustantivo. Un proyecto, una tarea, un usuario, un mensaje. Las URLs nombran sustantivos, no acciones. Eso es lo que descarta `/borrar-tarea` y deja `/tasks/17`.
+La idea central de REST es que todo lo que la API expone es un **recurso**: una cosa concreta. Un proyecto, una tarea, un usuario, un mensaje. Las URLs nombran recursos, no acciones. Eso es lo que descarta `/borrar-tarea` y deja `/tasks/17`.
 
 Los recursos vienen en dos formas. Una **colección** es el conjunto entero — `/projects` significa "todos los proyectos". Un **item** es uno solo — `/projects/4` es "el proyecto cuatro". Si un recurso solamente tiene sentido dentro de otro, anidás: `/projects/4/tasks` son "las tareas del proyecto cuatro", y `/projects/4/tasks/17` es la tarea 17 de ese proyecto.
 
@@ -22,7 +22,7 @@ La regla mental: el method dice qué hacer; la URL dice sobre qué. `GET /projec
 
 ### Recursos en plural
 
-Convención: `/users`, no `/user`. `/projects`, no `/project`. La URL nombra una colección, y una colección está en plural. Cuando querés uno solo, el item aparece como `/users/42`, no como un sustantivo distinto. Es chico, pero la consistencia importa: una API mezclada entre singular y plural se vuelve impredecible para quien la consume, incluida la IA que le genera el cliente.
+Convención: `/users`, no `/user`. `/projects`, no `/project`. La URL nombra una colección, y una colección está en plural. Cuando querés uno solo, el item aparece como `/users/42`, no como un recurso distinto. Es chico, pero la consistencia importa: una API mezclada entre singular y plural se vuelve impredecible para quien la consume, incluida la IA que le genera el cliente.
 
 ### Jerarquía cuando hay relación
 
@@ -32,7 +32,7 @@ Convención: `/users`, no `/user`. `/projects`, no `/project`. La URL nombra una
 
 Una operación es **idempotente** si llamarla dos veces deja el sistema igual que llamarla una. GET lo es: leer dos veces no cambia nada. DELETE también: borrar algo borrado sigue dejándolo borrado. PUT igual: reemplazar un recurso por la misma versión dos veces da el mismo estado final. POST no: dos POST a `/projects` crean dos proyectos distintos.
 
-La consecuencia práctica aparece cuando un request falla y no sabés si llegó. Si era idempotente, retentás sin miedo. Si era POST, retentar duplica.
+La consecuencia práctica aparece cuando un request falla y no sabés si llegó. Si era idempotente, reintentás sin miedo. Si era POST, reintentar duplica.
 
 ### Sin estado entre requests
 

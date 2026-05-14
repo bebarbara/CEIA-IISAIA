@@ -25,12 +25,12 @@
 
 ## Section 3: REST como estilo
 **Source material:** `source_material/03-rest-como-estilo.md`
-**Through-line:** HTTP es el cómo (transporte); REST es el qué (convención sobre qué se transporta y cómo se nombra). Todo es recurso, las URLs nombran sustantivos no acciones, y cuatro reglas (plural, jerarquía, idempotencia, stateless) ordenan cómo se piden las cosas.
+**Through-line:** HTTP es el cómo (transporte); REST es el qué (convención sobre qué se transporta y cómo se nombra). Todo es recurso, las URLs nombran recursos no acciones, y cuatro reglas (plural, jerarquía, idempotencia, stateless) ordenan cómo se piden las cosas.
 **Hook:** Querés borrar la tarea 17 del proyecto 4. ¿`DELETE /projects/4/tasks/17` o `POST /borrar-tarea?id=17&proyecto=4`? Las dos son HTTP válido. Una sola es REST.
 **What students walk away knowing:**
 - REST es una convención (no la única — GraphQL y RPC existen), y la mayoría de las APIs que vas a dictar la usan.
 - Las URLs nombran recursos en plural; el method dice qué hacer, la URL dice sobre qué; anidás cuando la pertenencia es estructural.
-- Idempotencia (GET/DELETE/PUT sí, POST no) y stateless: por qué cada propiedad cambia cómo retentás y cómo escala el servidor.
+- Idempotencia (GET/DELETE/PUT sí, POST no) y stateless: por qué cada propiedad cambia cómo reintentás y cómo escala el servidor.
 **Animations / interactive:** None new. `comparison-2col` para `DELETE /projects/4/tasks/17` vs `POST /borrar-tarea?...`. Para idempotencia, slide con dos llamadas seguidas y el estado final visible.
 **Slide budget:** 7–9
 

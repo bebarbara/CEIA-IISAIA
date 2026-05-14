@@ -53,9 +53,9 @@ El trade-off es directo: anidar es cómodo cuando siempre leés "todo de un proy
 
 ## Cómo elegir
 
-La heurística es simple. Relational cuando hay relaciones claras entre entidades y querés integridad: facturación, inventario, gestión de cualquier dominio que se modela con sustantivos relacionados. Document cuando el dato es jerárquico, de schema flexible, optimizado para acceso por documento: perfiles con muchos campos opcionales, logs, eventos.
+La heurística es simple. Relational cuando hay relaciones claras entre entidades y querés integridad: facturación, inventario, gestión de cualquier dominio que se modela con entidades relacionadas. Document cuando el dato es jerárquico, de schema flexible, optimizado para acceso por documento: perfiles con muchos campos opcionales, logs, eventos.
 
-La regla pragmática para este curso: la mayoría de las apps que vas a construir empiezan relational y se quedan ahí. Ir a document es una decisión que tiene que justificarse con un patrón de datos concreto.
+La regla pragmática para este curso: la mayoría de las apps arrancan relational. Ir a document tiene sentido cuando el patrón de datos lo pide.
 
 ## SQLite como entry point
 

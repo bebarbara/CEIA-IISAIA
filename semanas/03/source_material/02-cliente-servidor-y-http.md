@@ -34,9 +34,9 @@ Content-Type: application/json
 
 Ese ida y vuelta, repetido millones de veces por segundo, es internet.
 
-## Los methods: los sustantivos del trabajo
+## Los methods: el repertorio de operaciones
 
-HTTP define un puñado de métodos, llamados *methods*. La palabra engaña: no son acciones que vos componés libremente, son los pocos sustantivos del trabajo que pedís — las operaciones que se repiten en toda API.
+HTTP define un puñado de métodos, llamados *methods*. La palabra engaña: no son acciones que vos componés libremente, son el repertorio fijo de operaciones que pedís — las que se repiten en toda API.
 
 Los cinco que importan:
 
