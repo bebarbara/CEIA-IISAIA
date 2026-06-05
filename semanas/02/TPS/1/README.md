@@ -1,4 +1,4 @@
-# 🎾 Confirmación de Entrega IISAI - Mini Juego de Tenis
+# 🎾 Confirmación de Entrega IISAIA - Mini Juego de Tenis
 
 Sistema interactivo para confirmar la entrega de trabajos prácticos mediante un desafío de tenis en tiempo real.
 
