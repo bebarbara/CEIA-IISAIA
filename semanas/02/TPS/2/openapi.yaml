@@ -1,0 +1,810 @@
+openapi: 3.1.0
+
+info:
+  title: Task Tracker - API de Trabajos Prácticos Atrasados
+  description: |
+    API para gestionar trabajos prácticos, hacer seguimiento de plazos y 
+    registrar entregas con validación de atrasos.
+    
+    Esta API permite:
+    - Crear trabajos prácticos por materia
+    - Registrar entregas de trabajos
+    - Posponer fechas de entrega
+    - Calcular tiempo restante y días de atraso
+    - Gestionar clases/materias
+  version: 1.0.0
+  contact:
+    name: Soporte de Trabajos Prácticos
+    email: soporte@iisai.edu.ar
+  license:
+    name: MIT
+    identifier: MIT
+
+servers:
+  - url: http://localhost:3000/api
+    description: Servidor de desarrollo
+  - url: https://api.iisai.edu.ar/api
+    description: Servidor de producción
+
+tags:
+  - name: Clases
+    description: Operaciones sobre materias/clases
+  - name: Trabajos
+    description: Operaciones sobre trabajos prácticos
+  - name: Entregas
+    description: Seguimiento de entregas y atrasos
+
+paths:
+  /clases:
+    get:
+      summary: Obtener todas las clases
+      tags:
+        - Clases
+      operationId: getClases
+      responses:
+        '200':
+          description: Lista de clases obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Class'
+              example:
+                - id: "clase-001"
+                  name: "Análisis Matemático I"
+                - id: "clase-002"
+                  name: "Programación I"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      summary: Crear una nueva clase
+      tags:
+        - Clases
+      operationId: createClase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: Nombre de la clase/materia
+                  example: "Algoritmos y Estructuras de Datos"
+      responses:
+        '201':
+          description: Clase creada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Class'
+              example:
+                id: "clase-003"
+                name: "Algoritmos y Estructuras de Datos"
+        '400':
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /trabajos:
+    post:
+      summary: Crear un nuevo trabajo práctico
+      tags:
+        - Trabajos
+      operationId: createTrabajo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - end_date
+                - class_id
+              properties:
+                title:
+                  type: string
+                  description: Título del trabajo práctico
+                  example: "TP 1 - Sorteo de arrays"
+                end_date:
+                  type: string
+                  format: date-time
+                  description: Fecha y hora de vencimiento del trabajo
+                  example: "2026-05-13T23:59:59Z"
+                class_id:
+                  type: string
+                  description: ID de la clase a la que pertenece
+                  example: "clase-001"
+      responses:
+        '201':
+          description: Trabajo práctico creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+              example:
+                id: "tarea-001"
+                title: "TP 1 - Sorteo de arrays"
+                end_date: "2026-05-13T23:59:59Z"
+                class_id: "clase-001"
+                created_at: "2026-04-01T10:00:00Z"
+        '400':
+          description: Solicitud inválida (campos faltantes o formato incorrecto)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Bad Request"
+                message: "El campo 'title' es requerido"
+                status: 400
+        '404':
+          description: Clase no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Not Found"
+                message: "La clase con ID 'clase-999' no existe"
+                status: 404
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    get:
+      summary: Obtener todos los trabajos prácticos
+      tags:
+        - Trabajos
+      operationId: getTrabajosAll
+      parameters:
+        - name: class_id
+          in: query
+          description: Filtrar por clase (opcional)
+          schema:
+            type: string
+          example: "clase-001"
+      responses:
+        '200':
+          description: Lista de trabajos obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+              example:
+                - id: "tarea-001"
+                  title: "TP 1 - Sorteo de arrays"
+                  end_date: "2026-05-13T23:59:59Z"
+                  class_id: "clase-001"
+                  created_at: "2026-04-01T10:00:00Z"
+                - id: "tarea-002"
+                  title: "TP 2 - Búsqueda binaria"
+                  end_date: "2026-06-10T23:59:59Z"
+                  class_id: "clase-001"
+                  created_at: "2026-04-15T10:00:00Z"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /trabajos/{id_task}:
+    get:
+      summary: Obtener un trabajo práctico específico
+      tags:
+        - Trabajos
+      operationId: getTrabajo
+      parameters:
+        - name: id_task
+          in: path
+          required: true
+          description: ID del trabajo práctico
+          schema:
+            type: string
+          example: "tarea-001"
+      responses:
+        '200':
+          description: Trabajo obtenido exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+              example:
+                id: "tarea-001"
+                title: "TP 1 - Sorteo de arrays"
+                end_date: "2026-05-13T23:59:59Z"
+                class_id: "clase-001"
+                created_at: "2026-04-01T10:00:00Z"
+        '404':
+          description: Trabajo no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Not Found"
+                message: "El trabajo con ID 'tarea-999' no existe"
+                status: 404
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Eliminar un trabajo práctico
+      tags:
+        - Trabajos
+      operationId: deleteTrabajo
+      parameters:
+        - name: id_task
+          in: path
+          required: true
+          description: ID del trabajo práctico a eliminar
+          schema:
+            type: string
+          example: "tarea-001"
+      responses:
+        '204':
+          description: Trabajo eliminado exitosamente
+        '404':
+          description: Trabajo no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /trabajos/{id_task}/posponer:
+    put:
+      summary: Posponer la fecha de entrega de un trabajo
+      tags:
+        - Trabajos
+      operationId: postponeTrabajo
+      parameters:
+        - name: id_task
+          in: path
+          required: true
+          description: ID del trabajo práctico a posponer
+          schema:
+            type: string
+          example: "tarea-001"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - new_end_date
+              properties:
+                new_end_date:
+                  type: string
+                  format: date-time
+                  description: Nueva fecha de vencimiento
+                  example: "2026-05-20T23:59:59Z"
+                reason:
+                  type: string
+                  description: Razón del aplazamiento (opcional)
+                  example: "Problemas técnicos"
+      responses:
+        '200':
+          description: Fecha de entrega pospuesta exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  old_end_date:
+                    type: string
+                    format: date-time
+                  new_end_date:
+                    type: string
+                    format: date-time
+                  postponed_at:
+                    type: string
+                    format: date-time
+                  reason:
+                    type: string
+              example:
+                id: "tarea-001"
+                title: "TP 1 - Sorteo de arrays"
+                old_end_date: "2026-05-13T23:59:59Z"
+                new_end_date: "2026-05-20T23:59:59Z"
+                postponed_at: "2026-05-10T15:30:00Z"
+                reason: "Problemas técnicos"
+        '400':
+          description: Solicitud inválida (fecha anterior a hoy)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Bad Request"
+                message: "La nueva fecha debe ser posterior a hoy"
+                status: 400
+        '404':
+          description: Trabajo no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /tiempo-restante/{id_task}:
+    get:
+      summary: Obtener tiempo restante y estado de atraso
+      tags:
+        - Entregas
+      operationId: getTiempoRestante
+      parameters:
+        - name: id_task
+          in: path
+          required: true
+          description: ID del trabajo práctico
+          schema:
+            type: string
+          example: "tarea-001"
+      responses:
+        '200':
+          description: Información de tiempo restante obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TiempoRestante'
+              examples:
+                aEnTiempo:
+                  value:
+                    id: "tarea-001"
+                    title: "TP 1 - Sorteo de arrays"
+                    end_date: "2026-05-13T23:59:59Z"
+                    days_remaining: 8
+                    hours_remaining: 12
+                    minutes_remaining: 45
+                    status: "en_tiempo"
+                    is_late: false
+                    days_late: 0
+                    message: "Te quedan 8 días, 12 horas y 45 minutos"
+                atrasado:
+                  value:
+                    id: "tarea-001"
+                    title: "TP 1 - Sorteo de arrays"
+                    end_date: "2026-05-13T23:59:59Z"
+                    days_remaining: -5
+                    hours_remaining: -2
+                    minutes_remaining: -30
+                    status: "atrasado"
+                    is_late: true
+                    days_late: 5
+                    message: "Estás 5 días atrasado en la entrega"
+        '404':
+          description: Trabajo no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Not Found"
+                message: "El trabajo con ID 'tarea-999' no existe"
+                status: 404
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /entregas:
+    post:
+      summary: Registrar una entrega de trabajo práctico
+      tags:
+        - Entregas
+      operationId: createEntrega
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id_task
+                - student_id
+                - submitted_at
+              properties:
+                id_task:
+                  type: string
+                  description: ID del trabajo entregado
+                  example: "tarea-001"
+                student_id:
+                  type: string
+                  description: ID del estudiante
+                  example: "estudiante-123"
+                submitted_at:
+                  type: string
+                  format: date-time
+                  description: Fecha y hora de entrega
+                  example: "2026-05-18T15:30:00Z"
+                notes:
+                  type: string
+                  description: Notas adicionales (opcional)
+                  example: "Entrega completada satisfactoriamente"
+      responses:
+        '201':
+          description: Entrega registrada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entrega'
+              example:
+                id: "entrega-001"
+                id_task: "tarea-001"
+                student_id: "estudiante-123"
+                submitted_at: "2026-05-18T15:30:00Z"
+                days_late: 5
+                status: "atrasada"
+                registered_at: "2026-05-18T15:32:00Z"
+        '400':
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Trabajo o estudiante no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    get:
+      summary: Obtener todas las entregas
+      tags:
+        - Entregas
+      operationId: getEntregas
+      parameters:
+        - name: id_task
+          in: query
+          description: Filtrar por trabajo práctico (opcional)
+          schema:
+            type: string
+        - name: student_id
+          in: query
+          description: Filtrar por estudiante (opcional)
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Filtrar por estado (opcional)
+          schema:
+            type: string
+            enum: [en_tiempo, atrasada, no_entregada]
+      responses:
+        '200':
+          description: Lista de entregas obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Entrega'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /reportes/atrasos:
+    get:
+      summary: Obtener reporte de atrasos
+      tags:
+        - Entregas
+      operationId: getReporteAtrasos
+      parameters:
+        - name: class_id
+          in: query
+          description: Filtrar por clase (opcional)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Reporte de atrasos obtenido exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_trabajos:
+                    type: integer
+                  trabajos_entregados:
+                    type: integer
+                  trabajos_atrasados:
+                    type: integer
+                  trabajos_en_tiempo:
+                    type: integer
+                  porcentaje_atraso:
+                    type: number
+                  detalles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id_task:
+                          type: string
+                        title:
+                          type: string
+                        end_date:
+                          type: string
+                          format: date-time
+                        cantidad_atrasadas:
+                          type: integer
+                        promedio_dias_atraso:
+                          type: number
+              example:
+                total_trabajos: 5
+                trabajos_entregados: 4
+                trabajos_atrasados: 2
+                trabajos_en_tiempo: 2
+                porcentaje_atraso: 50
+                detalles:
+                  - id_task: "tarea-001"
+                    title: "TP 1 - Sorteo de arrays"
+                    end_date: "2026-05-13T23:59:59Z"
+                    cantidad_atrasadas: 2
+                    promedio_dias_atraso: 5.5
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Class:
+      type: object
+      description: Representa una clase o materia
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          description: Identificador único de la clase
+          example: "clase-001"
+        name:
+          type: string
+          description: Nombre de la clase/materia
+          example: "Análisis Matemático I"
+        created_at:
+          type: string
+          format: date-time
+          description: Fecha de creación
+          example: "2026-01-15T09:00:00Z"
+
+    Task:
+      type: object
+      description: Representa un trabajo práctico
+      required:
+        - id
+        - title
+        - end_date
+        - class_id
+      properties:
+        id:
+          type: string
+          description: Identificador único del trabajo
+          example: "tarea-001"
+        title:
+          type: string
+          description: Título del trabajo práctico
+          example: "TP 1 - Sorteo de arrays"
+        end_date:
+          type: string
+          format: date-time
+          description: Fecha y hora de vencimiento
+          example: "2026-05-13T23:59:59Z"
+        class_id:
+          type: string
+          description: ID de la clase a la que pertenece
+          example: "clase-001"
+        created_at:
+          type: string
+          format: date-time
+          description: Fecha de creación del trabajo
+          example: "2026-04-01T10:00:00Z"
+        description:
+          type: string
+          description: Descripción detallada del trabajo (opcional)
+          example: "Implementar un algoritmo de ordenamiento"
+
+    Entrega:
+      type: object
+      description: Representa una entrega de trabajo práctico
+      required:
+        - id
+        - id_task
+        - student_id
+        - submitted_at
+      properties:
+        id:
+          type: string
+          description: Identificador único de la entrega
+          example: "entrega-001"
+        id_task:
+          type: string
+          description: ID del trabajo entregado
+          example: "tarea-001"
+        student_id:
+          type: string
+          description: ID del estudiante
+          example: "estudiante-123"
+        submitted_at:
+          type: string
+          format: date-time
+          description: Fecha y hora de entrega
+          example: "2026-05-18T15:30:00Z"
+        days_late:
+          type: integer
+          description: Días de atraso (negativo si fue en tiempo)
+          example: 5
+        status:
+          type: string
+          enum: [en_tiempo, atrasada, no_entregada]
+          description: Estado de la entrega
+          example: "atrasada"
+        notes:
+          type: string
+          description: Notas adicionales
+          example: "Entrega completada satisfactoriamente"
+        registered_at:
+          type: string
+          format: date-time
+          description: Fecha de registro en el sistema
+          example: "2026-05-18T15:32:00Z"
+
+    TiempoRestante:
+      type: object
+      description: Información de tiempo restante y atraso
+      required:
+        - id
+        - title
+        - end_date
+        - status
+        - is_late
+      properties:
+        id:
+          type: string
+          description: ID del trabajo
+          example: "tarea-001"
+        title:
+          type: string
+          description: Título del trabajo
+          example: "TP 1 - Sorteo de arrays"
+        end_date:
+          type: string
+          format: date-time
+          description: Fecha de vencimiento
+          example: "2026-05-13T23:59:59Z"
+        days_remaining:
+          type: integer
+          description: Días restantes (negativo si está atrasado)
+          example: 8
+        hours_remaining:
+          type: integer
+          description: Horas restantes
+          example: 12
+        minutes_remaining:
+          type: integer
+          description: Minutos restantes
+          example: 45
+        status:
+          type: string
+          enum: [en_tiempo, proximo_a_vencer, atrasado]
+          description: Estado actual del trabajo
+          example: "en_tiempo"
+        is_late:
+          type: boolean
+          description: ¿Está atrasado?
+          example: false
+        days_late:
+          type: integer
+          description: Cantidad de días de atraso
+          example: 0
+        message:
+          type: string
+          description: Mensaje descriptivo para el usuario
+          example: "Te quedan 8 días, 12 horas y 45 minutos"
+
+    Error:
+      type: object
+      description: Respuesta de error estándar
+      required:
+        - error
+        - message
+        - status
+      properties:
+        error:
+          type: string
+          description: Tipo de error
+          example: "Bad Request"
+        message:
+          type: string
+          description: Descripción del error
+          example: "El campo 'title' es requerido"
+        status:
+          type: integer
+          description: Código HTTP del error
+          example: 400
+        timestamp:
+          type: string
+          format: date-time
+          description: Fecha y hora del error
+          example: "2026-05-10T14:30:00Z"
+        path:
+          type: string
+          description: Ruta del endpoint donde ocurrió el error
+          example: "/api/trabajos"
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Autenticación con token JWT
+
+security:
+  - bearerAuth: []
+
+x-custom:
+  metadata:
+    version: 1.0.0
+    status: "production"
+    lastUpdated: "2026-06-05"
+    author: "Task Tracker Team"
+    supportEmail: "soporte@iisai.edu.ar"

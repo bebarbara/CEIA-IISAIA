@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Torta de cumpleaños</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #fdf2f8;
+      color: #1f2937;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      color: #ec4899;
+      text-shadow: 0 4px 10px rgba(236, 72, 153, 0.25);
+      letter-spacing: 1px;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      max-width: 500px;
+      line-height: 1.5;
+      color: #374151;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    input {
+      width: 180px;
+      padding: 14px 16px;
+      border-radius: 999px;
+      border: 2px solid #f9a8d4;
+      background: white;
+      text-align: center;
+      font-size: 1.1rem;
+      color: #1f2937;
+      outline: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(236, 72, 153, 0.08);
+    }
+
+    input:focus {
+      border-color: #ec4899;
+      transform: scale(1.03);
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      width: 100%;
+    }
+
+    .cake-wrapper {
+      position: relative;
+      width: 360px;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cake {
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, #fecdd3 0%, #fda4af 45%, #fb7185 100%);
+      position: relative;
+      box-shadow:
+        0 20px 50px rgba(236, 72, 153, 0.25),
+        inset 0 8px 18px rgba(255,255,255,0.5);
+      overflow: hidden;
+      transition: transform 0.4s ease;
+    }
+
+    .cake:hover {
+      transform: scale(1.02) rotate(-1deg);
+    }
+
+    .icing {
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, #fff1f2 0%, #ffe4e6 100%);
+      opacity: 0.95;
+    }
+
+    .cake::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-image:
+        radial-gradient(#ec4899 2px, transparent 2px);
+      background-size: 28px 28px;
+      opacity: 0.18;
+    }
+
+    .slice-line {
+      position: absolute;
+      width: 2px;
+      height: 160px;
+      background: rgba(31, 41, 55, 0.45);
+      top: 0;
+      left: 50%;
+      transform-origin: bottom center;
+    }
+
+    .slice-number {
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.92);
+      color: #be185d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      transform: translate(-50%, -50%);
+      border: 2px solid #f9a8d4;
+    }
+
+    .result {
+      min-height: 40px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #be185d;
+      text-align: center;
+    }
+
+    button {
+      background: #ec4899;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 24px rgba(236, 72, 153, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-2px) scale(1.03);
+      background: #db2777;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .sparkles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: white;
+      opacity: 0.7;
+      animation: float 4s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+        opacity: 0.3;
+      }
+      50% {
+        transform: translateY(-12px);
+        opacity: 1;
+      }
+    }
+
+    footer {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .cake-wrapper {
+        width: 280px;
+        height: 280px;
+      }
+
+      .cake {
+        width: 260px;
+        height: 260px;
+      }
+
+      .icing {
+        width: 210px;
+        height: 210px;
+      }
+
+      .slice-line {
+        height: 130px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Torta de cumpleaños</h1>
+      <p class="subtitle">
+        La ciencia definitiva para cortar torta en cumpleaños familiares,
+        oficinas, bautismos, divorcios amistosos y reuniones donde siempre falta una porción.
+      </p>
+
+      <div class="controls">
+        <label for="guests">Cantidad de invitados (1 a 30)</label>
+        <input type="number" id="guests" min="1" max="30" placeholder="Ej: 12" />
+      </div>
+    </header>
+
+    <main>
+      <div class="cake-wrapper">
+        <div class="cake" id="cake">
+          <div class="icing"></div>
+        </div>
+
+        <div class="sparkles">
+          <div class="sparkle" style="top: 10%; left: 20%; animation-delay: 0s"></div>
+          <div class="sparkle" style="top: 25%; right: 18%; animation-delay: 1s"></div>
+          <div class="sparkle" style="bottom: 18%; left: 25%; animation-delay: 2s"></div>
+          <div class="sparkle" style="bottom: 12%; right: 22%; animation-delay: 1.5s"></div>
+        </div>
+      </div>
+
+      <button id="calculateBtn">Calcular</button>
+
+      <div class="result" id="result"></div>
+    </main>
+
+    <footer>
+      Método certificado por tías expertas en cumpleaños desde 1997.
+    </footer>
+  </div>
+
+  <script>
+    const calculateBtn = document.getElementById('calculateBtn');
+    const cake = document.getElementById('cake');
+    const result = document.getElementById('result');
+    const guestsInput = document.getElementById('guests');
+
+    function drawSlices(slices) {
+      document.querySelectorAll('.slice-line, .slice-number').forEach(el => el.remove());
+
+      const centerX = 160;
+      const centerY = 160;
+      const radius = 105;
+
+      for (let i = 0; i < slices; i++) {
+        const line = document.createElement('div');
+        line.classList.add('slice-line');
+
+        const angle = (360 / slices) * i;
+        line.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+
+        cake.appendChild(line);
+
+        const number = document.createElement('div');
+        number.classList.add('slice-number');
+        number.textContent = i + 1;
+
+        const radians = ((angle - 90) * Math.PI) / 180;
+        const x = centerX + radius * Math.cos(radians);
+        const y = centerY + radius * Math.sin(radians);
+
+        number.style.left = `${x}px`;
+        number.style.top = `${y}px`;
+
+        cake.appendChild(number);
+      }
+    }
+
+    calculateBtn.addEventListener('click', () => {
+      const guests = Number(guestsInput.value);
+
+      if (!guests || guests < 1 || guests > 30) {
+        result.textContent = 'Ingresá una cantidad válida entre 1 y 30 invitados 💕';
+        return;
+      }
+
+      const randomSlices = Math.floor(Math.random() * 30) + 1;
+
+      drawSlices(randomSlices);
+
+      result.innerHTML = `
+        Para <strong>${guests}</strong> invitados recomendamos mágicamente
+        <strong>${randomSlices}</strong> porciones 😊
+      `;
+    });
+  </script>
+</body>
+</html>

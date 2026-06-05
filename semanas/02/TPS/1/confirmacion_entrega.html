@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Entrega IISAI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: #0a0e27;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00ff00;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: #1a1f3a;
+            padding: 15px;
+            border-radius: 5px;
+            border: 2px solid #00ff00;
+        }
+
+        .player-info {
+            color: #00ff00;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .score {
+            color: #ffff00;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        #gameCanvas {
+            display: block;
+            background: #001a00;
+            border: 4px solid #00ff00;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            aspect-ratio: 4/3;
+        }
+
+        .instructions {
+            margin-top: 15px;
+            padding: 15px;
+            background: #1a1f3a;
+            border-left: 4px solid #ff6600;
+            color: #00ff00;
+            font-size: 0.95em;
+            border-radius: 3px;
+        }
+
+        .instructions strong {
+            color: #ff6600;
+        }
+
+        /* Modal de Game Over */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #0a0e27;
+            border: 4px solid #ff3333;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .professor-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #ff3333;
+            margin: 0 auto 20px;
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(255, 51, 51, 0.5);
+        }
+
+        .modal h2 {
+            color: #ff3333;
+            font-size: 2em;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+        }
+
+        .days-late {
+            color: #ffff00;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 20px 0;
+            background: #1a1f3a;
+            padding: 20px;
+            border-radius: 5px;
+            border: 2px solid #ff3333;
+        }
+
+        .days-late span {
+            color: #ff6600;
+            font-size: 1.3em;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-retry {
+            background: #00ff00;
+            color: #000;
+            border: 2px solid #00ff00;
+        }
+
+        .btn-retry:hover {
+            background: #00cc00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+            transform: scale(1.05);
+        }
+
+        .btn-confirm {
+            background: #00ff00;
+            color: #000;
+            border: 2px solid #00ff00;
+        }
+
+        .btn-confirm:hover {
+            background: #00cc00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+            transform: scale(1.05);
+        }
+
+        .success-modal {
+            display: none;
+        }
+
+        .success-modal.show {
+            display: flex;
+        }
+
+        .success-modal .modal-content {
+            border-color: #00ff00;
+        }
+
+        .success-modal h2 {
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        .success-message {
+            color: #00ff00;
+            font-size: 1.3em;
+            margin: 20px 0;
+        }
+
+        .difficulty-indicator {
+            text-align: right;
+            color: #ff6600;
+            font-size: 0.85em;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .modal-content {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ CONFIRMACIÓN DE ENTREGA IISAI ⚡</h1>
+        
+        <div class="game-info">
+            <div class="player-info">
+                ⏱️ TIEMPO RESTANTE
+                <div class="score" id="studentScore">15s</div>
+            </div>
+            <div style="color: #00ff00; font-size: 1.5em;">vs</div>
+            <div class="player-info" style="text-align: right;">
+                PROF. ENZO 👨‍🏫
+                <div class="score" id="professorScore">⏱️ 15</div>
+            </div>
+        </div>
+
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+        <div class="difficulty-indicator">
+            ⚠️ DIFICULTAD: La raqueta se aleja cuando golpeas
+        </div>
+
+        <div class="instructions">
+            <strong>CÓMO JUGAR:</strong> Usa el RATÓN para mover tu raqueta (abajo). 
+            Debes AGUANTAR 15 SEGUNDOS SIN PERDER NINGÚN TIRO para confirmar tu entrega. 
+            ¡Cuidado! Tu raqueta tiene un "problema de calibración"... 
+            Si el profesor anota, pierdes. ¡Mantente concentrado! 🎾⏱️
+        </div>
+    </div>
+
+    <!-- Modal Game Over -->
+    <div class="modal" id="gameOverModal">
+        <div class="modal-content">
+            <h2>¡PERDISTE! 😭</h2>
+
+            <div class="days-late">
+                Llevas <span id="daysLate">0</span> días de atraso
+            </div>
+            <p style="color: #ff6600; margin-bottom: 15px; font-style: italic;">
+                "Necesito que juegues mejor para poder aceptar tu trabajo..."
+            </p>
+            <div class="modal-buttons">
+                <button class="btn-retry" onclick="location.reload()">🎾 REINTENTAR 🎾</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Success -->
+    <div class="modal success-modal" id="successModal">
+        <div class="modal-content">
+            <h2>¡GANASTE! 🎉</h2>
+            <div class="success-message">
+                ✅ Tu trabajo ha sido confirmado exitosamente
+            </div>
+            <p style="color: #00ff00; margin-bottom: 15px; font-size: 1.2em; font-weight: bold;">
+                Solo tuviste <span id="daysLateSuccess">0</span> días de atraso
+            </p>
+            <div class="modal-buttons">
+                <button class="btn-confirm" onclick="alert('Trabajo registrado en el sistema. ¡Gracias por entregar!')">✓ CONTINUAR</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Ajustar canvas al tamaño del contenedor
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = Math.min(800, rect.width - 40);
+            canvas.height = canvas.width * 0.75;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Game variables
+        const game = {
+            ball: {
+                x: canvas.width / 2,
+                y: canvas.height / 2,
+                radius: 8,
+                vx: 6,
+                vy: 6,
+                speed: 6
+            },
+            paddleWidth: 120,
+            paddleHeight: 15,
+            studentPaddleWidth: 60,
+            student: {
+                x: canvas.width / 2 - 30,
+                y: canvas.height - 30,
+                score: 0
+            },
+            professor: {
+                x: canvas.width / 2 - 60,
+                y: 20,
+                score: 0
+            },
+            mouseX: canvas.width / 2,
+            gameActive: true,
+            startTime: Date.now(),
+            gameStartTime: Date.now(),
+            challengeDuration: 15000, // 15 segundos en milisegundos
+            daysLate: 0,
+            deliveryDate: new Date(2026, 4, 13) // 13 de mayo (mes 4 = mayo, 0-indexed)
+        };
+
+        // Mouse tracking
+        document.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            game.mouseX = e.clientX - rect.left;
+        });
+
+        // Cargar imagen del profesor
+        // Si la imagen no se carga, mostrar un placeholder
+        const img = new Image();
+        img.onload = function() {
+            document.getElementById('professorImg').src = img.src;
+        };
+        img.onerror = function() {
+            console.log('Nota: Abre este archivo en un navegador que permita acceso a archivos locales');
+        };
+        // Intentar cargar desde la ruta del archivo
+        img.src = '/mnt/user-data/uploads/1780634978380_image.png';
+        
+        // Alternativa: si usas este HTML en un servidor o localmente,
+        // puedes reemplazar la ruta anterior con la ruta correcta
+
+        function drawPaddle(x, y, width, height, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, width, height);
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x, y, width, height);
+        }
+
+        function drawBall(x, y, radius) {
+            ctx.fillStyle = '#ffff00';
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function drawCourt() {
+            // Background
+            ctx.fillStyle = '#001a00';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Border
+            ctx.strokeStyle = '#00ff00';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+            // Center line
+            ctx.strokeStyle = '#00ff0033';
+            ctx.setLineDash([10, 10]);
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height / 2);
+            ctx.lineTo(canvas.width, canvas.height / 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Net
+            ctx.strokeStyle = '#00ff00';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < canvas.height / 2; i += 15) {
+                ctx.beginPath();
+                ctx.moveTo(canvas.width / 2 - 10, i);
+                ctx.lineTo(canvas.width / 2 + 10, i);
+                ctx.stroke();
+            }
+        }
+
+        function updateStudentPaddle() {
+            // Dificultad: la raqueta se aleja levemente cuando la pelota se acerca
+            let targetX = game.mouseX - game.studentPaddleWidth / 2;
+
+            // Detección de proximidad
+            const distToBall = Math.abs(game.ball.x - game.mouseX);
+            const ballGettingClose = game.ball.y > canvas.height - 80 && game.ball.vy > 0;
+
+            if (ballGettingClose && distToBall < 100) {
+                // La raqueta se aleja un poco
+                const pushBack = (100 - distToBall) * 0.3;
+                if (game.mouseX < canvas.width / 2) {
+                    targetX -= pushBack;
+                } else {
+                    targetX += pushBack;
+                }
+            }
+
+            // Limitar al canvas
+            targetX = Math.max(0, Math.min(targetX, canvas.width - game.studentPaddleWidth));
+            
+            // Suavizado de movimiento
+            game.student.x += (targetX - game.student.x) * 0.2;
+        }
+
+        function updateProfessorPaddle() {
+            // IA perfecta del profesor
+            const paddleCenter = game.professor.x + game.paddleWidth / 2;
+            const ballCenter = game.ball.x;
+
+            if (Math.abs(paddleCenter - ballCenter) > 10) {
+                game.professor.x += (ballCenter - paddleCenter) * 0.15;
+            }
+
+            game.professor.x = Math.max(0, Math.min(game.professor.x, canvas.width - game.paddleWidth));
+        }
+
+        function updateBall() {
+            game.ball.x += game.ball.vx;
+            game.ball.y += game.ball.vy;
+
+            // Colisión con paredes laterales
+            if (game.ball.x - game.ball.radius < 0 || game.ball.x + game.ball.radius > canvas.width) {
+                game.ball.vx = -game.ball.vx;
+                game.ball.x = Math.max(game.ball.radius, Math.min(game.ball.x, canvas.width - game.ball.radius));
+            }
+
+            // Colisión con raqueta del estudiante
+            if (game.ball.y + game.ball.radius > game.student.y &&
+                game.ball.y - game.ball.radius < game.student.y + game.paddleHeight &&
+                game.ball.x > game.student.x &&
+                game.ball.x < game.student.x + game.studentPaddleWidth &&
+                game.ball.vy > 0) {
+                
+                game.ball.vy = -game.ball.vy;
+                const hitPos = (game.ball.x - game.student.x) / game.studentPaddleWidth;
+                game.ball.vx = (hitPos - 0.5) * 12;
+                game.ball.y = game.student.y - game.ball.radius;
+                game.ball.speed += 0.5;
+            }
+
+            // Colisión con raqueta del profesor
+            if (game.ball.y - game.ball.radius < game.professor.y + game.paddleHeight &&
+                game.ball.y + game.ball.radius > game.professor.y &&
+                game.ball.x > game.professor.x &&
+                game.ball.x < game.professor.x + game.paddleWidth &&
+                game.ball.vy < 0) {
+                
+                game.ball.vy = -game.ball.vy;
+                const hitPos = (game.ball.x - game.professor.x) / game.paddleWidth;
+                game.ball.vx = (hitPos - 0.5) * 12;
+                game.ball.y = game.professor.y + game.paddleHeight + game.ball.radius;
+                game.ball.speed += 0.5;
+            }
+
+            // Punto del profesor = PIERDES INMEDIATAMENTE
+            if (game.ball.y > canvas.height) {
+                endGame(false); // Pérdida inmediata
+            }
+
+            // El estudiante no anota, solo defendemos
+            if (game.ball.y < 0) {
+                resetBall();
+            }
+        }
+
+        function resetBall() {
+            game.ball.x = canvas.width / 2;
+            game.ball.y = canvas.height / 2;
+            game.ball.vx = (Math.random() > 0.5 ? 1 : -1) * 6;
+            game.ball.vy = (Math.random() > 0.5 ? 1 : -1) * 6;
+            game.ball.speed = 6;
+        }
+
+        function endGame(studentWon) {
+            game.gameActive = false;
+
+            // Calcular días desde el 13 de mayo de 2026
+            const deliveryDate = new Date(2026, 4, 13); // Mes es 0-indexed, así que 4 = mayo
+            const today = new Date();
+            const timeDiff = today - deliveryDate;
+            game.daysLate = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+            if (studentWon) {
+                document.getElementById('daysLateSuccess').textContent = game.daysLate;
+                document.getElementById('successModal').classList.add('show');
+            } else {
+                document.getElementById('daysLate').textContent = game.daysLate;
+                document.getElementById('gameOverModal').classList.add('show');
+            }
+        }
+
+        function gameLoop() {
+            drawCourt();
+
+            if (game.gameActive) {
+                updateStudentPaddle();
+                updateProfessorPaddle();
+                updateBall();
+                
+                // Verificar si han pasado 15 segundos
+                const timeElapsed = Date.now() - game.gameStartTime;
+                if (timeElapsed >= game.challengeDuration) {
+                    endGame(true); // Victoria!
+                }
+            }
+
+            // Dibujar raquetas
+            drawPaddle(game.student.x, game.student.y, game.studentPaddleWidth, game.paddleHeight, '#00ff00');
+            drawPaddle(game.professor.x, game.professor.y, game.paddleWidth, game.paddleHeight, '#ff3333');
+
+            // Dibujar pelota
+            drawBall(game.ball.x, game.ball.y, game.ball.radius);
+
+            // Mostrar contador de tiempo
+            const timeElapsed = Date.now() - game.gameStartTime;
+            const timeRemaining = Math.max(0, Math.ceil((game.challengeDuration - timeElapsed) / 1000));
+            document.getElementById('studentScore').textContent = timeRemaining + 's';
+            document.getElementById('professorScore').textContent = '⏱️ ' + timeRemaining;
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Iniciar juego
+        gameLoop();
+    </script>
+</body>
+</html>
